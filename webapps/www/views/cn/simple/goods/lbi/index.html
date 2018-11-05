@@ -1,0 +1,181 @@
+<div class="banner top_b">
+
+    <div class="swiper-container">
+
+        <div class="swiper-wrapper">
+
+            {foreach from=$data.row.img_thumb item=m name=f}
+
+            <div class="swiper-slide">
+
+                <a href="javascript:;"><img src="{$m}" {if $smarty.foreach.f.index eq 0}id="goods_img_{$data.row.id}"{/if} /></a>
+
+            </div>
+
+            {/foreach}
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="common_bor product">
+
+    <dl class="product_1">
+
+        <dt><a href="javascript:;" onclick="_system._guide(true)"><i class="icon iconfont">&#xe60a;</i>分享</a></dt>
+
+        <dd>
+
+            <big>{$data.row.name}</big>
+
+            <p>{$data.row.desc}</p>
+
+        </dd>
+
+    </dl>
+
+    <dl class="product_2">
+
+        {if $data.pack neq 1}
+
+        <dt>
+
+            <span>商品数量：</span>
+
+            <input type="button" value="&#xe618;" class="pro_jia pro_i" onclick="addToCart('{$data.row.id}','',this,'+');" data-url="list" data-id="{$data.row.cart_id}" />
+
+            <input value="{$data.row.cart_num}" class="pro_text" id="qty_{$data.row.id}" onblur="addToCart('{$data.row.id}','',this,'|');" data-url="list" data-id="{$m.cart_id}" />
+
+            <input type="button" value="&#xe61e;" class="pro_jian pro_i" onclick="addToCart('{$data.row.id}','',this,'-');" data-url="list" data-id="{$data.row.cart_id}" /><br>
+
+            <span style="color: #999">销量<font style="color: #000">{$data.row.sell}</font> / 库存<font style="color: #000">{$data.row.stock}</font></span>
+
+        </dt>
+
+        {/if}
+
+        <dd>
+
+            {if $data.row.market_price gt 0}
+
+            <p>价格：<del>￥{$data.row.market_price}</del></p>
+
+            {/if}
+
+            <strong><span>手机专享价：</span>￥{$data.row.price}</strong>
+
+        </dd>
+
+    </dl>
+
+</div>
+
+<div class="common_bor product1">
+
+    <div class="product1_top"><span>产品参数</span></div>
+
+    <div class="product2">
+
+        <table width="100%" cellspacing="0" cellpadding="0">
+
+            <tr>
+
+                <td width="20" style="white-space: nowrap">商品规格：</td>
+
+                <td width="20"></td>
+
+                <td>{$data.row.weight}{if $data.row.weight_unit}{$data.row.weight_unit}/{/if}每{$data.row.unit|default:$site_config.unit}</td>
+
+            </tr>
+
+            {foreach from=$data.row.params item=m}
+
+            {if $m.name || $m.value}
+
+            <tr>
+
+                <td nowrap>{$m.name}：</td>
+
+                <td></td>
+
+                <td>{$m.value}</td>
+
+            </tr>
+
+            {/if}
+
+            {/foreach}
+
+        </table>
+
+    </div>
+
+</div>
+
+{if $data.pack neq 1}
+
+<div class="common_bor product1" style="display: none;">
+
+    <div class="product1_top"><a href="#">更多评价</a><span>评价</span></div>
+
+    <ul class="product_px">
+
+        <li class="norecord">暂无评价记录！</li>
+
+        <li style="display: none;">
+
+            <em><img src="/style/images/product_2.jpg"></em>
+
+            <dl>
+
+                <dt>用户1234665</dt>
+
+                <dd>价格稍高，比普通玉米甜而且无渣，推荐！</dd>
+
+            </dl>
+
+        </li>
+
+    </ul>
+
+</div>
+
+{/if}
+
+<div class="common_bor product1">
+
+    <div class="product1_top"><span>产品详情</span></div>
+
+    <div class="product_img top_b">
+
+        {$data.row.content|stripcslashes}
+
+    </div>
+
+</div>
+
+{include file="public_share.html"}
+
+<script src="/style/js/swiper.min.js"></script>
+
+<script>
+
+    var mySwiper = new Swiper('.banner .swiper-container',{
+
+        pagination: '.banner .pagination',
+
+        grabCursor: true,
+
+        paginationClickable: true,
+
+        calculateHeight:true,
+
+        autoplayDisableOnInteraction:false,
+
+        autoplay:5000
+
+    });
+
+</script>

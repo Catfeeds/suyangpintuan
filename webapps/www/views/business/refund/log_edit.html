@@ -1,0 +1,97 @@
+{include file='../public_btn.html'}
+{literal}
+<style type="text/css">
+.order-info{border:1px solid #ddd; }
+.oi-tag{background-color:#eee; line-height:24px; height:24px; padding-left:10px; border-bottom:1px solid #ddd}
+.oi-text{padding:10px; line-height:24px}
+.oi-goods{}
+.oi-goods img{float:left; display:block; border:none; margin:2px}
+.oi-goods .oi-name{float:left}
+</style>{/literal}
+<div class="html-box">
+    <table class="tb-goods" style="width:100%;margin-bottom:5px">
+        <tr class="order-head">
+            <td colspan="8">
+                订单编号:<span class="order-no">{$row.order.order_sn}</span><span class="c-gray">（{$row.order.order_code}）</span>，
+                下单时间：<span class="order-date">{date('Y-m-d H:i:s',$row.order.c_time)}</span>
+            </td></tr>
+
+        {foreach from=$row.order.goods item=g key=k}
+        <tr>
+            <td class="bdl w5"></td>
+            <td class="w60"><img src="{$g.img_src}" style="width:60px" /></td>
+            <td style="line-height: 1.4">
+                <div class="oi-name">{$g.goods_name}</div>
+                <div style="color:#999">{$g.rule|default:''}</div>
+                {if $g.goods_info}
+                <span class="c-gray">备注：</span>
+                <span class="c-orange">{$g.goods_info|nl2br}</span>
+                {/if}
+                <div class="c-gray">
+                    {if $g.goods_spec}{$g.goods_spec}<br>{/if}
+                    单价：{$g.sell_price}<br>
+                    数量：{$g.buy_num}
+                </div>
+            </td>            
+            {if $k==0}
+            <td class="ac bdr" rowspan="{count($row.order.goods)}">
+                <b class="c-orange">￥{$row.order.order_amount}</b>
+            </td>
+            {/if}
+        </tr>
+        {/foreach}
+        <tr>
+            <td colspan="7" class="bdl bdr">
+                <span class="c-gray">会员名：</span><span>{$row.order.m_username}</span>
+                <span class="c-gray">收货人：</span><span>{$row.order.name}[{$row.order.mobile}]</span><br>
+                <span><i class="iconfont">&#xe655;</i> {$row.order.area} {$row.order.address}</span>
+                {if $row.order.order_tip}
+                <br>
+                <span class="c-gray">买家备注：</span>
+                <span class="c-orange">{$row.order.order_tip|nl2br}</span>
+                {/if}
+            </td>
+        </tr>
+    </table>
+    <form target="iframeNewsTarget" method="post" action="/business/refund/log_edit" >
+        <input type="hidden" name="post[id]" value="{$row.id}" />
+        <input type="hidden" name="post[order_id]" value="{$row.order_id}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>支付单号：</label></td>
+                <td class="td-input">
+                    {$row.out_trade_no}
+                </td>
+            </tr>         
+            <tr>
+                <td class="td-label"><label>退款单号：</label></td>
+                <td class="td-input">
+                    {$row.out_refund_no}
+                </td>
+            </tr>            
+            <tr>
+                <td class="td-label"><label>退款金额：</label></td>
+                <td class="td-input">
+                    {$row.order_amount}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>状态：</label></td>
+                <td class="td-input">
+                    <input type="radio" name="post[is_refund]" value="0" {if $row.is_refund==0}checked{/if}>申请中
+                    <input type="radio" name="post[is_refund]" value="1" {if $row.is_refund==1}checked{/if}>通过
+                    <input type="radio" name="post[is_refund]" value="2" {if $row.is_refund==2}checked{/if}>失败
+                </td>
+            </tr>      
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

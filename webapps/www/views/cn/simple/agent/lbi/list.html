@@ -1,0 +1,14 @@
+<li>
+    <a href="/goods/show/{$m.id}"><img src="{zz mod=fileurl source=$m.thumb width=160 height=160}" /></a>
+    <h3>
+            <a href="/goods/show/{$m.id}">{$m.name}</a>
+    </h3>
+    <p>
+            {if $m.comms>0}<i> {L('unit_comm')}：￥{$m.comms}</i>{/if}
+            <em>价格：￥{$m.price}</em>
+    </p>
+    <section>
+            <dl><dd><a href="/goods/show/{$m.id}">去推广</a></dd><dd><a href="javascript:mshop({$m.id});" id="agent_{$m.id}" data-val="{$m.id}" class="agent_share {if $m.is_mshop==0}on{/if}">{if $m.is_mshop==0}取消{L('unit_distribution')}{else}我要{L('unit_distribution')}{/if}</a></dd></dl>
+    </section>
+</li>
+		

@@ -1,0 +1,53 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/member/member_account_edit/{$row.id}" enctype="multipart/form-data">
+        <input type="hidden" name="post[id]" value="{$row.id}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>用户名：</label></td>
+                <td class="td-input">
+                    {$row.username}
+                    <input type="hidden" name="post[username]" value="{$row.username}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>金额：</label></td>
+                <td class="td-input">{$row.amount}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>支付方式：</label></td>
+                <td class="td-input">
+                    {$row.pay_name} <span class="c-orange">{$row.realname}</span>
+                    {if $row.type eq 2}<br/>{$row.user_note}{/if}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>申请时间：</label></td>
+                <td class="td-input">{date('Y-m-d H:i:s',$row.add_time)}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>操作备注：</label></td>
+                <td class="td-input">
+                    <textarea name="post[admin_note]">{$row.admin_note}</textarea>
+                </td>
+            </tr>
+            <tr class="h s0">
+                <td class="td-label"><label>状态：</label></td>
+                <td class="td-input">
+                    <label><input type="radio" name="post[status]" {if $row.status neq 1}disabled{/if} value="1" {if $row.status eq 1 || $row.id eq 0}checked{/if}> 待付款</label>
+                    <label><input type="radio" name="post[status]" {if $row.status neq 1}disabled{/if}  value="2" {if $row.status eq 2}checked{/if}> 已完成</label>
+                    <label><input type="radio" name="post[status]" {if $row.status neq 1}disabled{/if}  value="3" {if $row.status eq 3}checked{/if}> 已取消</label>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

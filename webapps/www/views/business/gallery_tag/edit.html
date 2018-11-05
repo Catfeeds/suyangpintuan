@@ -1,0 +1,42 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/business/gallery_tag/edit">
+    <input type="hidden" name="id" value="{$row.id}" />
+    <input type="hidden" name="post[type]" value="image" />
+
+    <table class="table-list">
+    <tbody>
+
+        <tr>
+            <td class="td-label"><label>上级栏目：</label></td>
+            <td class="td-input">
+                <select name="post[parentid]">
+                    <option value="0">一级栏目</option>
+                    {$select_categorys}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>分类名称：<span class="c-red">*</span></label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" name="post[name]" value="{$row.name}" />
+            </td>
+        </tr>
+
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+            </td>
+        </tr>
+
+    </tbody>
+    </table>
+
+    </form>
+</div>
+
+
+

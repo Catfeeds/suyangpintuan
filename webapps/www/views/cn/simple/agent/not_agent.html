@@ -1,0 +1,29 @@
+{include file="public_header.html"}
+<style>
+   body {
+background-color: #fff !important;
+}</style>
+<div class="qiandao">
+	<img src="/style/images/myfx.png" />
+</div>
+<div class="myfx-list">
+	<p class="myfx-list-p">开店条件</p>
+	<div class="myfx-list-div">
+		{if $row}		
+		{foreach from=$row.conditions_array item=m key=k name=foo}
+		{if $m>0}
+		<p>
+			<i class="icon iconfenxiao">&#xe650;</i>  条件{$smarty.foreach.foo.index+1}：{if $k=='comss'}{L('unit_comm')}总收入满{$m}元；{elseif $k=='order'}订单总金额满{$m}元；{elseif $k=='agent_order'}{L('unit_distribution')}商带来的订单总额满{$m}元；{elseif $k=='agent_total'}发展的{L('unit_distribution')}商数满{$m}人{elseif $k=='agent_num'}直属下级{L('unit_distribution')}商数量满{$m}人{/if}
+		</p>		
+		{/if}
+		{/foreach}
+		<section>			
+		{if $row.con_join==0}以上条件为或关系，只要满足其中一条条件就具备开店资格{else}以上条件为并列关系，需同时满足所有条件才具备开店资格{/if}，最终解释权归厦门紫竹数码科技有限公司
+		</section>
+		{/if}
+	</div>
+</div>
+<div class="myfx-list-a">
+    <a href="/">返回首页</a>
+</div>
+{include file="public_footer.html"}

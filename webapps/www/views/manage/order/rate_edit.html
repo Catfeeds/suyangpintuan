@@ -1,0 +1,64 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/share/edit">
+    <input type="hidden" name="id" value="{$row.id}" />
+
+    <table class="table-list">
+    <tbody>
+
+        <tr>
+            <td class="td-label"><label>会员名称：</label></td>
+            <td class="td-input">
+                {$row.username}({$row.mid})
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>商品名称：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w360" name="post[obj_name]" value="{$row.obj_name}" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>晒单标题：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w360" name="post[title]" value="{$row.title}" />
+            </td>
+        </tr>
+
+        <tr class="s h0">
+            <td class="td-label"><label>晒单内容：</label></td>
+            <td class="td-input">
+                <textarea name="post[content]" style="width:500px;height:100px;">{$row.content}</textarea>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>晒单图片：</label></td>
+            <td class="td-input">
+                {foreach from=unserialize($row.thumbs) item=m}
+                <p style="margin-bottom: 10px"><img src="{$m}" style="max-width:100%" /></p>
+                {/foreach}
+            </td>
+        </tr>
+
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input td-button">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+            </td>
+        </tr>
+
+    </tbody>
+    </table>
+
+    </form>
+</div>
+
+<script type="text/javascript">
+    $.loadJs('/admin/js/manage/auction.js',function(){ });
+</script>
+
+

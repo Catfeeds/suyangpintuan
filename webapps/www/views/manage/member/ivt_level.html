@@ -1,0 +1,25 @@
+<h3>共{$total}个会员<span></span>
+</h3>
+<div class="html-box">
+    <table class="list" style="width:100%">
+        <tr>
+            <th class="oid w200">MID</th>
+            <th class="w140">用户名</th>
+            <th class="w140">佣金收益</th>
+            <th class="w140">加入时间</th>
+        </tr>		
+        {foreach from=$list item=n key=k}
+        <tr >
+            <td colspan=4>{$k}级下家({count($n)}人)</td>
+        </tr>
+        {foreach from=$n item=m}
+        <tr class="opera">
+            <td class="oid">{$m.mid}</td>
+            <td>{$m.username}</td>
+            <td>{$m.commission_total|default:'0.00'}</td>
+            <td>{date('Y-m-d',$m.c_time)}</td>
+        </tr>
+        {/foreach}
+        {/foreach}
+    </table>   
+</div>

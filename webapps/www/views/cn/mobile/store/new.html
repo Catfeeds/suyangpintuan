@@ -1,0 +1,34 @@
+{$slider=1}
+{include file="public_header.html"}
+{include file="store/nav.html"}		
+<div class="hot-list shop-commodity">
+    {if $data.list}
+        {foreach from=$data.list item=m}
+        {if $m.datelog}
+        <div class="group-tit shop-dat">
+                <span>{$m.datelog|date_format:"m月d日"}本店上新</span>
+        </div>
+        {/if}
+        <div class="area-box">
+                <dl class="fx-cpbox clearfix">
+                        <dt>
+                                <img src="{zz mod=fileurl source=$m.thumbs num=1}"/>
+                        </dt>
+                        <dd>
+                                <h3>{$m.name}</h3>
+                                <p>已团<span class="rmb">{$m.sell+$m.sales_num}</span>件</p>
+                                <div class="mui-card-link">
+                                        <span class="tuan-rs">{$m.team_num}人团</span>
+                                        <span class="rmb">¥</span>
+                                        <span class="price-int">{$m.team_price}</span>
+                                        <button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/goods/show/{$m.id}')">去开团></button>
+                                </div>
+                        </dd>
+                </dl>
+        </div>
+        {/foreach}
+    {else}
+        
+    {/if}
+</div>
+{include file="public_footer.html"}

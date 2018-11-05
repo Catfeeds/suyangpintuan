@@ -1,0 +1,50 @@
+{$nav = 0}{$slider = 1}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+    <h1 class="mui-title">{$data.cat.catname}</h1>
+</header>
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">
+    <div class="mui-scroll">
+        <ul class="problem clearfix">
+            {foreach $data.list as $v}
+            <li><a href="{$v.url}">{$v.title}？</a></li>
+            {/foreach}
+        </ul>
+    </div>
+</div>
+{include file="public_footer.html"}
+{literal}
+<script type="text/javascript">
+    mui.init({
+        pullRefresh: {
+            container: '.refreshContainer',
+            up: {
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }
+        }
+    });
+    var count = 0;
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh() {
+        var url = '/content/index/22';
+        var data = {load:''};
+        $.get(url,data,function(data){
+            $('.clearfix li').remove();
+            mui('.refreshContainer').pullRefresh().endPullupToRefresh((++count > 5)); //参数为true代表没有更多数据了。
+            $('.problem').append(data);
+        });
+    }
+
+    mui.init({
+        swipeBack:true, //启用右滑关闭功能
+    });
+    var gallery = mui('#slider');
+    gallery.slider({
+        interval:5000 //自动轮播周期，若为0则不自动播放，默认为0；
+    });
+</script>
+{/literal}

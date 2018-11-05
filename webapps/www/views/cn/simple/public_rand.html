@@ -1,0 +1,25 @@
+<div class="area-box">
+    <div class="group-tit">
+        <span>大家都在团</span>
+    </div>
+    <ul class="mores-list clearfix">        
+    </ul>    
+</div>
+<script>
+    var id = '{$data.row.id}';
+    var page = 1;
+    $(function() {
+        mui.ajax("/goods/ajax_rand", {
+            dataType: 'xhr', //服务器返回json格式数据
+            type: 'get', //HTTP请求类型
+            beforeSend:function(){                
+                $(".mores-list").html("正在加载...");
+            },
+            success: function(data) {
+                if (data) {
+                    $(".mores-list").html(data);
+                }
+            }
+        });        
+    });
+</script>

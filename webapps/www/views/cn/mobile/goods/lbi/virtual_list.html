@@ -1,0 +1,45 @@
+{$talist = getTA()}
+{if  $k%3==0 && $k!=0}
+{$show_key = (int)$k/3-1}
+{if $talist && isset($talist[$show_key])}
+<div class="kill-scroll clearfix">
+	<div class="kill-top clearfix">
+		<a href="/topic/index/{$talist[$show_key].id}">查看更多 <i class="mui-icon mui-icon-arrowright"></i></a>
+		<p>{$talist[$show_key].name}</p>
+	</div>
+	<div id="hot-gd" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+		<div class="mui-scroll">
+			{foreach from=$talist[$show_key].apply_list item=t}
+			<a class="mui-control-item" href="/goods/show/{$t.id}">
+				<img src="{$t.img_cover}"/>
+				<p class="kill-p">{$t.name}</p>
+				<span class="rmb-1">¥{$t.team_price}</span>
+			</a>
+			{/foreach}
+			<a class="mui-control-item hot-agd" href="/topic/index/{$talist[$show_key].id}" >
+				查看<br />全部
+			</a>
+		</div>
+	</div>
+</div>
+{/if}
+{/if}
+<div class="kill-list clearfix">
+	<a href="/goods/show/{$m.id}" class="kill-img"><img src="{$m.img_cover}"></a>
+	<div class="kill-list1">
+		<a href="/goods/show/{$m.id}" class="kill-big">{$m.name}</a>
+		<div class="kill-color clearfix">{$m.desc|truncate:40}</div>
+		<div class="kill-list1-1 clearfix">
+			<div class="kill-list1-2">				
+				<p><input type="button" onclick="tourl('/goods/show/{$m.id}')" class="kill-input" value="{if $type=='now'}马上抢{else}即将开抢{/if}>"></p>
+			</div>
+			<div class="kill-list1-3">
+				<p>已团 {formatNum($m.sell+$m.sales_num)} 件</p>
+				<div class="kill-list-1">
+					<big>￥{$m.price}</big>
+					<small>￥{$m.team_price}</small>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+<div class="pop-dbox modal" id="modal-coupon-select-sid">
+		<div class="dp-pop">
+				<div class="buy-option-open modal-close"></div>
+				<h2>店铺优惠券</h2>
+                <div class="yhz-box2">
+				<!-- 下面的列表是要领取的列表-->
+				{foreach from=$list_res item=m}
+				<div class="yhj-list clearfix"> 
+					<span class="yhj-discount"><i>￥</i>{$m.amount}</span>
+					<span class="yhj-expire">{$m.title}<br />有效期：{if !empty($m.start_time)}{date('Y-m-d', $m.start_time)}{/if}{if empty($m.end_time)}不限{else}到{date('Y-m-d', $m.end_time)}{/if}<br /><i>未达优惠条件</i></span>
+					<span class="yhj-btn"><a href="javascript:;" class="coupon_get" data-coupon="{$m.id}" >领取</a></span>
+				</div>
+				{/foreach}				
+				{foreach from=$data.coupon_list.useable item=m}
+				<!-- 可以使用的样子-->
+				<div class="yhj-list available-list clearfix modal-coupon-sid" data-title="-{$m.amount}" data-amount="-{$m.amount}" data-target="#coupon-sid">
+						<span class="yhj-discount"><i>￥</i>{$m.amount}</span>
+						<span class="yhj-expire">{$m.title}<br />
+							有效期{if !empty($m.start_time)}{date('Y-m-d', $m.start_time)}{/if}{if empty($m.end_time)}不限{else}到{date('Y-m-d', $m.end_time)}{/if}<br />
+							<i>{if $m.need_amount gt 0}满{$m.need_amount}{/if}立减{$m.amount}</i>
+						</span>
+						<span class="yhj-btn {if !empty($data.coupon_id) and $m.id eq $data.coupon_id} {assign var='coupon' value=$m}active{/if} modal-coupon-check-sid" data-id="{$m.id}" data-target="#coupon_id_sid" ><a href="#">已领</a></span>
+				</div>	
+				{/foreach}                    
+				<div class="yhj-list available-list clearfix  modal-coupon" data-title="暂不使用优惠券" data-amount="0" data-target="#coupon-sid">
+						<span class="yhj-bsy">暂不使用优惠券</span>
+						<span class="yhj-btn modal-coupon-check-sid {if empty($data.coupon_id)}active{/if}" data-id="0" data-target="#coupon_id_sid"><a href="#">已领</a></span>
+				</div>
+				<!-- 下面是不可用的样子-->
+				<div class="group-tit">
+						<span>不可使用优惠券</span>
+				</div>
+				{foreach from=$data.coupon_list.disable item=m}
+				<div class="yhj-list prohibit-list clearfix">
+						<span class="yhj-discount"><i>￥</i>{$m.amount}</span>
+						<span class="yhj-expire">{$m.title}<br />有效期：{if !empty($m.start_time)}{date('Y-m-d', $m.start_time)}{/if}{if empty($m.expire_time)}不限{else}到{date('Y-m-d', $m.expire_time)}{/if}<br /><i>{if $m.need_amount gt 0}满{$m.need_amount}{/if}立减{$m.amount}</i></span>
+						<span class="yhj-btn"><a href="#">领取</a></span>
+				</div>
+				{/foreach}
+				<div class="group-tit" style="display: none;">
+						<span>未领取的优惠券</span>
+				</div>
+                        </div>
+		</div>
+</div>
+         

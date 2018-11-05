@@ -1,0 +1,138 @@
+<h3 class="info-tag">
+    {*<a class="uiBtn BtnGreen r" href="javascript:;" onclick="exportMember()">导出Excel</a>*}
+    {foreach from=$btnMenu item=m key=key}
+    <a class="uiBtn{if $btnNo==$key} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+<div class="html-box">
+    <form class="cond-form clear" action="#!team/index" method="get" onsubmit="return xForm.submit(this)">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="id" {if $smarty.request.k eq 'id'}selected{/if}>ID</option>
+                <option value="goods_id" {if $smarty.request.k eq 'goods_id'}selected{/if}>商品编号</option>
+                <option value="username" {if $smarty.request.k eq 'username'}selected{/if}>用户名</option>
+                <option value="order_sn" {if $smarty.request.k eq 'order_sn'}selected{/if}>订单号</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$smarty.request.q}" type="text">
+                        
+            <select name="status" >
+                <option value="">状态</option>
+                {foreach from=$orderCommon item=m key=k}
+                <option value="{$k}" {if $smarty.request.status eq $k}selected{/if}>{$m}</option>
+                {/foreach}
+            </select> 
+            
+            <select name="goods_typeid" >
+                <option value="">类型</option>
+                {foreach from=$actTypes item=m key=k}
+                <option value="{$m.id}" {if $smarty.request.goods_typeid eq $k}selected{/if}>{$m.title}</option>
+                {/foreach}
+            </select>
+            <select name="is_robots" >
+                <option value="">是否模拟数据</option>
+                <option value="1" {if $smarty.request.is_robots eq '1'}selected{/if}>是</option>
+                <option value="0" {if $smarty.request.is_robots eq '0'}selected{/if}>否</option>
+            </select>
+            <label class="ui-label w60">开团时间：</label>
+            <input class="form-i w120 sitem" name="c_stime" value="{$smarty.get.c_stime|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" />
+            <input style="margin-left:-1px" class="form-i w120 sitem" name="c_etime" value="{$smarty.get.c_etime|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" />
+            
+            <label class="ui-label w60">结束时间：</label>
+            <input class="form-i w120 sitem" name="e_stime" value="{$smarty.get.e_stime|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" />
+            <input style="margin-left:-1px" class="form-i w120 sitem" name="e_etime" value="{$smarty.get.e_etime|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" />
+
+            <select name="sortby" id="sortby">
+                <option value="id" {if $smarty.get.sortby eq 'id'}selected{/if}>ID</option>
+                {*<option value="c_time" {if $smarty.get.sortby eq 'c_time'}selected{/if}>开团时间</option>
+                <option value="e_time" {if $smarty.get.sortby eq 'e_time'}selected{/if}>结束时间</option>*}
+            </select>
+            <select name="sortorder" id="sortorder">
+                <option value="DESC" {if $smarty.get.sortorder eq 'DESC'}selected{/if}>降序</option>
+                <option value="ASC" {if $smarty.get.sortorder eq 'ASC'}selected{/if}>升序</option>
+            </select>           
+            <button type="submit" id="submit" style="margin:1px 20px 0 10px;float:left;" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+    <table class="tb-goods" style="width:100%">
+        <thead>
+            <tr>
+                <th nowrap class="w80">ID</th>
+                <th nowrap class="w360">商品名称</th>
+                <th nowrap class="w80">商品编号</th>
+                <th nowrap class="w140">类型</th>
+                <th nowrap class="w140">状态</th>
+                <th nowrap class="w80">所需人数</th>
+                <th nowrap class="w80">缺少人数</th>
+                <th nowrap class="w140">开团时间</th>
+                <th nowrap class="w140">到期时间</th>
+                <th nowrap class="w140">用户名</th>
+                <th nowrap class="w140">操作</th>
+            </tr>
+        </thead>
+        {foreach from=$list item=m}
+        <tbody>
+            <tr>
+                <td align='center'>{$m.id}</td>
+                <td>
+                    <table  class="table-list" >
+                        <tr>
+                            <td  style="border-bottom:none;"><img src="{$m.img_src}" style="width:60px" /></td>
+                            <td  style="border-bottom:none;">
+                                {$m.goods_name}<br>
+                                团购价：{if $m.team_price>0}{$m.team_price}{else}{$m.goods_team_price}{/if}
+                            </td>
+                        </tr>
+                    </table>     
+                </td>
+                <td align='center'>{$m.goods_id}</td>
+                <td align='center'>{$m.type_name}</td>
+                <td align='center'>{$m.status_name}</td>
+                <td align='center'>{$m.team_num}</td>
+                <td align='center'>{$m.team_num-$m.team_num_yes}</td>
+                <td align='center'>{$m.c_time|date_format:"Y-m-d H:i:s"}</td>
+                <td align='center'>{$m.e_time|date_format:"Y-m-d H:i:s"}</td>
+                <td align='center'>{$m.username}
+                    {if $m.is_robots eq 1}
+                    <img src="/admin/images/robots.png">
+                    {/if}
+                </td>
+                <td class="opera" nowrap align='center'>
+                    <a class="uiBtn" href="#!team/detail/{$m.id}"> 详情</a>
+                    <a class="uiBtn" href="#!team/qrcode/?id={$m.id}&com=xshow|扫码分享">扫码分享</a>
+                    <p class="c-gray">待发货：{if $m.ship_num>0}<font color="red">{$m.ship_num}</font>{else}0{/if}</p>
+                    {*<p class="c-gray">待退款：{if $m.refund_num>0}<font color="red">{$m.refund_num}</font>{else}0{/if}</p>*}
+                </td>
+            </tr>             
+        </tbody>
+        {foreachelse}
+        <tbody>
+        <tr><td class="bdl bdr" style="text-align:center" colspan="11">
+            没有找到符合条件的拼团!
+        </td></tr>
+        {/foreach}
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+{literal}
+<style type="text/css">
+    .setorder{line-height:18px; height:18px}
+    .setorder i{vertical-align:middle}
+    .order_num{text-align:center}
+    .span10 .order_num .order{width:30px; min-width:0; text-align:center; display:block; margin:0 auto}
+</style>
+<script type="text/javascript" src="/admin/js/manage/order.js"></script>
+<script type="text/javascript">
+    function exportMember(){
+        var arr = location.hash.split("?");
+        var get = arr[1]?('?'+arr[1]):'';
+        if(!get){
+            com.xtip('导出量较大，请先进行筛选操作！',{type:1});
+        }else{
+            location.href='/business/order/exportExcel'+get;
+        }
+    }
+</script>
+{/literal}
+</div>

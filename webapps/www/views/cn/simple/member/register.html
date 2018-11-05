@@ -1,0 +1,93 @@
+{$headTit="注册"}
+{include file="public_header.html"}
+<div class="dl-fhbtn  mui-action-back">
+    <img src="/style/img/vip/ico5.png"/>
+</div>
+<div class="zc-top">
+    <img src="/style/img/zctop1.jpg"/>
+</div>		
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<div class="zc-tabbox">
+    <ul class="zc-ul">
+        <li><a href="/member/login">账号密码登陆</a></li>
+        <li class="dq"><a href="/member/register">快速注册账号</a></li>
+    </ul>
+    <div class="dl-inipt">
+        <form action="/member/submit" target="iframeNews" id="myform" name="myform" method="post">
+            <input type="hidden" name="backUrl" value="{$backUrl}" />
+            <div class="dl-inbox">
+                    <span><img src="/style/img/vip/ico1.png"/></span>
+                    <input placeholder="用户名" name="username" value="{$smarty.session.wxoauth.nickname}" datatype="*2-40" ajaxurl="/member/check_username" nullmsg="请输入用户名" errormsg="用户名长度为3-40位字符"  class="dl-ip1" />
+            </div>
+            <div class="dl-inbox">
+                    <span><img src="/style/img/vip/ico1.png"/></span>
+                    <input placeholder="手机号码 " name="mobile" id="mobile" value="" datatype="m" nullmsg="请输入您的手机号码" errormsg="手机号码格式不正确"  class="dl-ip1" />                    
+            </div>
+            {if C('sms_open') eq 1 && 'sms_register'|statusTpl}
+            <div class="dl-inbox">
+                    <span><img src="/style/img/vip/ico2.png"/></span>
+                    <input type="text" name="scode" id="scode" value="" placeholder="此处填写右图答案" datatype="*" nullmsg="请输入图片验证" class="dl-ip1" />
+                    <img class="refresh_scode abs-btn mui-btn" src="/welcome/scode" data-src="/welcome/scode"  style="position: absolute;width: 7rem;right: 0;" >
+            </div>            
+            <div class="dl-inbox">
+                    <span><img src="/style/img/vip/ico2.png"/></span>
+                    <input placeholder="手机验证码" name="sms_code" id="sms_code" datatype="*" nullmsg="请输入手机验证码" class="dl-ip1" />                    
+                    <button class="abs-btn mui-btn" onclick="getSmsVerify('sms_register')">获取验证码</button>                            
+            </div>
+            {/if}
+            <div class="dl-inbox">
+                    <span><img src="/style/img/vip/ico2.png"/></span>
+                    <input placeholder="设置登录密码" type="password" name="password" id="password" value="" datatype="*3-40" nullmsg="请设置登录密码" errormsg="密码长度为3-40位字符" class="dl-ip1" />
+            </div>
+            <div class="dl-inbox">
+                    <span><img src="/style/img/vip/ico2.png"/></span>
+                    <input  placeholder="确认登录密码" type="password" name="confirm_password" recheck="password" datatype="*" nullmsg="请再次确认登录密码" errormsg="两次输入的密码不一致" class="dl-ip1" />
+            </div>
+            {if C('isagree')}
+            <div class="dl-inbox"><input type="checkbox" name="agree" value="1" datatype="*" nullmsg="请先阅读并同意服务协议" />我已阅读并同意<a href="javascript:;" id="Agree">《{C('site_name')}注册协议》</a></div>
+            {else}
+            <input type="hidden" name="agree" value="1" />
+            {/if}
+            <button type="submit" class="mui-btn mui-btn-danger mui-btn-block">注册 </button>
+        </form>
+    </div>
+</div>
+<div class="layerAgree" style="display:none;"><div style="font-size:12px;padding:10px;">{zz mod=block mark=agree}</div></div>
+{include file="public_footer.html"}
+<script type="text/javascript">
+    $(function(){
+        $("#myform").Validform({
+            tiptype:function(msg,o,cttl){ validTip(msg,o,cttl);},
+            showAllError:false,
+            beforeSubmit:function(){
+                //触点验证码               
+                var D = $('#regForm').formSerialize();
+                D=D+'&step='+step;
+                $.post("/member/submit", D,
+                    function(data){
+                        if(data.error==1){
+                            layer.alert(data.msg,8);
+                        }
+                        else{
+                            location.href="/member/index";
+                        }
+                    },"json"
+                );
+                return false;
+            }
+        });
+        $('#Agree').on('click',function(){           
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim',
+                area: ['100%', '60%'],
+                title: "{C('site_name')}注册协议",
+                content: $('.layerAgree').html()
+            });
+        })
+        $(document).on('click', '.refresh_scode', function() {
+            var $this = $(this)
+            $this.attr('src', $this.data('src') + '?' + (+new Date()));
+        })
+    });
+</script>

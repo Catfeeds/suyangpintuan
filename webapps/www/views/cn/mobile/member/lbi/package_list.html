@@ -1,0 +1,35 @@
+<li>
+    <table class="sale_tb" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td colspan="2">
+                <div class="sale_tb1">
+                    {if $m.status_pack}
+                    <a href="/package/view/{$m.extension_id}/{$m.order_sn}">去选菜</a>
+                    {else}
+                    {$m.status_pack_name}
+                    {/if}
+                </div>
+                <div class="sale_tb2">{$m.act_name}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="sale_img">
+                    {foreach from=$m.goods item=g key=k}
+                    <a href="/goods/show/{$g.good_id}"><img src="{zz mod=fileurl source=$g.img_src height=80 type=0}" /></a>
+                    {/foreach}
+                </div>
+            </td>
+            <th><a href="/member/package?order_sn={$m.order_sn}"><img src="/style/images/sale.png"></a></th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="sale_tb1">
+                    <em> </em>
+                    <span></span>
+                </div>
+                <div class="sale_tb2"><span>选菜截止时间：{date('Y-m-d H:i:s',$m.end_time)}</span></div>
+            </td>
+        </tr>
+    </table>
+</li>

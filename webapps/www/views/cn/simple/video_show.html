@@ -1,0 +1,27 @@
+{$headTit=$data.cat.catname}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+<div class="main pd_10">
+    <div id="a1"></div>
+    <div class="see_video">
+        {if $data.row.videourl}
+        <iframe width=100% src="{$data.row.videourl}" frameborder=0 allowfullscreen></iframe>
+        {else}
+        <video width="100%" height="" controls="controls" preload="auto" poster="{zz mod=fileurl source=$data.row.thumb}">
+            <source src="{zz mod=fileurl source=$data.row.file}" type="video/mp4"></source>
+        </video>
+        {/if}
+    </div>
+    <div class="see_articel">
+        <div class="see1">
+            <p>{$data.row.title}</p>
+        </div>
+        {zz mod=pn var=pn catid=$data.row.catid id=$data.row.id}
+        <ul class="pager">
+            <li>上一篇：{if $pn.prev}<a href="{$pn.prev.url}">{$pn.prev.title}</a>{else}没有了...{/if}</li>
+            <li>下一篇：{if $pn.next}<a href="{$pn.next.url}">{$pn.next.title}</a>{else}没有了...{/if}</li>
+        </ul>
+    </div>
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

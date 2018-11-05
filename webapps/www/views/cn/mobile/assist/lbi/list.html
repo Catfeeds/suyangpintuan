@@ -1,0 +1,39 @@
+<li class="mui-clearfix">
+	<input type="hidden" id="bargain_spec_{$m.goods_id}" value="">
+	<a href="/assist/show/{$m.id}" class="bargain1-img"><img src="{$m.img_cover}"></a>
+	<div class="bargain1-text">
+		<a href="javascript:;" class="bargain-big">{$m.goods_name|truncate:30}</a>
+		<div class="help-1">
+			<span>已领{$m.sell}件</span>
+			<p>需{$m.number}人助力</p>
+		</div>
+		<div class="bargain1-1 mui-clearfix">
+			<span class="mui-pull-right"><input type="submit" value="免费领" class="{if !empty($m.sp_vals) && empty($m.log_id)}bargin-bg{/if} mui-btn mui-btn-block"  data-gid="{$m.goods_id}" {if $m.log_id>0}onclick="qrcode_share({$m.log_id})"{elseif empty($m.sp_vals)}onclick="bargain_apply({$m.id},'')"{/if}/></span>
+			<strong>￥0</strong>
+		</div>
+	</div>
+	<!--点击砍价弹窗 开始-->
+	<section class="bargain2 mui-clearfix ">
+		<div class="bargain2-close"><i class="mui-icon mui-icon-closeempty"></i></div>
+		<dl class="bargain2-1 mui-clearfix">
+			<dt><img src="{$m.img_cover}" class="cp-img-{$m.goods_id}"></dt>
+			<dd>
+				<big>￥{$m.price}</big>
+			</dd>
+		</dl>
+		{if $m.sp_vals}
+		{foreach from=$m.sp_vals item=s key=k}
+		<dl class="bargain2-dl mui-clearfix bargain_{$m.goods_id}" data-goodsid="{$m.goods_id}">
+			<dt>{$k}</dt>
+			<dd>
+				{foreach from=$s item=n name=foo key=key}
+				<p {if  (count($data.spec)==0 && $smarty.foreach.foo.index==0)}class="hover"{/if} data-val="{$key}"><span>{$n}</span></p>
+				{/foreach}
+			</dd>
+		</dl>
+		{/foreach}
+		{/if}
+		<div class="bargain2-input mui-clearfix"><input type="button" value="确定" onclick="bargain_apply({$m.id},$('#bargain_spec_{$m.goods_id}').val())"></div>
+	</section>
+	<!--点击砍价弹窗 结束-->
+</li>

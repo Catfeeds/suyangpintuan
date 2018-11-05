@@ -1,0 +1,17 @@
+{include file="public_header.html"}
+{foreach from=$data.list item=m key=k}
+<div class="user-list">
+	<ul>
+		<li>
+			<a href="/agent/team/{$k}"><i class="icon iconfenxiao fr"><em class="em1">{count($m)}人</em>&#xe611;</i><i class="icon iconfenxiao">&#xe64a;</i><span>{$k}级{L('unit_distribution')}</span></a>
+		</li>
+	</ul>
+</div>
+{foreachelse}
+<div class="zfzt">
+    暂没有成员！
+</div>	
+{/foreach}
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+{include file="public_footer.html"}

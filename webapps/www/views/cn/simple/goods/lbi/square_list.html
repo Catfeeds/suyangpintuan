@@ -1,0 +1,33 @@
+<li class="clearfix">
+    <div class="square-l">
+        <img src="{photo($m.mid)}"/>
+        <p>{nickname($m.username,$m.username)}</p>
+    </div>
+    <div class="square-r">
+        <p>{$m.square_time|date_format:'%Y-%m-%d %H:%M:%S'}</p>
+        <div class="square-kh">
+            {$m.square_desc}
+        </div>
+        <a href="/goods/show/{$m.extension_id}" class="square-abtn1">
+            <dl class="fx-cpbox clearfix">
+                <dt>
+                    <img src="{$m.img_cover}"/>
+                </dt>
+                <dd>
+                    <h3><span>{goods_typeid($m.extension_code)}</span>{$m.goods_name}</h3>
+                    <div class="mui-card-link">
+                        价格：
+                        <span class="rmb">¥</span>
+                        <span class="price-int">{formatPrice($m.team_price)}</span>
+                        <span class="price-ori">¥{formatPrice($m.price)}</span>
+                    </div>
+                    <p>还差<span class="rmb">{$m.team_num-$m.team_num_yes}</span>人成团</p>
+                </dd>
+            </dl>
+        </a>
+        <a class="square-btn3 clearfix" href="/goods/team/{$m.common_id}">
+            <div class="square-rs"> {$m.team_num}人团</div>
+            <div class="square-je">去参团 ></div>
+        </a>
+    </div>
+</li>

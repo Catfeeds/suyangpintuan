@@ -1,0 +1,171 @@
+<h3 class="info-tag">
+    <a class="uiBtn BtnGreen r" style="margin-left: 5px" href="#!order/excelOrderSend?com=xshow|批量发货" >批量发货</a>
+    <a class="uiBtn BtnGreen r" href="javascript:;" onclick="exportMember()">导出Excel</a>
+    {foreach from=$btnMenu item=m key=key}
+    <a class="uiBtn{if $btnNo==$key} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+
+<div class="html-box">
+    <form class="cond-form clear" action="#!order/index" method="get" onsubmit="return xForm.submit(this)">
+        {include file='../order/public_form.html'}
+    </form>
+
+    {if isset($data)}
+    <div class="tips">
+        订单支付（不含第三方支付, 例如 余额,佣金等）：
+        <b class="c-red">{$data.order_price|default:0}</b>
+        第三方支付：
+        <b class="c-red">{$data.money_paid|default:0}</b>
+    </div>
+    {/if}
+
+    <table class="tb-goods" style="width:100%">
+        <thead>
+            <tr>
+                <th nowrap class="oid" colspan="3">商品详情</th>
+                <th nowrap class="w120">收货人信息</th>
+                <th nowrap class="w140">订单总价/还需支付</th>
+                <th nowrap>状态与操作</th>
+            </tr>
+        </thead>
+        {foreach from=$list item=m}
+        <tbody>
+            <tr><td colspan="10" class="sep-row"></td></tr>
+            <tr class="order-head"><td colspan="10">
+                订单编号：<span class="order-no">{$m.order_sn}</span> ，
+                下单时间：<span class="order-date">{date('Y-m-d H:i:s',$m.c_time)}</span>
+                <a class="uiBtn BtnXs" href="#!order/detail/{$m.id}?com=xshow|订单详情"><i class="iconfont">&#xe601;</i><span>订单详情</span></a>
+                &nbsp;
+                <a class="uiBtn BtnXs" href="#!member/detail/{$m.mid}?com=xshow|会员信息"><i class="iconfont">&#xe621;</i><span>会员信息</span></a>
+                &nbsp;
+                <span class="c-gray">用户ID: </span><span>{$m.mid} </span>
+                <span class="c-gray">用户名: </span><span>{$m.m_username}</span>
+                {if $m.m_nickname}<span class="c-gray">真实姓名: </span><span>{$m.m_nickname}</span>{/if}
+                <span class="c-gray">注册手机: </span><span class="c-green">{$m.m_mobile}</span>
+                {if $m.m_status eq 0}
+                <b class="c-red">已封号</b>
+                {/if}
+                {if $m.extension}
+                <br>{$m.order_code}：<span class="c-red">{$m.extension.act_name}</span>
+                {/if}
+                {if $m.order_tip}
+                <br><span class="c-red">买家备注: {$m.order_tip|nl2br}</span>
+                {/if}
+            </td></tr>
+            {if isset($m.goods)}
+            {foreach from=$m.goods item=g key=k}
+            <tr>
+                <td class="bdl w5"></td>
+                <td class="w60"><img src="{$g.img_src}" style="width:60px" /></td>
+                <td class="bdr" style="line-height: 1.5;">
+                    <div class="oi-name"><a href="{if $m.extension_code eq $smarty.const.CART_GOODS}/goods/show/{$g.good_id}{else}{$m.goods_url}{/if}" target="_blank">{$g.goods_name}</a></div>
+                    <div class="oi-name" style="color:#999">{$g.rule|default:''}</div>
+                    {if isset($g.goods_info)}
+                    <div class="c-orange">备注：{$g.goods_info|nl2br|default:''}</div>
+                    {/if}
+                    <div class="c-gray">
+                        {if $g.goods_spec}{$g.goods_spec}<br>{/if}
+                        单价：{$g.sell_price}<br>
+                        数量：{$g.buy_num}{$g.goods_unit|default:$common.unit}
+                        {if $m.extension_code eq $smarty.const.CART_PACK}
+                        ({($g.goods_pack_num|default:1)*$g.buy_num}{$g.cat_unit|default:$common.unit})
+                        {/if}
+                    </div>
+                </td>
+
+                {if $k==0}
+                <td class="ac bdr w300" rowspan="{count($m.goods)}">
+                    <div>{$m.name}[{$m.mobile}]</div>
+                    <div><i class="iconfont">&#xe655;</i> {$m.area} {$m.address}</div>                    
+                    {if $m.express_name}<div>{$m.express_name}{if $m.express_num}[<a href="http://www.kuaidi100.com/chaxun?com={$m.express_pinyin}&nu={$m.express_num}" target="_blank" title="查看物流">{$m.express_num}</a>]{/if}</div>{/if}
+                    <div class="c-gray">{if $m.best_time}（{$m.best_time}）{/if}</div>
+                    {if $m.express_id>0}<a class="uiBtn BtnBlue" target="_blank" href="/business/express/printView?order_id={$m.id}&express_id={$m.express_id}">快递单打印</a>{/if}
+                </td>
+                <td class="ac bdr" rowspan="{count($m.goods)}" style="line-height:18px;">
+                    ￥{$m.order_amount|price_format}<br />
+                    <b style="color:#f60">￥{$m.amount|price_format}</b>
+                    {*    
+                    {if $m.status_pay eq '0' && $m.status_shipping eq '0'}
+                    <br><a href="#!order/chPrice/{$m.id}?com=xshow|调整价格" class="uiBtn">调整价格</a>
+                    {/if}
+                    *}
+                </td>
+                <td class="ac bdr w140" rowspan="{count($m.goods)}" nowrap>
+                    <div style="line-height:18px">
+                        {$m.status_shipping_name_all|default:$m.status_name}<br>
+                        <span class="c-gray">({$m.pay_name|default:'余额支付'})</span><br>
+
+                        <!--待付款-->
+                        {*
+                        {if $m.status_pay neq 10 && $m.status_order eq 0}
+                        <a href="#!order/receivePay/{$m.id}?com=xshow|收到货款" class="uiBtn BtnBlue">收到货款</a>
+                        {/if}
+                        *}
+                        <!--待发货-->
+                        {if $m.status_id eq $smarty.const.CS_AWAIT_SHIP && $m.extension_code neq $smarty.const.CART_PACK}
+                            {if ($m.address_id>0 || $m.mobile>0) && $m.take_address_id==0}
+                            <a href="#!order/send/{$m.id}?com=xshow|发货" class="uiBtn BtnGreen BtnXs">发货</a>
+                            {elseif $m.address_id==0 && $m.take_address_id>0 && $m.extension_code != $smarty.const.CART_AA}
+                            <a href="#!order/send_take/{$m.id}?com=xshow|自提" class="uiBtn BtnGreen BtnXs">自提</a>
+                            {elseif $m.address_id==0 && $m.take_address_id>0 && $m.extension_code == $smarty.const.CART_AA && $m.mid == $m.tuanzhang}
+                            <a href="#!order/send_take/{$m.id}?com=xshow|自提" class="uiBtn BtnGreen BtnXs">自提</a>
+                            {/if}
+                            {if $m.ship_remind eq 1}
+                            <br><b style="color:#f60">买家[{$m.ship_time|date_format:"Y-m-d H:i:s"}]提醒发货</b>
+                            {/if}
+                        {/if}
+                        {if $m.status_order eq 2}{*退货审核*}
+                        <a href="#!order/refund/{$m.id}?com=xshow|退货审核" class="uiBtn">退货审核</a>
+                        {elseif $m.status_order eq 3 && $m.refund_amount>0}{*退货成功*}
+                        <b style="color:#f60">退款{$m.refund_amount}</b>
+                        {elseif $m.status_order eq 4}{*退货失败*}
+                        <a href="javascript:com.xtip('{$m.refund_note}',{literal}{type:1}{/literal});" class="uiBtn">失败原因</a>
+                        {elseif $m.status_shipping == 2 && $m.address_id == 0 && $m.take_address_id > 0 && $m.verify_code_id > 0}
+                        <a href="#!order/verify_order_code/{$m.id}?com=xshow|提货码验证" class="uiBtn">提货码验证</a>
+                        {/if}
+                        <!--选菜记录-->
+                        {*{if $m.extension_code eq $smarty.const.CART_PACK}
+                        <a href="#!order/pack/{$m.id}" class="uiBtn BtnBlue BtnXs">选菜记录</a>
+                        {/if}*}
+                    </div>
+                </td>
+                {/if}
+
+            </tr>
+            {/foreach}
+			{/if}
+        </tbody>
+        {foreachelse}
+        <tbody>
+        <tr><td class="bdl bdr" style="text-align:center" colspan="10">
+            没有找到符合条件的订单!
+        </td></tr>
+        {/foreach}
+    </table>
+
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+
+{literal}
+<style type="text/css">
+    .setorder{line-height:18px; height:18px}
+    .setorder i{vertical-align:middle}
+    .order_num{text-align:center}
+    .span10 .order_num .order{width:30px; min-width:0; text-align:center; display:block; margin:0 auto}
+</style>
+<script type="text/javascript" src="/admin/js/manage/order.js"></script>
+<script type="text/javascript">
+    function exportMember(){
+        var arr = location.hash.split("?");
+        var get = arr[1]?('?'+arr[1]):'';
+        if(!get){
+            com.xtip('导出量较大，请先进行筛选操作！',{type:1});
+        }else{
+            location.href='/business/order/exportExcel'+get;
+        }
+    }
+</script>
+{/literal}
+</div>

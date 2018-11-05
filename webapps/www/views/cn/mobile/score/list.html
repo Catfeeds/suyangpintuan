@@ -1,0 +1,79 @@
+{$nav = 1}{$slider = 1}{$active = 1}{$notice = 1}
+{$headTit=L('unit_score')|cat:'记录'}{include file="public_header.html"}
+<!-- 这里是分销样式 ：大转盘-->
+
+    <link href="/style/style/style.css" rel="stylesheet" />
+    <link href="/style/style/common.css" rel="stylesheet" />
+    <link href="/style/style/media.css" rel="stylesheet" />
+    <!-- 以上是分销样式： 大转盘 -->
+
+<div class="lingjiang">
+    <div class="lingjiang-jl toggle-target pointer" data-target=".score-type-selection" style="text-align: left">
+        <span>剩余{L('unit_score')}: {if empty($score.total_left)}0{else}{$score.total_left}{/if}</span>
+        {if !empty($data.score_types)}
+        <span class="fr">
+            {if isset($smarty.get.type)}{$data.score_types[$smarty.get.type]}{else}全部类型{/if}
+            <i class="iconfenxiao">&#xe611;</i>
+        </span>
+        <ul class="score-type-selection"  style="display: none;">
+            <li>
+                <a class="{if !isset($smarty.get.type)}active{/if}" href="/score/index">全部类型</a>
+            </li>
+            {foreach from=$data.score_types item=m key=k}
+            <li>
+                <a class="{if isset($smarty.get.type) && get('type') eq $k}active{/if}" href="/score/index?type={$k}">{$m}</a>
+            </li>
+            {/foreach}
+        </ul>
+        {/if}
+    </div>
+    
+    {if empty($data.list)}
+    <ul>
+        <li class="norecord">暂无内容</li>
+    </ul>
+    {else}
+    
+    <div class=" refreshContainer mui-scroll-wrapper"  style="margin-top:40px;">
+    <div class="list mui-scroll">
+    	<div class="area-box">
+        {foreach from=$data.list item=m} {include file="score/lbi/list.html"} {/foreach}
+        </div>
+    </div>
+    </div>
+    {assign var=event value='nclick'}
+    <!-- <script type="text/javascript">
+    var ExtendOptions = {
+        itemSelector: 'ul',
+        path: function(index) {
+            return '/score/index/' + index + '?load{if isset($smarty.get.type)}&type={$smarty.get.type}{/if}';
+        }
+    };
+    </script> -->
+    {$params = "load:1"}
+    <script>
+    	var D = {literal}{{/literal}{$params}{literal}}{/literal};//load:1必填
+        var ajax_url = "/score/index/{if isset($smarty.get.type)}&type={$smarty.get.type}{/if}";//请求的地址
+        var ajax_class = ".area-box";//加载的元素
+        var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+	</script>
+    {include file="public_scroll.html"}{/if}
+</div>
+<div class="ft"></div>
+{include file="public_footer.html"}
+<script>
+    $(function(){
+    	$(".fr").click(function(){
+        	var display =$('.score-type-selection').css('display');
+        	if(display=='none'){
+        		$(".score-type-selection").show();
+        	}else{
+        		$(".score-type-selection").hide();
+        	}
+    	})
+        $('#score_type').on('change', function(){
+            console.log(this.value)
+            $(".score-type-selection").hide();
+        });
+    });
+</script>

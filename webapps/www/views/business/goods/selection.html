@@ -1,0 +1,59 @@
+<div class="selection-content">
+
+    <form class="cond-form clear" action="/business/goods/selection">
+        <input type="hidden" name="target" value="{get('target')}">
+        <div class="f-unit">
+            <select name="k">
+                <option value="name" {if get( 'k') eq 'name'}selected{/if}>商品名称</option>
+                <option value="id" {if get( 'k') eq 'id'}selected{/if}>ID</option>
+            </select>
+            <input class="form-i w160" name="q" value="{get('q')}" type="text" onkeypress="javascript:return false;">
+            <select name="cid">
+                <option value="">商品分类</option> {$select_categorys}</select>
+            <button type="button" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue selection-search">搜索</button>
+            <button type="button" class="uiBtn selection-reset">重置</button>
+        </div>
+        <table class="list">
+            <thead>
+                <tr>
+                    <th class="w30">选择</th>
+                    <th class="w30">ID</th>
+                    <th class="title">商品名称</th>
+                    <th class="title">商品分类</th>
+                    <th class="w100">促销价/价格</th>
+                    <th class="w60">已售/库存</th>
+                    <th class="w100">重量/单位</th>
+                </tr>
+            </thead>
+            <tbody>
+                {if $data.list} {foreach from=$data.list item=m}
+                <tr>
+                    <td align='center'>
+                        <input type='radio' class='form-i w30' name="post[good_id_selected]" value='{$m.id}' data-target="{get('target')}"  data-price="{$m.price}" data-img="{$m.img_src}" data-name="{$m.name}" data-stock="{$m.stock}" {if isset($smarty.get.post.good_id_selected) and $smarty.get.post.good_id_selected eq $m.id}checked="checked" {/if}/>
+                    </td>
+                    <td align='center'>{$m.id}</td>
+                    <td class="title">
+                        <img class="l" src="{$m.img_src}" width="60" height="60" style="margin-right: 10px;">
+                        <div class="l">
+                            <div class="oBlk">{$m.name}</div>
+                            <p class="c-gray">{$m.desc}</p>
+                        </div>
+                    </td>
+                    <td class="title">{$m.cat_name_str}</td>
+                    <td align='center'><b class="c-orange">{$m.price}￥</b>
+                        <br><span class="c-gray">{$m.market_price}</span></td>
+                    <td align='center'>已售:{$m.sell}
+                        <br><span class="c-gray">库存:{$m.stock}</span></td>
+                    <td align="center">
+                        {if isset($m.cid)} {if $m.cid neq $smarty.const.CATE_GIFT} {$m.weight|default:0}{if $m.weight_unit}{$m.weight_unit}/{/if}每{$m.unit|default:$common.unit} {/if} {/if}
+                    </td>
+                </tr>
+                {/foreach} {/if}
+            </tbody>
+        </table>
+        <div class="foot-btn">
+            <div class="pager r">{$page}</div>
+            <button type="button" class="uiBtn BtnGreen e2-com-xhide">确定</button>
+        </div>
+    </form>
+</div>

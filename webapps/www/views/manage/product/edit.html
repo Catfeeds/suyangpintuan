@@ -1,0 +1,189 @@
+{include file='../public_btn.html'}
+
+{literal}<style type="text/css">
+.stocks table{width:100%}
+.spec-item{width:140px; display:inline-block}
+.spec-item *{display:inline-block; vertical-align:middle}
+.spec-item span{width:100px}
+</style>{/literal}
+<div class="html-box">
+    <form target="iframeNewsTarget" enctype="multipart/form-data" method="post" action="/manage/product/submit" id="goods-form">
+        <input name="id" type="hidden" value="{$product.id}" />
+        <input type="hidden" id="x_cate" value="{$product.cate}">
+        <input type="hidden" id="x_subcate" value="{$product.subcate}">
+
+        <table class="table-list">
+        <tbody>
+            <tr>
+                <td class="td-label"><label>商品名称：<span class="c-red">*</span></label></td>
+                <td class="td-input">
+                    <input class="form-i w360" type="text" name="name" value="{$product.name}" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>商品分类：<span class="c-red">*</span></label></td>
+                <td class="td-input">
+                    <select name="cid">{$select_categorys}</select>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>商品描述：</label></td>
+                <td class="td-input">
+                    <textarea name="desc" class="form-area">{$product.desc}</textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>原价：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w140" name="price" value="{$product.price}" placeholder="0.00" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>是否上架：</label></td>
+                <td class="td-input">
+                    <label><input type="radio" name="is_sale" value="1" {if $product.is_sale eq 1}checked{/if}/>是</label>
+                    <label><input type="radio" name="is_sale" value="0" {if $product.is_sale eq 0}checked{/if}/>否</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>图片列表：</label></td>
+                <td class="td-input">
+                    <div class="product-imgs" id="product-imgs">
+                        <ul>
+                            {foreach from=$product.pics item=m key=k}
+                            {if $k+1==count($product.pics)}
+                            {$lastClass = 'last-pic'}
+                            {else}
+                            {$lastClass = ''}
+                            {/if}
+
+                            {if !empty($m.imgurl_thumb)}
+                            <li onmouseover="product.inOpera(this)" onmouseout="product.outOpera(this)" class="seted{if $lastClass!=''} {$lastClass}{/if} e2-product-selGoodsImage">
+                                <span><img src="{$m.imgurl_thumb}" onerror="this.src='/admin/images/no-img.png'" width="{$m.thumb_size.width}" height="{$m.thumb_size.height}"></span><i class="img-note">{$picsType[$k]}</i><input type="hidden" name="pics[]" value="{$m.id}">
+                                <div class="imgop">
+                                    <div class="mask">&nbsp;</div>
+                                    <div class="opwrp">
+                                        <i class="iconfont e1-product-moveToPrev">&#xe631;</i>
+                                        <i class="iconfont e1-product-moveToNext">&#xe60c;</i>
+                                        <i class="iconfont e1-product-rmProductImg">&#xe606;</i>
+                                    </div>
+                                </div>
+                            </li>
+                            {else}
+                            <li onmouseover="product.inOpera(this)" onmouseout="product.outOpera(this)" class="{$lastClass} e2-product-selGoodsImage">
+                                <span><img src="/admin/images/no-img.png" onerror="this.src='/admin/images/no-img.png'"></span><i class="img-note">{$picsType[$k]}</i><input type="hidden" name="pics[]" value="">
+                                <div class="imgop">
+                                    <div class="mask">&nbsp;</div>
+                                    <div class="opwrp">
+                                        <i class="iconfont e1-product-moveToPrev">&#xe631;</i>
+                                        <i class="iconfont e1-product-moveToNext">&#xe60c;</i>
+                                        <i class="iconfont e1-product-rmProductImg">&#xe606;</i>
+                                    </div>
+                                </div>
+                            </li>
+                            {/if}
+                            {/foreach}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>商品详情：</label></td>
+                <td class="td-input" colspan="2">
+                    {$product.html_content}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>商品参数：</label></td>
+                <td class="td-input">
+                    <div class="l" style="width:584px">
+                        <table style="width:100%" class="list">
+                            <tbody id="g-params-list">
+                            <tr>
+                                <th>参数项</th>
+                                <th>参数值</th>
+                                <th class="w40"><a href="javascript:;" class="uiBtn BtnGreen e2-goods-addGoodsParam"><i class="iconfont">&#xe604;</i></a> </th>
+                            </tr>
+                            {if count($product.params)}
+                            {foreach from=$product.params item=m}
+                            <tr>
+                                <td><input name="params[name][]" class="form-i LH22 w160" value="{$m.name}"></td>
+                                <td><input name="params[value][]" class="form-i LH22 w200" value="{$m.value}"></td>
+                                <td><a href="javascript:;" class="uiBtn e2-goods-rmGoodsParam"><i class="iconfont">&#xe606;</i></a></td>
+                            </tr>
+                            {/foreach}
+                            {else}
+                            <tr>
+                                <td><input name="params[name][]" class="form-i LH22 w160"></td>
+                                <td><input name="params[value][]" class="form-i LH22 w200"></td>
+                                <td><a href="javascript:;" class="uiBtn e2-goods-rmGoodsParam"><i class="iconfont">&#xe606;</i></a></td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="display: none;">
+                <td class="td-label"><label>商品规格：</label></td>
+                <td class="td-input">
+                    <div class="goods-spec" id="sp-box">
+                        {foreach from=$spec_list item=m}
+                        <div class="f-unit spec-unit" sp_id="{$m.id}" sp_name="{$m.name}">
+                            <label class="ui-label w60">{$m.name}：</label>
+                            <div class="rule-box">
+                                {foreach from=$m.values item=n}
+                                <label class="spec-item">
+                                    {if isset($product.sp_val[$m.id][$n.id])}
+                                    <input class="spec-ckbox e1-goods-setSpecVal-{$n.id}" value="{$product.sp_val[$m.id][$n.id]}" type="checkbox" name="sp_val[{$m.id}][{$n.id}]" spitem_id="{$n.id}" checked>
+                                    <span><input value="{$product.sp_val[$m.id][$n.id]}" class="spec-val form-i BtnSm w110" onblur="goods.chSepcValue(this)"></span>
+                                    {else}
+                                    <input class="spec-ckbox e1-goods-setSpecVal-{$n.id}" value="{$n.value}" type="checkbox" name="sp_val[{$m.id}][{$n.id}]" spitem_id="{$n.id}">
+                                    <span>{$n.value}</span>
+                                    {/if}
+                                </label>
+                                {/foreach}
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+
+        </tbody>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+
+$.loadJs('/admin/js/manage/product.js',function(){
+$.loadJs('/admin/js/manage/goods.js',function(){
+$.loadJs('/admin/js/upload.js',function(){
+    //goods.spData = '';
+    {if isset($goodsItem)}
+        goods.stuffSpecs({$goodsItem});
+    {/if}
+    //gallery.initUploader();
+});
+});
+});
+</script>
+</div>
+

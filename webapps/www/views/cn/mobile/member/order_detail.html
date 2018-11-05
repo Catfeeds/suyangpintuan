@@ -1,0 +1,112 @@
+{$headTit="订单详情"} {include file="public_header.html"}
+<div class="page-box">
+    {if $order.status_shipping==0 || $order.status_order==0}
+	{if $order.status_common==1}
+	<!--描述：正在拼团中-->
+	<div class="od-state">
+		拼团还未成功，<br />
+		邀请小伙伴们都来拼团吧~
+	</div>
+	{elseif $order.status_common==2}
+	<!--描述：拼团失败-->
+	<div class="od-state od-state2">
+		未成团，退款成功
+	</div>
+	{elseif $order.status_common==10}
+	<!--描述：拼团成功之后的所有状态-->
+	<div class="od-state od-state3">
+        拼团成功，{if $order.status_pay==10}等待发货{else}待支付尾款{/if}
+	</div>
+	{/if}
+        {/if}
+	<div class="od-dz clearfix">
+		<p>收货人：{$order.name} <span>{$order.mobile}</span></p>
+		<p>收地址：{$order.area} {$order.address}</p>
+	</div>
+	
+	<div class="area-box">
+		<div class="payment-t">
+			 {if $order.sid>0}{$order.store_name}{else}{C('site_name')}{/if}
+			<span class="rmb">{$order.status_name}</span>
+		</div>
+		<dl class="fx-cpbox clearfix">
+			<dt>
+				<a href="/goods/show/{$order.goods.0.goods_id}"><img src="{$order.goods.0.img_src}"/></a>
+			</dt>
+			<dd>
+				<h3>{$order.goods.0.goods_name}</h3>
+				<div class="mui-card-link">
+					{if $order.goods.0.goods_typeid==$smarty.const.CART_EXCHANGE}
+					<span class="rmb">积分</span>
+					<span class="price-int">{$order.goods.0.sell_price}</span>
+					<span class="price-ori">{$order.goods.0.goods_price}</span>
+					{else}
+					<span class="rmb">¥</span>
+					<span class="price-int">{$order.goods.0.sell_price}</span>
+					<span class="price-ori">¥{$order.goods.0.goods_price}</span>
+					{/if}
+				</div>
+				{if $order.goods.0.goods_spec}<p>{$order.goods.0.goods_spec}</p>{/if}
+				<p>数量：{$order.goods.0.buy_num}</p>				
+				{if $order.order_tip}<p>备注：{$order.order_tip}</p>{/if}
+				<div class="od-bt">
+					{if $order.common_id>0}<button type="button" class="mui-btn" onclick="tourl('/goods/team/{$order.common_id}')">查看团详情</button>{/if}					
+				</div>
+			</dd>
+		</dl>
+                <div class="dd-yhbox">
+                        运费(快递) <span>￥{$order.shipping_fee}</span>
+                </div>
+                {if $order.coupon_id_sid>0}
+                <div class="dd-yhbox">
+                        店铺满减 <span>-￥{$coupon_sid.amount}</span>
+                </div>
+                {/if}
+                {if $order.coupon_id>0}
+                <div class="dd-yhbox">
+                        通用满减 <span>-￥{$coupon.amount}</span>
+                </div>
+                {/if}
+                {if $order.discount_amount>0}
+                <div class="dd-yhbox">
+                        团长优惠 <span>-￥{$order.discount_amount}</span>
+                </div>
+                {/if}
+                <div class="dp-hz clearfix">
+                        <div class="dp-yhtxt">
+                        		{if $order.goods.0.goods_typeid==$smarty.const.CART_EXCHANGE}
+                                <span>总计积分{$order.goods.0.sell_price*$order.goods.0.buy_num}</span>
+                                {else}
+                                <span>总计￥{$order.goods.0.sell_price*$order.goods.0.buy_num}元</span>  <span>优惠￥{$order.discount_amount+$coupon.amount+$coupon_sid.amount}元</span>
+                                {/if}
+                        </div>
+                        {if $order.goods.0.goods_typeid==$smarty.const.CART_EXCHANGE}
+                        合计积分：<span class="rmb"></span><strong>{$order.order_amount}</strong> <span>支付：<strong>{if $order.money_paid>0}{$order.money_paid}{else}{$order.amount}{/if}</strong></span>
+                        {else}
+                        合计：<span class="rmb">¥</span><strong>{$order.order_amount}</strong> <span></span>
+                        {/if}
+                </div>
+                <div class="order-btn2 clearfix">
+					<a href="javascript:;" onclick="tourl('{if $order.store_kf_online}{$order.store_kf_online}{else}/chat{if !empty($order.sid)}?bid={$order.sid}{/if}{/if}')">联系卖家</a>
+					<a href="tel:{if $order.sid>0}{$order.store_mobile}{else}{C('business_tel')}{/if}">电话联系</a>
+                </div>		
+	</div>
+	<div class="area-box order-xq">
+		<p>订单编号:{$order.order_sn}</p>
+		<p>支付方式:{$order.pay_name}</p>
+		<p>下单时间:{$order.c_time|date_format:"Y-m-d H:i:s"}</p>
+	</div>
+	{include file="public_rand.html"}
+	
+	{if $order.status_id eq $smarty.const.CS_AWAIT_GET && $order.goods.0.verify_code_id == 0}
+	<nav class="mui-bar mui-bar-tab order-bottom" style="">
+            <button type="button" class="mui-btn " onclick="tourl('/member/order_ship/{$order.order_sn}')">查看物流</button>
+            <button type="button" class="mui-btn mui-btn-danger" onclick="zz_confirm('您确认已经收到所有订单商品？','/member/finish_order/{$order.id}')">确认收货</button>
+	</nav>	
+	{elseif $order.status_order eq 10 && $order.is_rate==0}
+	<nav class="mui-bar mui-bar-tab order-bottom" style="">
+	<button type="button" class="mui-btn " onclick="tourl('/member/order_rate/{$order.order_sn}')">评价</button>
+	</nav>	
+	{/if}
+</div>
+{include file="public_footer.html"}

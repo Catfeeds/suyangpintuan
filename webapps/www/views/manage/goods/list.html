@@ -1,0 +1,162 @@
+<h3 class="info-tag">    
+    <a class="uiBtn BtnGreen r" href="#!goods/excelGoods?com=xshow|导入商品" >导入商品</a>
+    <a class="uiBtn BtnBlue r" href="javascript:;" onclick="exportMember()">导出商品</a>
+    {foreach from=$btnMenu item=m key=k}
+    <a class="uiBtn{if $btnNo==$k} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+<div class="html-box">
+
+<form class="cond-form clear" action="#!goods/index" onsubmit="return xForm.submit(this)">
+    <div class="f-unit">
+        <select name="k" id="k">
+            <option value="name" {if $k eq 'name'}selected{/if}>商品名称</option>
+            <option value="id" {if $k eq 'id'}selected{/if}>ID</option>
+        </select>
+        <input id="q" class="form-i w160 sitem" name="q" value="{if isset($q)}{$q}{/if}" type="text">
+        <select name="cid"><option value="">商品分类</option> {$select_categorys}</select>
+        <select name="typeid">
+            <option value="-99" {if !isset($smarty.request.typeid) || $smarty.request.typeid eq '-99' }selected{/if}>类型</option>
+            {foreach from=$select_type item=m}
+            <option value="{$m.id}" {if isset($smarty.request.typeid) && $smarty.request.typeid == $m.id}selected{/if}>{$m.title}</option>
+            {/foreach}
+        </select>
+        <select name="bid">
+            <option value="" {if $smarty.request.typeid==''}selected{/if}>品牌</option> 
+            {$select_brands}
+        </select>
+        <select name="is_sale">
+            <option value="" {if $smarty.request.is_sale==''}selected{/if}>是否上架</option>
+            <option value="1" {if $smarty.request.is_sale=='1'}selected{/if}>上架</option>
+            <option value="2" {if $smarty.request.is_sale=='2'}selected{/if}>下架</option>
+        </select>
+        <label class="ui-label">排序:</label>
+        <select name="sortby">
+            <option value="">默认</option>
+            <option value="sell_num" {if $smarty.get.sortby == "sell_num"}selected{/if}>销量</option>
+            <option value="id" {if $smarty.get.sortby == "id"}selected{/if}>ID</option>
+        </select>
+        <select name="sortorder">
+            <option value="desc" {if $smarty.get.sortorder == "desc"}selected{/if}>降序</option>
+            <option value="asc" {if $smarty.get.sortorder == "asc"}selected{/if}>升序</option>
+        </select>
+        <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        {*<span style="color: red;"><a href="#!goods/batch_price?com=xshow|批量修改价格">批量修改价格</a></span>*}
+    </div>
+</form>
+
+<table class="list">
+    <thead>
+    <tr>
+        <th class="w30">排序</th>
+        <th class="w30">ID</th>
+        <th colspan="2" class="title">商品名称</th>
+        <th class="title">类型</th>
+        <th class="title">商品分类</th>
+        <th class="w100">促销价/价格</th>
+        <th class="w60">已售/库存</th>
+        <th class="w100">重量/单位</th>
+        <th class="w40">包邮</th>
+        <th class="w40">上架</th>
+        <!--<th class="w40">热门</th>
+        <th class="w40">新品</th>-->
+        <th class="w40">热销</th>
+        <th class="w60">二维码</th>
+        <th class="w60">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {if $data.list}
+    {foreach from=$data.list item=m}
+    <tr>
+        <td align='center'><input type='text' class='form-i-s w30' name='listorders[{$m.id}]' value='{$m.listorder}' /></td>
+        <td align='center'>{$m.id}</td>
+        <td width="60"><img src="{$m.img_src}" height="60"></td>
+        <td class="title">
+            <div class="oBlk" title="{$m.name}">{$m.name|truncate:30}</div>
+            <p class="c-gray" title="{$m.desc}">{$m.desc|truncate:30}</p>
+        </td>
+        <td class="title">{$m.type_name}</td>
+        <td class="title">{$m.cat_name_str}</td>
+        {if $m.typeid==$smarty.const.CART_EXCHANGE}
+        <td align='center'><b class="c-orange">积分</b><br><span class="c-gray">{$m.price}</span></td>
+        {else}
+        <td align='center'><b class="c-orange">{$m.team_price}￥</b><br><span class="c-gray">{$m.price}</span></td>
+        {/if}
+        <td align='center'>{$m.sell}<br><span class="c-gray">{$m.stock}</span></td>
+        <td align="center">
+			{if isset($m.cid)}
+            {if $m.cid neq $smarty.const.CATE_GIFT}
+            {$m.weight|default:0}{if $m.weight_unit}{$m.weight_unit}/{/if}每{$m.unit|default:$common.unit}
+            {/if}
+			{/if}
+        </td>
+        <td align='center'>
+            {if $m.is_free_shipping==1}
+            <img onclick="main.chang_status('{$m.id}','goods','is_free_shipping')" src="/admin/images/yes.gif">
+            {else}
+            <img onclick="main.chang_status('{$m.id}','goods','is_free_shipping')" src="/admin/images/no.gif">
+            {/if}
+        </td>
+        <td align='center'>
+            {if $m.is_sale==1}
+            <a href="javascript:;" onclick="main.chang_status('{$m.id}','goods','is_sale')" class="c-green" title="当前上架状态">上架</a>
+            {else}
+            <a href="javascript:;" onclick="main.chang_status('{$m.id}','goods','is_sale')" class="c-red" title="当前下架状态">下架</a>
+            {/if}
+        </td>
+        <!--<td align='center'>
+            {if $m.is_best==1}
+            <img onclick="main.chang_status('{$m.id}','goods','is_best')" src="/admin/images/yes.gif">
+            {else}
+            <img onclick="main.chang_status('{$m.id}','goods','is_best')" src="/admin/images/no.gif">
+            {/if}
+        </td>
+        <td align='center'>
+            {if $m.is_new==1}
+            <img onclick="main.chang_status('{$m.id}','goods','is_new')" src="/admin/images/yes.gif">
+            {else}
+            <img onclick="main.chang_status('{$m.id}','goods','is_new')" src="/admin/images/no.gif">
+            {/if}
+        </td>-->
+        <td align='center'>
+            {if $m.is_hot==1}
+            <img onclick="main.chang_status('{$m.id}','goods','is_hot')" src="/admin/images/yes.gif">
+            {else}
+            <img onclick="main.chang_status('{$m.id}','goods','is_hot')" src="/admin/images/no.gif">
+            {/if}
+        </td>
+        <td align='center'>
+            <a href="#!goods/qrcode?id={$m.id}&com=xshow|商品二维码">二维码</a>
+        </td>
+        <td class="opera" align='center' nowrap>
+            <a href='#!goods/edit?id={$m.id}' class='uiBtn' title='编辑'>编辑</a>
+            <a href='javascript:;' onclick="main.confirm_del('goods/del','{$m.id}')" class='uiBtn' title='删除'>删除</a>
+            <p style="height:5px;"></p>
+            <a href='#!goods/edit?id={$m.id}&type=copy' class='uiBtn' title='复制'>复制</a>
+            <a href='#!robots/team?id={$m.id}&com=xshow|测试' class='uiBtn' title='测试'>测试</a>
+        </td>
+    </tr>
+    {/foreach}
+    {/if}
+    </tbody>
+</table>
+<div class="foot-btn">
+    <div class="pager r">{$page}</div>
+    <button type="button" class="uiBtn BtnGreen" onclick="main.batch_order('formlist','order','goods')">更新排序</button>
+</div>
+</div>
+{literal}
+<script type="text/javascript">
+    function exportMember(){
+        var arr = location.hash.split("?");
+        var get = arr[1]?('?'+arr[1]):'';
+        if(!get){
+            com.xtip('导出量较大，请先进行筛选操作！',{type:1});
+        }else{
+            location.href='/manage/goods/exportExcel/0'+get;
+        }
+    }
+</script>
+{/literal}

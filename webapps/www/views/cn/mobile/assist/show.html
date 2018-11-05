@@ -1,0 +1,434 @@
+{include file="public_header.html"}
+{$headTit=$data.row.name}
+{$slider = 1}{$notice = 1}
+{include file="public_header.html"}
+<style>
+    body{
+        overflow-x: hidden;
+    }
+    .mui-pull-bottom-pocket{
+        opacity: 0;
+        height: 40px;
+        overflow: hidden;
+    }
+    .mores-list {
+        padding: 10px 0 0;
+        margin: 0 -1px;
+    }
+    .mui-content{
+        position: absolute;
+        top: 0;
+        bottom: 50px;
+        left: 0;
+        right: 0;
+        /* 使之可以滚动 */
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    .mui-content .bq-box{
+        background: #f3f4f6;
+        padding-bottom: 20px
+    }
+    .mui-content .mui-content-content{
+        height: auto;
+    }
+</style>
+<script src="/style/js/lefttime.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/style/css/assist.css">
+<div class="mui-content cp-dbox">
+    <div class="mui-content-content ">
+        <div id="slider" class="mui-slider" >
+            <div class="mui-slider-group mui-slider-loop">
+                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                {$img_first = $data.row.img_thumb.0}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="javascript:;">
+                        <img src="{$img_first}">
+                    </a>
+                </div>
+
+                {foreach from=$data.row.img_thumb item=m name=f}
+                <div class="mui-slider-item">
+                    <a href="javascript:;">
+                        <img src="{$m}">
+                    </a>
+                </div>
+                {/foreach}
+                <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+
+                {$img_end=end($data.row.img_thumb)}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="javascript:;">
+                        <img src="{$img_end}">
+                    </a>
+                </div>
+
+            </div>
+            <div class="mui-slider-indicator">
+                {foreach from=$data.row.img_thumb item=m key=k}
+                <div class="mui-indicator {if $k==0}mui-active{/if}"></div>
+                {/foreach}
+            </div>
+        </div>
+        <div class="title  clearfix">
+            <span class="sc-xin {if $data.row.is_fav}active{/if}" onclick="addFav('{$data.row.id}',this);"></span>
+            <h3>{$data.row.name}</h3>
+        </div>
+        <div class="mui-card-footer pintuan-title ">
+            <div class="mui-card-link">
+                <span class="rmb">¥</span>
+                <span class="price-int">0</span>
+                <span class="price-ori" >¥{$data.row.price}</span>
+            </div>
+            <div class="mui-card-link">
+                {if $data.row.sell+$data.row.sales_num>0}<span>已售<b>{formatNum($data.row.sell+$data.row.sales_num)}</b>件</span>{/if}
+            </div>
+        </div>
+
+        {if $data.row.desc}
+        <div class="productInfo">
+            <div class="product-txt"><em class="t">推荐理由</em>{$data.row.desc}</div>
+        </div>
+        {/if}
+        {if $data.assist.note}
+        <div class="productInfo">
+            <div class="product-txt"><em class="t">活动说明</em>{$data.assist.note}</div>
+        </div>
+        {/if}
+        {if $data.row.sid>0}
+        <div class="area-box shop-area">
+            <a href="/store/index/{$data.row.sid}" class="shop-rk">
+                <div class="shop-rklogo">
+                    <img src="{$data.store.info.logo}"/>
+                </div>
+                <div class="shop-rkname">
+                    <h2>{$data.store.info.name}</h2>
+                    <p>商品:{$data.store.goods_total|default:0} <span></span>  已团:{$data.store.sell_total|default:0}</p>
+                    <i href="/store/index/{$data.row.sid}">进店逛逛</i>
+                </div>
+            </a>
+        </div>
+        {/if}
+        <div class="area-box" id="detail">
+            <div id="segmentedControl" class="mui-segmented-control">
+                <a class="mui-control-item mui-active" href="#item1">商品简介</a>
+                {if $data.count>0}<a class="mui-control-item" href="#item2">客户评价</a>{/if}
+            </div>
+            <div>
+                <div id="item1" class="mui-control-content mui-active">
+                    {$data.row.content}
+                </div>
+                {if $data.count>0}
+                <div id="item2" class="mui-control-content">
+                    {include file="goods/lbi/comment.html"}
+                </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+    {include file="public_rand.html"}
+    {if C('is_contact')}
+    {$tsupport=1}
+    {include file="public_contact.html"}
+    {/if}
+</div>
+{if $data.log}
+<dl class="help-bottom" >
+    <dt><a href="/assist/log_list">助力详情</a></dt>
+    <dd>
+        <a href="javascript:;" onclick="qrcode_share({$data.log.id})" class="help-bottom-a">
+            <div class="help-bottom-time">剩余 <em id="leftTimeJxas">00:00:00</em></div>
+            <script>onload_leftTime_jx('as',{$data.end_time},"","");</script>
+            <p class="help-share">继续邀请</p>
+        </a>
+    </dd>
+</dl>
+{else}
+<dl class="help-bottom" >
+    <dt><a href="/assist/index">更多免单</a></dt>
+    <dd>
+        <p class="help-free buy_now">免费领</p>
+    </dd>
+</dl>
+{/if}
+<div class="pop-dbox" style="display: none;">
+    <div class="buy-option" >
+        <div class="buy-option-open"></div>
+        <div class="buy-cp clearfix">
+            <img src="{$data.row.img_src}" class="cp-img" />
+            <div class="buy-cpt">
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int price-sku">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="buy-auto">
+            {if $data.row.sp_val}
+            {foreach from=$data.sp_vals item=m key=k}
+            <dl class="buy-fl sp_val">
+                <dt>{$k}</dt>
+                <dd>
+                    {foreach from=$m item=n name=foo key=key}
+                    <span {if in_array($key,$data.spec) || (count($data.spec)==0 && $smarty.foreach.foo.index==0)}class="active"{/if} data-val="{$key}">{$n}</span>
+                    {/foreach}
+                </dd>
+            </dl>
+            {/foreach}
+            {/if}
+        </div>
+        <div class="buy-btn">
+            <button type="button" class="mui-btn mui-btn-danger ajax_cart btn_msg">确定</button>
+            <input type="hidden" class="spec" name="spec" value="">
+            <input type="hidden" class="buy_type" name="buy_type" value="{$data.row.typeid}">
+        </div>
+    </div>
+</div>
+<div class="toTop" id="roll_top">
+    <a href="javascript:void(0)" class="tot">顶部</a>
+    <a href="javascript:history.back()">关闭</a>
+</div>
+
+<div class="bargain-screen"></div>
+<!--规则弹窗 开始-->
+<div class="bargain-rule">
+    <div class="bargain2-close"><i class="mui-icon mui-icon-closeempty"></i></div>
+    <h2>助力赢免单规则</h2>
+    <section>
+        {zz mod=block mark='assist_rule'}
+    </section>
+</div>
+<!--规则弹窗 结束-->
+<!--选择收货地址弹窗 开始-->
+<div class="bargain3 mui-clearfix">
+    <div class="bargain2-close"><i class="mui-icon mui-icon-closeempty"></i></div>
+    <h3 class="mui-text-center">选择收货地址</h3>
+    <ul class="mui-clearfix bargain3-ul">
+        {if $data.address_list}
+        {foreach from=$data.address_list item=addr}
+        <li class="address_id" data-val="{$addr.name},{$addr.mobile},{$addr.area} {$addr.address}" data-id="{$addr.id}">
+            <i class="mui-icon mui-icon-arrowright"></i>
+            <div class="bargain3-1">
+                <p >{$addr.name}，{$addr.mobile}</p>
+                <p>{$addr.area} {$addr.address}</p>
+            </div>
+        </li>
+        {/foreach}
+        {/if}
+        <li>
+            <a href="javascript:;" class="toggle-modal"  data-url="/member/address_ajax_edit/add">
+                <i class="mui-icon mui-icon-arrowright"></i>
+                <div class="bargain3-1">
+                    <p  >添加新收货地址</p>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="modal modal-checkout" id="modal-address-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="modal-close close" href="javascript:;"></a>
+                <h4 class="modal-title">新增收货地址</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!--选择收货地址弹窗 结束-->
+<!--确认地址 开始-->
+<div class="bargain3-middle mui-text-center">
+    <form>
+        <input type="hidden" name="address_id" id="address_id" value="0">
+        <input type="hidden" name="spec" id="spec" value="">
+        <input type="hidden" name="assist_id" id="assist_id" value="{$data.assist.id}">
+        <h3>您的收货信息</h3>
+        <dl class="bargain3-dl mui-clearfix">
+            <dd class="bargain3-addr"></dd>
+            <dt>
+                <span><input type="button" value="取消" class="bargain3-input bargain3-bg1" /></span>
+                <span><input type="button" value="确定" class="bargain3-input bargain3-bg2" /></span>
+            </dt>
+        </dl>
+    </form>
+</div>
+<!--确认地址 结束-->
+<!--助力分享 开始-->
+<div class="help-fx" style="display: none">
+    <div class="help-fx-bg"></div>
+    <div class="help-fx1 mui-clearfix mui-text-center">
+        长按图片，发送给朋友<br>长按保存图片，发送到朋友圈
+    </div>
+    <div class="help-fx2 mui-clearfix" id="qrcode_share">
+    </div>
+</div>
+<!--助力分享 结束-->
+<script>
+
+    $(document).on('tap', '.buy_now', function() {
+        {if $data.row.sp_val}
+            $('.pop-dbox').fadeIn();
+            getSelecteds();
+        {else}
+            $('.bargain-screen').fadeIn();
+            $('.bargain2').fadeOut();
+            $('.bargain3').fadeIn();
+        {/if}
+    }).on('tap', '.buy-option-open', function() {
+        $('.pop-dbox').fadeOut();
+    }).on('tap', '.bargain2-close', function() {
+        $('.bargain-screen').fadeOut();
+        $('.bargain-rule').fadeOut();
+        $('.bargain2').fadeOut();
+        $('.bargain3').fadeOut();
+    }).on('tap', '.bargain3-bg1', function() {
+        $('.bargain-screen').fadeOut();
+        $('.bargain3-middle').fadeOut();
+    }).on('tap', '.address_id', function() {
+        $('.bargain3-middle').fadeIn();
+        $('.bargain3').fadeOut();
+        $(".bargain3-addr").html($(this).attr("data-val"));
+        $("#address_id").val($(this).attr("data-id"));
+    }).on('tap', '.help-fx-bg', function() {
+        $(this).parent('.help-fx').fadeOut();
+    }).on('tap', '.toggle-modal', function() {
+        $('.modal-checkout').fadeIn();
+        $('.bargain3').fadeOut();
+        $('.bargain-screen').fadeOut();
+        mui.post("/member/address_ajax_edit/add?assist=1",function(data) {
+            $(".modal-body").html(data);
+        },"html");
+    }).on('tap', '.modal-close', function() {
+        $('.modal-checkout').fadeOut();
+    }).on('tap', '.ajax_cart', function() {
+        $('.pop-dbox').fadeOut();
+        $('.bargain-screen').fadeIn();
+        $('.bargain2').fadeOut();
+        $('.bargain3').fadeIn();
+    })
+
+    //选择规格返回不同的图片和规格
+    var goods_id = '{$data.row.id}';
+    var img_src = '{$data.row.img_src}';
+    var team_num = '{$data.row.team_num}';
+    $('.buy-fl dd span').click(function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        if(typeof($(this).attr('data-val'))!='undefined'){
+            getSelecteds();
+        }
+    });
+</script>
+{literal}
+<script src="/style/js/layer1.8.5/layer.min.js"></script>
+<script src="/style/js/html2canvas.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function getSelecteds() {
+        var result = "";
+        var buy_type = $('.buy_type').val();
+        $(".sp_val dd span[class='active']").each(function () {
+            result += $(this).attr("data-val")+"-";
+        });
+        $.post("/goods/ajax_goodspec",{spec:result,goods_id:goods_id},function(data){
+            if(data.code=='success'){
+                $("#spec").val(data.spec);
+                if(data.path){
+                    $(".cp-img").attr('src',data.path);
+                }else{
+                    $(".cp-img").attr('src',img_src);
+                }
+            }
+        },"json");
+    }
+
+    $('.bargain3-bg2').bind('click',function(){
+        var address_id = $('#address_id').val();
+        var spec = $('#spec').val();
+        var assist_id = $('#assist_id').val();
+        mui.post("/assist/assist_apply",{address_id:address_id,assist_id:assist_id,spec:spec}, function(data) {
+            $('.bargain-screen').fadeOut();
+            $('.bargain3-middle').fadeOut();
+            if(data.code==0){
+                qrcode_html(data);
+            }else if(data.code==10002){
+                qrcode_share(data.id);
+            }else{
+                mui.alert(data.message);
+            }
+        },'json');
+    })
+
+    function qrcode_share(log_id){
+        mui.post("/assist/qrcode_share/"+log_id, function(data) {
+            qrcode_html(data);
+        },'json');
+    }
+
+    function qrcode_html(data){
+        $('.help-fx').fadeIn();
+        $("#qrcode_share").html(data.html);
+        $('.pic').height(($(window).width()*0.7)*0.7);
+        if(!$("#qrcode_share").hasClass('hasqr')){
+            var canvas = document.querySelector("canvas");
+            html2canvas(document.getElementById("qrcode_share"), { canvas: canvas }).then(function(canvas) {
+                document.getElementById("qrcode_share").appendChild(canvas);
+                $("canvas").hide();
+                $("#qrcode_share").html('').addClass('hasqr');
+                //$("#qrcode_share").html('');
+                document.getElementById("qrcode_share").appendChild(convertCanvasToImage(canvas));
+            });
+        }
+    }
+
+    function convertCanvasToImage(canvas) {
+        var image = new Image();
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+</script>
+<script type="text/javascript">
+    mui.init({
+        pullRefresh: {
+            container: '.refreshContainer',
+            up: {
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }
+        }
+    });
+    var count = 0;
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh() {
+        setTimeout(function() {
+            mui('.refreshContainer').pullRefresh().endPullupToRefresh((++count > 5)); //参数为true代表没有更多数据了。
+            $('.mui-content').append('');
+        }, 1500);
+    }
+    mui.init({
+        swipeBack:true, //启用右滑关闭功能
+    });
+    var gallery = mui('#slider');
+    gallery.slider({
+        interval:5000 //自动轮播周期，若为0则不自动播放，默认为0；
+    });
+</script>
+{/literal}
+<div class="ptjj-txt" style="display: none;">
+    {zz mod=block mark='pintuan_note'}
+</div>
+<script>
+    $(document).ready(function() {
+        $(".show_note").click(function(){
+            $(".ptjj-txt").show();
+        });
+        $(".close_note").click(function(){
+            $(".ptjj-txt").hide();
+        });
+    });
+</script>
+{include file="public_footer.html"}

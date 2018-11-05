@@ -1,0 +1,19 @@
+{$headTit="修改手机号"}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">修改手机号</h1>
+</header>
+<div class="mui-content set-box ios-bug">
+    <div class="name-box"  style="display: block;">
+        <form class="myform" method="post"  action="/member/info"  target="iframeNews">
+            <input type="hidden" name="Submit1" value="1">
+            <input type="text" name="nickname" value="{$member.nickname}" placeholder="输入昵称" />
+            <div class="name-btn">
+                <button type="submit">确定</button>
+                <button class="mui-action-back">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+{include file="public_footer.html"}

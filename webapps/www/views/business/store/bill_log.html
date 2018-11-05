@@ -1,0 +1,95 @@
+{include file='../public_btn.html'}
+<h3 class="info-tag">
+    明细列表(共{$page_total}个明细)<span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>资金总计: </b> 可用余额￥<span>{$total.user_money}</span> </h3>
+
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!business/bill_log/{$row.mid|default:0}" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <input type="hidden" value="{$smarty.get.mid|default:0}" name="mid">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="desc" {if $smarty.get.k eq 'desc'}selected{/if}>描述</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$smarty.get.q}" type="text">
+            <div class="l">
+                <select name="stage" style="display:none;">
+                    <option value="">-操作类型-</option>
+                    {foreach from=$stages item=m}
+                    <option value="{$m.key}" {if $m.key eq $smarty.get.stage}selected{/if}>{$m.title}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="l" style="display:none;">
+                <select name="points">
+                    <option value="">-币值-</option>
+                    <option value="user_money"{if $points eq 'user_money'} selected{/if}>可用余额</option>
+                    <option value="pay_points"{if $points eq 'pay_points'} selected{/if}>积分</option>
+                    <option value="rank_points"{if $points eq 'rank_points'} selected{/if}>经验值</option>
+                </select>
+                <select name="sortorder" id="sortorder">
+                    <option value="">-排序-</option>
+                    <option value="DESC" {if $sortorder eq 'DESC'}selected{/if}>降序</option>
+                    <option value="ASC" {if $sortorder eq 'ASC'}selected{/if}>升序</option>
+                </select>
+            </div>
+            <label class="ui-label w60">操作时间：</label>
+            <div class="l">
+                <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|default:''}" autocomplete="off" onclick="WdatePicker()" type="text">
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|default:''}" autocomplete="off" onclick="WdatePicker()" type="text">
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="w40">ID</th>
+            <th>商家名</th>
+            <th class="w80">可用余额</th>
+            <th class="w80">平台抵用券金额</th>
+            <th class="w80">商家抵用券金额</th>
+            <th class="w80">总佣金</th>
+            <th class="w160">订单号</th>
+            <th class="w160">操作类型</th>
+            <th class="w160">操作时间</th>
+            <th class="title">操作描述</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td>{$m.id}</td>
+            <td>{$m.name}</td>
+            <td><b style="color:#f80">{$m.user_money}</b></td>
+            <td>{$m.coupon_id_num}</td>
+            <td>{$m.coupon_id_sid_num}</td>
+            <td>{$m.comm_amount}</td>
+            <td>{$m.order_sn}</td>
+            <td>{$m.stage|default:''}</td>
+            <td>{date('Y-m-d H:i',$m.logtime)}</td>
+            <td class="title">{$m.desc}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {$page}
+
+</div>
+
+<script src="/js/manage/member.js"></script>
+{literal}
+<script>
+    $.loadJs('/admin/js/manage/member.js',function(){
+    });
+    var menus = $('#page_container a'), i;
+    for(i = 0;i < menus.length;i++){
+        menus[i].onclick = function() {
+            var page = this.rel;
+            member.search(page);
+        }
+    }
+</script>
+{/literal}

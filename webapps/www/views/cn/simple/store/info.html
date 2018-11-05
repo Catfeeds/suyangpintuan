@@ -1,0 +1,54 @@
+{include file="public_header.html"}
+{include file="store/nav.html"}
+<div class="shop-about">
+	<dl class="clearfix">
+		<dt>店铺二维码</dt>
+		<dd>
+			<a href="/store/qrcode/{$data.info.id}" class="shop-rwm">
+				<img src="/style/img/rwm.png" />
+			</a>
+		</dd>
+	</dl>
+	<dl class="clearfix">
+		<dt>店铺简介</dt>
+		<dd>
+			<p>{$data.info.note}</p>
+		</dd>
+	</dl>
+        <dl class="clearfix">
+                <dt>店铺认证 </dt>
+                <dd>
+                        <p>{if $data.info.type==1}通过个人认证{else}通过企业认证{/if}</p>
+                </dd>
+        </dl>
+        {if $data.info.deposit>0}
+        <dl class="clearfix">
+                <dt>保证金金额 </dt>
+                <dd>
+                        <p><span class="rmb">￥{$data.info.deposit}</span>元</p>
+                </dd>
+        </dl>
+        {/if}
+	<dl class="clearfix">
+		<dt>所在地区</dt>
+		<dd>
+			<p>{$data.info.zone}</p>
+		</dd>
+	</dl>
+	<dl class="clearfix">
+		<dt>开店时间</dt>
+		<dd>
+			<p>{$data.info.c_time|date_format:"Y-m-d"}</p>
+		</dd>
+	</dl>			
+</div>
+<div class="shop-brand">
+	<h3>主营品牌</h3>	
+	<ul class="clearfix shop-brand-list">
+		{zz mod=fileurl source=$data.info.brand var=brand num=2}
+		{foreach from=$brand item=m}
+		<li><a href="javascript:;"><img src="{$m.path}"/></a></li>
+		{/foreach}		
+	</ul>	
+</div>
+{include file="public_footer.html"}

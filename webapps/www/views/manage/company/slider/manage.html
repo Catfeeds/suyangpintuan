@@ -1,0 +1,60 @@
+<h3 class="info-tag">
+    <a class="uiBtn r" href="#!company/info/slider">返回</a>
+    轮播广告图设置 <span></span></h3>
+
+<div class="html-box">
+
+{literal}
+<style type="text/css">
+.slider-box .oid{width:60px}
+.slider-box .opera{width:60px; border-left:1px solid #ddd}
+.slider-box .opera .uiBtn{margin:0 auto; float:none}
+.slider{width:320px}
+.slider img{width:320px; display:block; border-radius:5px}
+.slider-link{line-height:20px; padding:2px 0 2px 10px; overflow:hidden; border-top:1px solid #eee; color:#F80}
+</style>
+{/literal}
+<table class="xlist slider-box">
+    <tr>
+        <td colspan="3">
+            <form action="/manage/company/info/upSlider" target="upSlider" enctype="multipart/form-data" id="upSliderForm" method="post">
+                <input type="hidden" name="slider_id" value="{$slider.id}" />
+                <input type="hidden" name="imgcate_id" value="{$slider.imgcate_id}" />
+
+                <div class="f-unit">
+                    <label class="ui-label w60">选择图片：</label>
+                    <input type="file" name="upFile">
+                </div>
+                <div class="f-unit">
+                    <label class="ui-label w60">标题：</label>
+                    <input type="text" class="form-i w220" name="title">
+                </div>
+                <div class="f-unit">
+                    <label class="ui-label w60">图片链接：</label>
+                    <input type="text" class="form-i w220" name="link">
+                    <a onclick="G('upSliderForm').submit();" href="javascript:;" class="uiBtn BtnGreen" style="float:left; margin:1px 0 0 4px">上传图片</a>
+                </div>
+            </form>
+
+        </td>
+    </tr>
+    <tr>
+        <th class="oid">序号</th>
+        <th>图片</th>
+        <th class="opera">操作</th>
+    </tr>
+    {foreach from=$slides item=m key=k}
+    <tr>
+        <td class="oid">{$k+1}</td>
+        <td><div class="slider">
+            <img src="{$m.imgurl_thumb}">
+            <div class="slider-link">链接：{$m.link}</div>
+        </div></td>
+        <td class="opera"><a href="javascript:;" class="uiBtn e2-site-rmSlideImg-{$m.id}">删除</a></td>
+    </tr>
+    {/foreach}
+</table>
+
+</div>
+<iframe name="upSlider" style="display:none; width:500px; height:200px; border:1px solid #ddd"></iframe>
+<script type="text/javascript" src="/admin/js/manage/site.js"></script>

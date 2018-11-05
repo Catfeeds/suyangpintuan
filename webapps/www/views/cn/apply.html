@@ -1,0 +1,181 @@
+{include file="public_header.html"}
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<div class="rzlc-box">
+    <div class="content-box clearfix">
+        <div class="pull-left rzlc-t1">
+            <span>欢迎入驻</span><br />拼团网站
+        </div>
+        <div class="pull-right">
+            <ul class="rzlc-li">
+                <li class="active">1.填写店铺信息</li>
+                <li>2.填写企业/个人信息</li>
+                <li>3.资质审核</li>
+                <li>4.支付保障金费用</li>
+                <li>5.完成入驻</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="news-box">
+    <div class="content-box rz-box">
+        <div class="clearfix lc-dbox">
+            <form action="" id="myform"  name="myform" target="iframeNews" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="Submit" value="1">
+            <input type="hidden" name="post[id]" value="{$smarty.session.b_id}">
+            <h2>填写店铺信息</h2>
+            <div class="lc-zctable">
+                <table>
+                    <tr>
+                        <th><span>*</span>店铺类型：</th>
+                        <td>
+                            <label><input type="radio" name="post[type]" value="2" {if $data.b_info.type==2}checked{/if} />企业</label>
+                            <label><input type="radio" name="post[type]" value="1" {if $data.b_info.type==1}checked{/if} />个人</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span>*</span>店铺 LOGO：
+                        </th>
+                        <td>
+                            <input type="hidden" name="post[logo]"  value='{$data.b_info.logo}'/>
+                            <input type="file" name="logo"  value='{$data.b_info.logo}'/>
+                            <p>尺寸200x200最佳</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span>*</span>店铺名称：</th>
+                        <td>
+                            <input type="text" name="post[name]" value="{$data.b_info.name}" id="name" placeholder="店铺名称" class="zc-inpt shop-name"  datatype="*" nullmsg="请输入店铺名称" />
+                        </td>
+                    </tr>
+                    {*<tr>
+                        <th><span>*</span>主营类目：</th>
+                        <td>
+                            <select class="zc-select">
+                                <option>请选择您的主营类目</option>
+                            </select>
+                        </td>
+                    </tr>*}
+                    <tr>
+                        <th><span>*</span>店铺描述：</th>
+                        <td>
+                            <textarea class="zc-text" name="post[note]" datatype="*" nullmsg="请输入店铺描述">{$data.b_info.note}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>淘宝/天猫/JD 店地址：</th>
+                        <td>
+                            <input type="text" name="post[url]" value="{$data.b_info.url}" id="url" placeholder="店铺网址" class="zc-inpt shop-name" />
+                            <p>已有电商平台经验可以提升入驻审核速度哟</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h2>填写联系人信息</h2>
+            <div class="lc-zctable">
+                <table>
+                    <tr>
+                        <th><span>*</span>真实姓名：</th>
+                        <td>
+                            <input type="text" name="post[truename]" value="{$data.b_info.truename}" id="truename" value="" class="zc-inpt shop-name"  datatype="*" nullmsg="请输入真实姓名"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span>*</span>身份证号码：</th>
+                        <td>
+                            <input type="text" name="post[card]" value="{$data.b_info.card}" id="card" placeholder="请输入二代身份证" class="zc-inpt shop-name" datatype="*" nullmsg="请输入二代身份证"/>
+                        </td>
+                    </tr>
+                    {*<tr>
+                        <th><span>*</span>手机：</th>
+                        <td>
+                            <input type="text" name="post[mobile]" id="mobile" value="" class="zc-inpt shop-name2" datatype="m" nullmsg="请输入您的手机号码" errormsg="手机号码格式不正确" autocomplate="off" />
+                            <button class="sjyzm" type="button" onclick="getSmsVerify('sms_business_reg')">获取验证码</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span>*</span>图片验证码：</th>
+                        <td>
+                            <input id="scode" class="zc-inpt shop-name2" type="text" name="scode" value="" placeholder="此处填写右图答案" datatype="*" nullmsg="请输入图片验证">
+                            <img class="refresh_scode" src="/welcome/scode" data-src="/welcome/scode" width="100px">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span>*</span>手机验证码：</th>
+                        <td>
+                            <input type="text" name="sms_code" id="sms_code" value="" class="zc-inpt "  datatype="*" nullmsg="请输入手机验证码" autocomplate="off"/>
+                        </td>
+                    </tr>*}
+                    <tr>
+                        <th><span>*</span>QQ：</th>
+                        <td>
+                            <input type="text" name="post[qq]" value="{$data.b_info.qq}" id="qq" value="" class="zc-inpt shop-name" datatype="*" nullmsg="请输入QQ" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span>*</span>常用邮箱：</th>
+                        <td>
+                            <input type="text" name="post[email]" value="{$data.b_info.email}" id="email" value="" class="zc-inpt shop-name"  datatype="*" nullmsg="请输入常用邮箱" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span>*</span>常驻地址：</th>
+                        <td>
+                            {linkage('zone', $data.b_info.zone)}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input name="agree" type="checkbox" value="1" datatype="*"  nullmsg="请同意入驻协议" checked="checked"/>我已阅读并同意《<a href="javascript:;" id="Agree">{C('site_name')}入驻协议</a>》
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <button class="rz-btn1" type="submit">保存，下一步</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="screen"></div>
+<div class="ruzhu1 clearfix">
+    <dl class="ruzhu1-top clearfix">
+        <dt>×</dt>
+        <dd>{C('site_name')}入驻协议</dd>
+    </dl>
+    <div class="ruzhu1-1 clearfix">{zz mod=block mark=pc_agree}</div>
+    <div class="ruzhu1-2 clearfix"><span>知道了</span></div>
+</div>
+<script src="/style/js/layer/layer.js" type="text/javascript"></script>
+<script src="/style/js/layer/extend/layer.ext.js" type="text/javascript"></script>
+<script src="/style/js/xmsz_common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#myform").Validform({
+            tiptype: function(msg, o, cttl) {
+                validTip(msg, o, cttl);
+            },
+            showAllError: false
+        }); 
+    });
+    $(document).on('click', '.refresh_scode', function() {
+           var $this = $(this)
+           $this.attr('src', $this.data('src') + '?' + (+new Date()));
+    })
+    $('#Agree').click(function(){
+        $(".ruzhu1").fadeIn()
+        $(".screen").fadeIn()
+        $('.ruzhu1-1').height($('.ruzhu1').height()-125)
+    });
+    $('.screen,.ruzhu1-top dt,.ruzhu1-2 span').click(function(){
+        $(".ruzhu1").fadeOut()
+        $(".screen").fadeOut()
+    });
+</script>
+{include file="public_footer.html"}

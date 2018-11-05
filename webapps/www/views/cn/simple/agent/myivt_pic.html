@@ -1,0 +1,47 @@
+{include file="public_header.html"}
+<div class="tuiguang-tp-top">
+	<div class="tuiguang-tp-tx">
+		<em style="background-image: url('{photo($mid)}');"></em>
+		<p>
+			{$member.username|nickname:$member.nickname:1}
+			<br />
+			我为港湾核变电商代言
+		</p>
+	</div>
+	<div class="tupiantg-tzy">
+		<img src="/style/images/tupiantg-tzy.png" />
+	</div>
+</div>
+<div class="tupiantg-ewm">
+	<ul>
+		<li>
+			<img style="width: 100%;" src="{$qrcode}" />
+		</li>
+		<li>
+			<img class="ewm" src="{$qrcode}" />
+			<img src="/style/images/tupiantg-zw.png" />
+		</li>
+	</ul>
+	<p>长按此图识别二维码  开始分享之旅</p>
+</div>
+<div class="tupiantg-zq">
+	{zz mod=block mark=myivt_pic}
+</div>
+<div class="ft"></div>
+<div class="fxpyq">
+	<img src="/style/images/fxpyq.png" />
+	<a href="javascript:;" onclick="$('.fxpyq').hide();" class="fxpyq-a"> 我知道了</a>
+</div>
+<div class="fxpyq-tp">
+	<p>
+		长按保存图片并将
+		<br />
+		图片转发给您的好友
+	</p>
+	<a href="javascript:;" onclick="$('.fxpyq-tp').hide();" class="fxpyq-a"> 我知道了</a>
+</div>
+<div class="tupiantg-fxlj">
+	<a href="javascript:;" onclick="$('.fxpyq').show();">链接推广</a>
+	<a href="javascript:;" onclick="$('.fxpyq-tp').show();">图片推广</a>
+</div>
+{include file="public_footer.html"}

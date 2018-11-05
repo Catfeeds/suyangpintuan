@@ -1,0 +1,8 @@
+<ul class="my-money-1">
+    <li><span>{L('unit_comm')}来源：</span> <p>{if $m.level==0}开团{else}会员{/if}{L('unit_comm')}</p></li>
+    <li><span>获得时间：</span> <p>{$m.addtime|date_format:"Y-m-d"}</p></li>
+    <li><span>订单金额：</span> <p>￥{$m.total}</p></li>
+    <li><span>{L('unit_comm')}金额：</span> <p><em>￥{$m.commission}</em></p></li>
+    <li><span>{L('unit_comm')}备注：</span> <p>{$m.desc}</p></li>
+</ul>
+            

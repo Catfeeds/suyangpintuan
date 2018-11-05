@@ -1,0 +1,22 @@
+<div class="area-box">
+    <dl class="fx-cpbox clearfix">
+        <dt>
+            <img src="{zz mod=fileurl source=$m.goods_thumb type=1}"/>
+        </dt>
+        <dd>
+            <h3>{$m.goods_name}</h3>
+            <div class="mui-card-link">
+                <span class="tuan-rs">{$m.goods_team_num}人团</span>
+                <span class="rmb">¥</span>
+                <span class="price-int">{$m.goods_team_price}</span>
+                <span class="sc-xin active"  onclick="delFav('{$m.id}',this);"></span>
+            </div>
+            <div class="mui-card-link">
+                <button type="button" class="mui-btn mui-btn-danger"
+                        onclick="window.location.href='/flow/team/{$m.id}'">去开团>
+                </button>
+            </div>
+
+        </dd>
+    </dl>
+</div>

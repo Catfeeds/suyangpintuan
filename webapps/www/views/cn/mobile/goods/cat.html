@@ -1,0 +1,173 @@
+{$slider = 1}{$active = 4}{$nav = 1}
+{include file="public_header.html"}
+{literal}
+<style>
+    .mui-row.mui-fullscreen>[class*="mui-col-"] {
+        height: 100%;
+    }
+    #segmentedControlContents div{
+        padding: 0 8px;
+    }
+
+    #segmentedControlContents .mui-table-view-cell{
+        padding: 8px;
+        width: 33.3333%;
+        display: inline-block;
+        text-align: center;
+    }
+    .mui-table-view:before{background-color: #fff;}
+    .mui-col-xs-3,
+    .mui-col-xs-9 {
+        overflow-y: auto;
+        height: 100%;
+    }
+    .mui-col-xs-3{
+        background: #fff;
+    }
+
+    .mui-segmented-control .mui-control-item {
+        line-height: 50px;
+        width: 100%;
+    }
+
+    .mui-control-content {
+        display: block;
+    }
+
+    .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+        background-color: #fff;
+    }
+</style>
+{/literal}
+<header class="mui-bar mui-bar-nav so-top">
+    <form action="/goods/index" method="get">
+        <div class="mui-input-row mui-search">
+            <input type="search" class="mui-input-clear" placeholder="{C('keywords')}" name="q" value="{if isset($smarty.get.q)}{$smarty.get.q}{/if}">
+            <button class="so-btn" type="submit" >搜索</button>
+        </div>
+    </form>
+</header>
+<div class="mui-content mui-row mui-fullscreen">
+    <div class="mui-col-xs-3">
+        <div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+        </div>
+    </div>
+    <div id="segmentedControlContents" class="mui-col-xs-9">
+    </div>
+</div>
+<script>
+    mui.init({
+        swipeBack: true //启用右滑关闭功能
+    });
+    var controls = document.getElementById("segmentedControls");
+    var contents = document.getElementById("segmentedControlContents");
+    var html = [];
+
+    var i = 1,
+        j = 1,
+        m = 0, //左侧选项卡数量+1
+        n = 0; //每个选项卡列表数量+1
+
+    {foreach from=$list item=m key=k}
+    html.push('<a class="mui-control-item" data-index="{$k}" href="#content{$k}">{$m.catname}</a>');
+    {/foreach}
+    controls.innerHTML = html.join('');
+    html = [];
+    {foreach from=$list item=m key=k}
+    html.push('<div id="content{$k+1}" class="mui-control-content"><section class="mui-navtitle"><a href="/goods/index/{$m.id}?all=1&top={$m.id}">{$m.catname}<span>查看更多</span></a></section><ul class="mui-table-view">');
+    {foreach from=$m.sub item=n key=_k}
+    html.push('<li class="mui-table-view-cell"><a  href="/goods/index/{$n.id}?all=1&top={$n.id}"><i style="display: inline-block; width: 75px; height: 75px;background: url({$n.thumb}) no-repeat center center;background-size: 75px;"></i><p>{$n.catname}</p></a></li>');
+    {/foreach}
+    html.push('</ul></div>');
+    {/foreach}
+    contents.innerHTML = html.join('');
+    //默认选中第一个
+    controls.querySelector('.mui-control-item').classList.add('mui-active');
+    //			contents.querySelector('.mui-control-content').classList.add('mui-active');
+    (function() {
+        var controlsElem = document.getElementById("segmentedControls");
+        var contentsElem = document.getElementById("segmentedControlContents");
+        var controlListElem = controlsElem.querySelectorAll('.mui-control-item');
+        var contentListElem = contentsElem.querySelectorAll('.mui-control-content');
+        var controlWrapperElem = controlsElem.parentNode;
+        var controlWrapperHeight = controlWrapperElem.offsetHeight;
+        var controlMaxScroll = controlWrapperElem.scrollHeight - controlWrapperHeight;//左侧类别最大可滚动高度
+        var maxScroll = contentsElem.scrollHeight - contentsElem.offsetHeight;//右侧内容最大可滚动高度
+        var controlHeight = controlListElem[0].offsetHeight;//左侧类别每一项的高度
+        var controlTops = []; //存储control的scrollTop值
+        var contentTops = [0]; //存储content的scrollTop值
+        var length = contentListElem.length;
+        for (var i = 0; i < length; i++) {
+            controlTops.push(controlListElem[i].offsetTop + controlHeight);
+        }
+        for (var i = 1; i < length; i++) {
+            var offsetTop = contentListElem[i].offsetTop;
+            if (offsetTop + 100 >= maxScroll) {
+                var height = Math.max(offsetTop + 100 - maxScroll, 100);
+                var totalHeight = 0;
+                var heights = [];
+                for (var j = i; j < length; j++) {
+                    var offsetHeight = contentListElem[j].offsetHeight;
+                    totalHeight += offsetHeight;
+                    heights.push(totalHeight);
+                }
+                for (var m = 0, len = heights.length; m < len; m++) {
+                    contentTops.push(parseInt(maxScroll - (height - heights[m] / totalHeight * height)));
+                }
+                break;
+            } else {
+                contentTops.push(parseInt(offsetTop));
+            }
+        }
+        contentsElem.addEventListener('scroll', function() {
+            var scrollTop = contentsElem.scrollTop;
+            for (var i = 0; i < length; i++) {
+                var offsetTop = contentTops[i];
+                var offset = Math.abs(offsetTop - scrollTop);
+//						console.log("i:"+i+",scrollTop:"+scrollTop+",offsetTop:"+offsetTop+",offset:"+offset);
+                if (scrollTop < offsetTop) {
+                    if (scrollTop >= maxScroll) {
+                        onScroll(length - 1);
+                    } else {
+                        onScroll(i );
+                    }
+                    break;
+                } else if (offset < 20) {
+                    onScroll(i);
+                    break;
+                }else if(scrollTop >= maxScroll){
+                    onScroll(length );
+                    break;
+                }
+            }
+        });
+        var lastIndex = 0;
+        //监听content滚动
+        var onScroll = function(index) {
+            if (lastIndex !== index) {
+                lastIndex = index;
+                var lastActiveElem = controlsElem.querySelector('.mui-active');
+                lastActiveElem && (lastActiveElem.classList.remove('mui-active'));
+                var currentElem = controlsElem.querySelector('.mui-control-item:nth-child(' + (index + 1) + ')');
+                currentElem.classList.add('mui-active');
+                //简单处理左侧分类滚动，要么滚动到底，要么滚动到顶
+                 /*var controlScrollTop = controlWrapperElem.scrollTop;
+                 if (controlScrollTop + controlWrapperHeight < controlTops[index]) {
+                 controlWrapperElem.scrollTop = controlMaxScroll;
+                 } else if (controlScrollTop > controlTops[index] - controlHeight) {
+                 controlWrapperElem.scrollTop = 0;
+                 }*/
+            }
+        };
+        //滚动到指定content
+        var scrollTo = function(index) {
+            contentsElem.scrollTop = contentTops[index];
+        };
+        mui(controlsElem).on('tap', '.mui-control-item', function(e) {
+            scrollTo(this.getAttribute('data-index'));
+            return true;
+        });
+    })();
+</script>
+
+{include file="public_footer.html"}

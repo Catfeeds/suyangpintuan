@@ -1,0 +1,44 @@
+{$nav = 0}{$slider = 1}
+{include file="public_header.html"}
+<div class="add-btn">
+    <button type="button" class="mui-btn mui-btn-danger" onclick="window.location.href='/member/address/add?back={$back}'">添加收货地址</button>
+</div>
+{foreach from=$address item=m}
+<div class="area-box address-list {$m.id}">
+    <a href="javascript:set_default({$m.id});" class="no-address {if $m.is_default == 1}active{/if}">
+        <p>{$m.name}，{$m.mobile}</p>
+        {$m.area} {$m.address}
+    </a>
+    <div class="address-btn2 clearfix">
+        <button type="button" onclick="window.location.href='/member/address/{$m.id}?back={$back}'"><span class="modify-bt">修改</span></button>
+        <button type="button" onclick="del_confirm({$m.id})"><span class="delete-bt">删除</span></button>
+    </div>
+</div>
+{/foreach}
+{include file="public_footer.html"}
+{literal}
+<script>
+    function del_confirm(id){
+        var btnArray = ['否', '是'];
+        mui.confirm('确认删除该收货地址吗?', '提示', btnArray, function(e) {
+            if (e.index == 1) {
+                $.post("/member/ajax_address_del",{id:id},function(data){
+                    if(data['error'] == false){
+                        mui.toast(data['msg']);
+                        $('.'+id).remove();
+                    }else {
+                        mui.toast(data['msg']);
+                    }
+                },"json")
+            }
+        })
+    }
+
+    function set_default(id){
+        $.get("/member/address_default/"+id,function(e){
+            location.reload();
+        })
+    }
+</script>
+{/literal}
+</html>

@@ -1,0 +1,27 @@
+{$headTit="提现记录"} {include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<div class="main pd_10">
+    <div class="list">
+        {foreach from=$list item=m}
+        {include file="member/lbi/withdraw_list.html"}
+        {foreachelse}
+        <ul class="sale1 f12">
+            <li class="norecord">暂无对应记录</li>
+        </ul>
+        {/foreach}
+    </div>
+    {if count($list)>0}
+    {assign var=event value='nclick'}
+    <script type="text/javascript">
+    var ExtendOptions = {
+        itemSelector: 'ul',
+        path: function(index) {
+            return "/member/withdraw_list/"+index+"?status={$status}&load";
+        }
+    };
+    </script>
+    {include file="public_scroll.html"}
+    {/if}
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

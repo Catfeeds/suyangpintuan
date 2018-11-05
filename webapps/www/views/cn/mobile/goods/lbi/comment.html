@@ -1,0 +1,41 @@
+<ul class="mui-table-view comment_ajax_list">
+</ul> 
+<div class="mui-content-padded">
+    <ul class="mui-pager">
+        <li class="mui-previous">
+            <a href="javascript:prePage()">
+                上一页
+            </a>
+        </li>
+        <li class="mui-next">
+            <a href="javascript:nextPage()">
+                下一页
+            </a>
+        </li>
+    </ul>                        
+</div>
+<script>
+    var id = '{$data.row.id}';
+    var page = 1;
+    $(function() {
+        getComment();
+    });
+    function getComment() {
+        if (page < 1)page = 1;
+        mui.get("/goods/ajax_rate/" + id + "/" + page, function(data) {
+            if (data) {
+                $(".comment_ajax_list").html(data);
+            } else {
+                if ($(".no-comment").length == 0)$(".comment_ajax_list").append('<div class="group-tit no-comment" ><span>没有更多了</span></div>');
+            }
+        });
+    }
+    function nextPage() {
+        ++page;
+        getComment();
+    }
+    function prePage() {
+        --page;
+        getComment();
+    }
+</script>

@@ -1,0 +1,37 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <table  class="table-list">
+        <tr>
+            <td class="w5"></td>
+            <td class="w80"><img src="{$row.img_src}" style="width:60px" /></td>
+            <td style="line-height: 1.4">
+                <div class="oi-name">{$row.name}</div>
+                <div class="c-gray">
+                    类型：{$row.typeid_name}<br>
+                    拼团价格：{$row.team_price}<br>
+                    拼团人数：{$row.team_num}
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <form target="iframeNewsTarget" method="post" action="/manage/robots/team" >
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>开团数：</label></td>
+                <td class="td-input">
+                    <input type="text" name="num" >
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <input type="hidden" name="id" value="{$row.id}">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

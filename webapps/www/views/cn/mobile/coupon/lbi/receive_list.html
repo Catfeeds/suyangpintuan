@@ -1,0 +1,11 @@
+<li class="clearfix coupon-list{if $m.is_receive eq 1} ylq-li{/if}" >
+						<div class="yhj-jr"><span>￥</span>{$m.amount}</div>
+						<div class="yhj-txt">
+							<h3>{$m.title}</h3>
+							<p>{if !empty($m.start_time)}{date('Y/m/d', $m.start_time)}-{/if}{if empty($m.end_time)}有效期不限{else}{date('Y/m/d', $m.end_time)}{/if}</p>
+							<p>{if $m.need_amount gt 0}<span>满{$m.need_amount}</span>{/if}立减{$m.amount}</p>
+						</div>
+						<div class="yhj-abtn">
+							<a href="javascript:;" class="coupon_get" data-coupon="{$m.id}">{if $m.is_receive eq 1}已领取{else}领取{/if}</a>
+						</div>						
+					</li>

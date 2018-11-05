@@ -1,0 +1,26 @@
+{$headTit="我的抽奖"}
+{$headOrder=1}
+{$slider=1}
+{include file="public_header.html"}
+{if $data.list}
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">
+	 <div class="mui-scroll">
+		 <div class="hot-list page-box">
+			{foreach from=$data.list item=m}
+			{include file="member/lbi/lottery_list.html"}
+			{/foreach}
+		 </div>
+	 </div>
+ </div>
+{else}
+{$empty_tip = "没有内容，马上参加吧!"}
+{include file="public_empty.html"}
+{/if}
+ <script>
+{literal}var D = {load: 1};{/literal}//load:1必填
+var ajax_url = "/member/order_lottery/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

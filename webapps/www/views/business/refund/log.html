@@ -1,0 +1,104 @@
+<h3 class="info-tag">
+    {*<a class="uiBtn BtnGreen r" href="javascript:;" onclick="exportMember()">导出Excel</a>*}
+    {foreach from=$btnMenu item=m key=key}
+    <a class="uiBtn{if $btnNo==$key} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+<div class="html-box">
+    <form class="cond-form clear" action="#!refund/log" method="get" onsubmit="return xForm.submit(this)">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">            
+            <select name="k" id="k">
+                <option value="id" {if $smarty.request.k eq 'id'}selected{/if}>ID</option>
+                <option value="order_id" {if $smarty.request.k eq 'order_id'}selected{/if}>订单ID</option>          
+                <option value="out_trade_no" {if $smarty.request.k eq 'out_trade_no'}selected{/if}>支付单号</option>            
+                <option value="out_refund_no" {if $smarty.request.k eq 'out_refund_no'}selected{/if}>退款单号</option>            
+            </select>
+            <input class="form-i w160 sitem" name="q" value="{$smarty.request.q}" type="text">
+            <select name="is_refund" >
+                <option value=""  {if !isset($smarty.request.is_refund) || $smarty.request.is_refund === ''}selected{/if}>状态</option>                
+                <option value="0" {if $smarty.request.is_refund === '0'}selected{/if}>申请中</option>                
+                <option value="1" {if $smarty.request.is_refund == 1}selected{/if}>通过</option>              
+                <option value="2" {if $smarty.request.is_refund == 2}selected{/if}>失败</option>              
+            </select>              
+            <label class="ui-label w60">申请时间：</label>
+            <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" />
+            <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" />     
+            {*<select name="sortby" id="sortby">
+                <option value="id" {if $smarty.get.sortby eq 'id'}selected{/if}>ID</option>
+                <option value="c_time" {if $smarty.get.sortby eq 'c_time'}selected{/if}>开团时间</option>
+                <option value="e_time" {if $smarty.get.sortby eq 'e_time'}selected{/if}>结束时间</option>
+            </select>
+            <select name="sortorder" id="sortorder">
+                <option value="DESC" {if $smarty.get.sortorder eq 'DESC'}selected{/if}>降序</option>
+                <option value="ASC" {if $smarty.get.sortorder eq 'ASC'}selected{/if}>升序</option>
+            </select>*}           
+            <button type="submit" id="submit" style="margin:1px 20px 0 10px;float:left;" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+    <table class="tb-goods" style="width:100%">
+        <thead>
+            <tr>
+                <th nowrap class="w80">ID</th>                
+                <th nowrap class="w80">订单ID</th>
+                <th nowrap class="w80">退款金额</th>
+                <th nowrap class="w140">订单号</th>
+                <th nowrap class="w140">支付单号</th>
+                <th nowrap class="w140">退款单号</th>
+                <th nowrap class="w80">申请时间</th>
+                <th nowrap class="w80">状态</th>
+                <th nowrap class="w140">操作</th>
+            </tr>
+        </thead>
+        {foreach from=$list item=m}
+        <tbody>
+            <tr>
+                <td align='center'>{$m.id}</td>               
+                <td align='center'>{$m.order_id}</td>
+                <td align='center'>{$m.order_amount}</td>
+                <td align='center'>{$m.order_order_sn}</td>
+                <td align='center'>{$m.out_trade_no}</td>
+                <td align='center'>{$m.out_refund_no}</td>
+                <td align='center'>{$m.c_time|date_format:"Y-m-d H:i:s"}</td>
+                <td align='center'>{if $m.is_refund==0 }申请中{elseif $m.is_refund==1}通过{elseif $m.is_refund==2}失败{/if}</td>
+                <td class="opera" nowrap align='center'>
+                    {if $m.is_refund==1}
+                    <a class="uiBtn" href="#!refund/log_detail?com=xshow|查看&id={$m.id}">查看</a>  
+                    {else}
+                    <a class="uiBtn" href="#!refund/log_edit?com=xshow|编辑&id={$m.id}">编辑</a>  
+                    {/if}             
+                </td>
+            </tr>             
+        </tbody>
+        {foreachelse}
+        <tbody>
+        <tr><td class="bdl bdr" style="text-align:center" colspan="7">
+            没有数据!
+        </td></tr>
+        </tbody>
+        {/foreach}
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+{literal}
+<style type="text/css">
+    .setorder{line-height:18px; height:18px}
+    .setorder i{vertical-align:middle}
+    .order_num{text-align:center}
+    .span10 .order_num .order{width:30px; min-width:0; text-align:center; display:block; margin:0 auto}
+</style>
+<script type="text/javascript" src="/admin/js/manage/order.js"></script>
+<script type="text/javascript">
+    function exportMember(){
+        var arr = location.hash.split("?");
+        var get = arr[1]?('?'+arr[1]):'';
+        if(!get){
+            com.xtip('导出量较大，请先进行筛选操作！',{type:1});
+        }else{
+            location.href='/business/order/exportExcel'+get;
+        }
+    }
+</script>
+{/literal}
+</div>

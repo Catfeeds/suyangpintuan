@@ -1,0 +1,34 @@
+<a href="#" class="coupon-list">
+    <dl class="clearfix ">
+        <dt>
+            <!--<span>店铺券</span>-->
+        <h2>￥<span>{$m.b_amount}</span></h2>
+        </dt>
+        <dd>
+            <h3>{if $m.b_need_amount gt 0}<span>满{$m.b_need_amount}</span>{/if}立减{$m.b_amount}</h3>
+            <!--<h4>仅限于某某某食品专营店</h4>-->
+            <p>{if !empty($m.b_start_time)}{date('Y/m/d', $m.b_start_time)}-{/if}{if empty($m.expire_time)}有效期不限{else}{date('Y/m/d', $m.expire_time)}{/if}</p>
+        </dd>
+    </dl>
+</a>
+
+<!--<div class="user-yhq-list-ul-div">-->
+    <!--<li class="yhq-{if $m.expire_time lt $smarty.now}gray{elseif $m.use_time}gray{elseif $m.b_amount>50}yellow{elseif $m.b_amount>10}red{else}green{/if} {if $m.expire_time lt $smarty.now}yhq-gq{elseif $m.use_time}yhq-sy{/if}">-->
+        <!--<p>-->
+            <!--{if $m.expire_time lt $smarty.now}{elseif $m.use_time}{elseif !$m.use_time}<i>未使用</i>{/if}{$m.b_title} {if $m.share eq 1}{if $m.share_time }<span class="share shared">已分享</span>{else}<span class="share" data-url="{$m.share_url}">分享</span>{/if}{/if}-->
+        <!--</p>-->
+        <!--<section>-->
+            <!--<label>￥<b>{$m.b_amount}</b></label>-->
+            <!--<em><i class="icon iconfenxiao">&#xe650;</i>{if $m.b_need_amount gt 0}<span>满{$m.b_need_amount}</span>{/if}立减{$m.b_amount}</em>-->
+            <!--<em><i class="icon iconfenxiao">&#xe650;</i>{if !empty($m.b_start_time)}{date('Y.m.d', $m.b_start_time)}-{/if}{if empty($m.expire_time)}有效期不限{else}{date('Y.m.d', $m.expire_time)}{/if}</em>-->
+        <!--</section>-->
+
+        <!--<div {if $m.b_remark}class="xiangxi" onclick="$(this).offsetParent().toggleClass('on')"{elseif $m.expire_time gt $smarty.now }class="no-xiangxi" {/if}>-->
+            <!--{if $m.b_remark}<span>详细信息</span>{/if} {if $m.expire_time gt $smarty.now}<strong> 还有{ceil(1+($m.expire_time-$smarty.now)/86400)}天过期</strong>{/if}-->
+        <!--</div>-->
+
+    <!--</li>-->
+    <!--<div class="xiangxi-nr">-->
+        <!--{$m.b_remark}-->
+    <!--</div>-->
+<!--</div>-->

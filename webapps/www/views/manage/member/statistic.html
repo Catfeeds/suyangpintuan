@@ -1,0 +1,100 @@
+<h3 class="info-tag">会员列表(共{$page_total}个会员)<span></span>
+    <a class="uiBtn BtnGreen r" style="display:none" href="javascript:;" onclick="exportMember()">导出Excel</a>
+</h3>
+    <!-- 统计图表 -->
+
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/index" onsubmit="return xForm.submit(this)">
+
+        <div class="f-unit">
+            <label class="ui-label w60">用户名：</label>
+            <input id="pass2" class="form-i w140 sitem" name="nickname" value="{$nickname}" type="text">
+
+            <label class="ui-label w60">创建时间：</label>
+            <input class="form-i w120 sitem" name="start_time" value="{$start_time}" type="text" onclick="WdatePicker()">
+            <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$end_time}" type="text" onclick="WdatePicker()">
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        </div>
+
+    </form>
+
+    <table class="list" style="width:100%">
+        <tr>
+            <th class="oid w40">ID</th>
+            <th class="title w120">用户名</th>
+            <th class="title w120">姓名</th>
+            <th class="w80">余额</th>
+            <th class="w80">用户状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td class="oid">{$m.mid}</td>
+            <td>{$m.username}</td>
+            <td>{$m.realname}</td>
+            <td><b style="color:#f80">{$m.money}</b></td>
+            <td>{if $m.status=='1'}正常{else}关闭{/if}</td>
+            <td>{date('Y-m-d H:i',$m.c_time)}</td>
+            <td>
+                <a class="uiBtn" href="/member/book_detail/{$m.mid}">消费/充值明细</a>
+            </td>
+        </tr>
+        {/foreach}
+    </table>
+
+    {$page}
+
+</div>
+<div id="container" style="height: 400px"></div>
+{literal}
+<script type="text/javascript">
+    $.loadJs('/js/standalone-framework.js',function(){
+        $.loadJs('/js/highcharts.js',function(){
+            /**
+             * Add custom date formats
+             */
+            Highcharts.dateFormats = {
+                W: function (timestamp) {
+                    var date = new Date(timestamp),
+                        day = date.getUTCDay() == 0 ? 7 : date.getUTCDay(),
+                        dayNumber;
+                    date.setDate(date.getUTCDate() + 4 - day);
+                    dayNumber = Math.floor((date.getTime() - new Date(date.getUTCFullYear(), 0, 1, -6)) / 86400000);
+                    return 1 + Math.floor(dayNumber / 7);
+
+                }
+            }
+
+            var chart = new Highcharts.Chart({
+
+                chart: {
+                    renderTo: 'container'
+                },
+
+                title: {
+                    text: 'Custom date format'
+                },
+
+                xAxis: {
+                    type: 'datetime',
+                    tickInterval: 7 * 24 * 36e5, // one week
+                    labels: {
+                        format: '{value:Week %W/%Y}',
+                        align: 'right',
+                        rotation: -30
+                    }
+                },
+
+                series: [{
+                    data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                    pointInterval: 7 * 24 * 36e5,
+                    pointStart: Date.UTC(2013, 0, 7)
+
+                }]
+
+            });
+
+        });
+    });</script>
+{/literal}

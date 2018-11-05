@@ -1,0 +1,45 @@
+{$slider = 1}{$notice = 1}
+{include file="public_header.html"}
+<style type="text/css">
+    .mui-scroll-wrapper{
+        padding-bottom: 0 !important;
+    }
+</style>
+<header id="header" class="mui-bar mui-bar-nav">
+    <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                 <div class="mui-scroll">
+                        <a class="mui-control-item {if $data.cid==0}mui-active{/if}" href="/store/lists">
+                            全部
+                         </a>
+                        {foreach from=$data.cat_list item=m}
+                        {if $m.ismenu==1}
+                        <a class="mui-control-item {if $data.cid==$m.id}mui-active{/if}" href="/store/lists/{$m.id}">
+                            {$m.catname}
+                        </a>
+                        {/if}
+                        {/foreach}
+                 </div>
+         </div>
+ </header>
+{if $data.list}
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">         
+        <div class="hot-list">
+            {foreach from=$data.list item=m}
+            {include file="store/lbi/lists.html"}
+            {/foreach}
+        </div>
+    </div>
+</div>
+{else}
+{$empty_tip = "还没有店铺!"}
+{include file="public_empty.html"}
+{/if}
+<script>   
+  {literal}var D = {load: 1};//load:1必填{/literal}
+  var ajax_url = "/store/lists/{$data.cid|default:0}/";//请求的地址
+  var ajax_class = ".hot-list";//加载的元素
+  var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,22 @@
+<div class="sy-hot">
+    <div class="hot-title1 clearfix">
+        <a href="/topic/index/{$m.id}">查看更多<span class="mui-icon mui-icon-arrowright"></span></a>
+        <big>{$m.name}</big>
+    </div>
+    <div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted hot-gd">
+        <div class="mui-scroll topic-1">
+            {foreach from=$m.apply_list item=t}
+            {if $t.id>0}
+            <a class="mui-control-item" href="/goods/show/{$t.id}">
+                <img src="{$t.img_cover}"/>
+                <p>{$t.name}</p>
+                <div class="topic-2">¥{$t.team_price}<del>¥{$t.price}</del></div>
+            </a>
+            {/if}
+            {/foreach}
+            <a class="mui-control-item hot-agd" href="/topic/index/{$m.id}" >
+                查看<br />全部
+            </a>
+        </div>
+    </div>
+</div>

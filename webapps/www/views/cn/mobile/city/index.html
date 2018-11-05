@@ -1,0 +1,131 @@
+{$nav = 1}{$slider = 1}{$notice = 1}
+{include file="public_header.html"}
+<header id="header" class="mui-bar mui-bar-nav city-header">
+    <a class="city-left" href="/city/charea"><span>{$data.local_city|default:'切换城市'}</span></a>
+        <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <div class="mui-scroll">
+                <a class="mui-control-item {if $cid==0}mui-active{/if}" href="/city/index">
+                    同城到家
+                </a>
+                {foreach from=$data.cat_list item=m key=k}
+                {if $m.ismenu==1}
+                <a class="mui-control-item  {if $cid==$m.id}mui-active{/if}" href="/city/index/{$m.id}">
+                    {$m.catname}
+                </a>
+                {/if}
+                {/foreach}
+            </div>
+        </div>
+</header>
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        {if $data.cat_isrec && $data.row.id}
+        <ul class="nav-fl clearfix">
+            {foreach from=$data.cat_isrec item=m key=k}
+            {if $k<9}
+            <li>
+                <a href="/city/index/{$m.id}?all=1&top={$m.id}">
+                    <img src="{zz mod=fileurl source=$m.thumb}"/>
+                    <p>{$m.catname}</p>
+                </a>
+            </li>
+            {/if}
+            {/foreach}
+            <li>
+                <a href="/city/index/{$data.row.id}?all=1&top={$data.row.id}">
+                    <img src="/style/img/f9.png"/>
+                    <p>查看全部</p>
+                </a>
+            </li>
+        </ul>
+        {/if}
+        {if $data.thumb && empty($data.row.id)}
+        <div id="slider" class="mui-slider city-banner" >
+            <div class="mui-slider-group mui-slider-loop">
+                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                {$ad_end=end($data.thumb)}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="{$ad_end.title|default:'javascript:;'}">
+                        <img src="{$ad_end.path}">
+                    </a>
+                </div>
+                {foreach from=$data.thumb item=m}
+                <div class="mui-slider-item">
+                    <a href="{$m.title|default:'javascript:;'}">
+                        <img src="{$m.path}">
+                    </a>
+                </div>
+                {/foreach}
+                <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                {$ad_fir=$data.thumb[0]}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="{$ad_fir.title|default:'javascript:;'}">
+                        <img src="{$ad_fir.path}">
+                    </a>
+                </div>
+            </div>
+            <div class="mui-slider-indicator">
+                {foreach from=$data.thumb item=m key=k}
+                <div class="mui-indicator {if $k==0}mui-active{/if}"></div>
+                {/foreach}
+            </div>
+        </div>
+        {/if}
+        {if $data.nav && empty($data.row.id)}
+        <ul class="mui-table-view mui-grid-view mui-grid-9">
+            {foreach from=$data.nav item=m}
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="{$m.img.title|default:'javascript:;'}">
+                <span class="mui-icon"><img src="{$m.img.path}"/></span>
+                <div class="mui-media-body">{$m.title}</div></a>
+            </li>
+            {/foreach}
+        </ul>
+        {/if}
+        {if $data.ad && empty($data.row.id)}
+        <div class="height1 clearfix"></div>
+        <div class="nation-ul clearfix">
+	        {foreach from=$data.ad item=m}
+	        <div class="mui-slider-item">
+	            <a href="{$m.title|default:'javascript:;'}">
+	                <img src="{$m.path}">
+	            </a>
+	        </div>
+	        {/foreach}
+        </div>
+        <div class="height1 clearfix"></div>
+    	<div class="hot-new1">
+        	<div class="hot-title">
+		        <span>热门好货必需拼</span>
+		    </div>
+    	</div>
+        {/if}
+        {if $data.nation_list }
+        <ul class="mui-table-view mui-grid-view mui-grid-9">
+            {foreach from=$data.nation_list item=m}
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="/goods/nation_goods/{$m.id}">
+                <span class="mui-icon"><img src="{zz mod=fileurl source=$m.thumb}"/></span>
+                <div class="mui-media-body">{$m.catname}</div></a>
+            </li>
+            {/foreach}
+        </ul>
+        {/if}
+        
+        <div class="hot-list">
+            {foreach from=$data.list item=m key=k}
+            {include file="goods/lbi/goods_list.html"}
+            {/foreach}
+        </div>
+        {if C('is_contact')}
+        {include file="public_contact.html"}
+        {/if}
+    </div>
+</div>
+</div>
+<script>
+    {literal}var D = {load: 1};//load:1必填{/literal}
+    var ajax_url = "/city/getCityGoods/{$cid}/{$zone}/";//请求的地址
+    var ajax_class = ".hot-list";//加载的元素
+    var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

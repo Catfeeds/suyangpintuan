@@ -1,0 +1,44 @@
+{$headTit="新闻资讯"}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+<div class="main">
+    {$cate=0|cate}
+    {foreach from=$cate item=n}
+    {if $n.parentid eq 2}<!--新闻资讯-->
+    {if $n.id eq 5}<!--最新活动-->
+    {$n.style='color:#ffba00;'}
+    {$n.iconfont='&#xe61f;'}
+    {else}
+    {$n.style='color:#2da23a;'}
+    {$n.iconfont='&#xe605;'}
+    {/if}
+    <a class="news_top news_top_1" href="/content/index/{$n.id}">
+        <span><i class="icon iconfont">&#xe61c;</i></span>
+        <p><i class="icon iconfont" style="{$n.style}">{$n.iconfont}</i>{$n.catname}</p>
+    </a>
+    <ul class="news_1">
+        {zz mod=content catid=$n.id posid=3 limit=2}
+        {foreach from=$tagData item=m}
+        {include file="lbi/article_list.html"}
+        {/foreach}
+    </ul>
+    {/if}
+    {/foreach}
+
+    {foreach from=$cate item=n}
+    {if $n.id eq 3}
+    <a class="news_top" href="/content/index/{$n.id}">
+        <span><i class="icon iconfont">&#xe61c;</i></span>
+        <p><i class="icon iconfont" style=" color:#00a0ea;">&#xe601;</i>{$n.catname}</p>
+    </a>
+    <dl class="see">
+        {zz mod=content catid=$n.id posid=3 limit=2}
+        {foreach from=$tagData item=m}
+        {include file="lbi/video_list.html"}
+        {/foreach}
+    </dl>
+    {/if}
+    {/foreach}
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

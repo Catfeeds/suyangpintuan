@@ -1,0 +1,138 @@
+<h3 class="info-tag">
+    <a href="#!databack/index/export" class="uiBtn">数据库备份</a>    
+    <a href="#!databack/index/import" class="uiBtn BtnBlue">数据库还原</a>    
+</h3>
+<h3 class="info-tag">
+    <select class="form-control input-sm setStatus" name="status">
+        <option value="0">批量操作</option>
+        <option value="1">删除备份</option>
+    </select>
+    <button type="button"  class="uiBtn BtnGreen setStatusSubmit">应用</button>
+</h3>
+<div class="html-box">    
+    <table class="tb-goods" style="width:100%">
+        <thead>
+            <tr>                
+                <th nowrap class="w40"><input type="checkbox" class="checkall" checked></th>
+                <th nowrap class="w140">备份名称</th>
+                <th nowrap class="w140">卷数</th>
+                <th nowrap class="w140">压缩</th>
+                <th nowrap class="w140">数据大小</th>
+                <th nowrap class="w140">备份时间</th>
+                <th nowrap class="w140">状态</th>
+                <th nowrap class="w140">操作</th>
+            </tr>
+        </thead>
+        {foreach from=$list item=m key=key}
+        <tbody>
+            <tr>
+                <td ><input type="checkbox" class="check" name="ids" value="{$m.time}" checked /></td>
+                <td align='center'>{$m.time|date_format:"Ymd-His"}</td>                
+                <td align='center'>{$m.part}</td>
+                <td align='center'>{$m.compress}</td>
+                <td align='center'>{format_bytes($m.size)}</td>            
+                <td align='center'>{$key}</td>            
+                <td align='center' class="import-msg-{$m.time}">-</td>            
+                <td class="opera" nowrap align='center'>
+                    <a class="uiBtn db-import" data-url="databack/import/{$m.time}" data-time="{$m.time}">还原</a>                    
+                </td>
+            </tr>             
+        </tbody>       
+        {/foreach}
+    </table>    
+</div>
+{literal}
+<script>
+$.loadJs('/style/js/jquery-1.11.2.min.js', function() {
+    jQuery.noConflict();
+    $('.checkall').click(function(){
+        var checkboxs=document.getElementsByName("ids");
+        for (var i=0;i<checkboxs.length;i++) {
+            var e=checkboxs[i];
+            e.checked=!e.checked;
+        }
+    });
+
+    var url;
+    var tables;
+    var index;   
+    //设置状态方法
+    $('.setStatusSubmit').click(function(){
+      setStatus = $(".setStatus").val();  
+      var checkboxs=document.getElementsByName("ids");  
+      var ids = new Array();//声明一个存放id的数组
+      for (var i=0;i<checkboxs.length;i++) {
+          var e=checkboxs[i];
+          if(e.checked) ids.push(e.value);
+      }   
+      if(setStatus==0){
+        alert('请选择操作类型');
+        return;
+      }
+      if(ids.length==0){
+        alert('请选择要操作的数据');
+        return;
+      }  
+        $post({
+            url:"databack/del",
+            method:'post',
+            data:{time:ids},
+            dataType:'json',
+            callback:function(data){
+                if(data.error==0){
+                    com.xtip(data.msg);
+                    main.refresh();
+                  } else {            
+                    com.xtip(data.msg,{type:1});
+                  }
+            }
+        });       
+
+    });
+    $(".db-import").click(function(){
+        var self = jQuery(this), status = ".";       
+        $post({
+            url:self.data('url'),
+            method:'get',
+            dataType:'json',
+            callback:function(data){
+                success(data);
+            },
+        });
+        window.onbeforeunload = function(){ return "正在还原数据库，请不要关闭！" }
+        return false;
+
+        function success(data){
+            if(data.error==0){
+                if(typeof(data.data)!="undefined" && data.data.gz){
+                    data.msg += status;
+                    if(status.length === 5){
+                        status = ".";
+                    } else {
+                        status += ".";
+                    }
+                }
+                jQuery('.import-msg-'+self.data('time')).html(data.msg);
+                if(typeof(data.data)!="undefined" && data.data.part){                
+                    $post({
+                        url:'databack/import/1480321235',
+                        method:'get',
+                        data:{"part" : data.data.part, "start" : data.data.start},
+                        dataType:'json',
+                        callback:function(data){
+                            success(data);
+                        },
+                    });
+                } else {
+                    com.xtip(data.msg);
+                    window.onbeforeunload = function(){ return null; }
+                }
+            } else {
+                com.xtip(data.msg,{type:1});
+            }
+        }
+    });
+});
+
+</script>
+{/literal}

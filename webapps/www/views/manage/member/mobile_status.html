@@ -1,0 +1,40 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/member/edit" enctype="multipart/form-data">
+        <input type="hidden" name="post[mid]" value="{$row.mid}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>用户名：</label></td>
+                <td class="td-input">{$row.username}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>手机号：</label></td>
+                <td class="td-input">{$row.mobile}</td>
+            </tr>
+            <tr class="h s0">
+                <td class="td-label"><label>手机状态：</label></td>
+                <td class="td-input">
+                    <label><input type="radio" name="post[verify_mobile]" value="0" checked> 待认证</label>
+                    <label><input type="radio" name="post[verify_mobile]" value="1" {if $row.verify_mobile eq 1}checked{/if}> 已认证</label>
+                    <label><input type="radio" name="post[verify_mobile]" value="-1" {if $row.verify_mobile eq -1}checked{/if}> 未拨通</label>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+{literal}
+<script type="text/javascript">
+    $.loadJs('/admin/js/manage/linkage.js',function(){
+});
+</script>
+{/literal}

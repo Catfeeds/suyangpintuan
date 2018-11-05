@@ -1,0 +1,307 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/index" onsubmit="return xForm.submit(this)">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $k eq 'username'}selected{/if}>用户名</option>
+                <option value="nickname" {if $k eq 'nickname'}selected{/if}>真实姓名</option>
+                <option value="itv" {if $k eq 'itv'}selected{/if}>推荐人</option>
+                <option value="mobile" {if $k eq 'mobile'}selected{/if}>手机</option>
+                <option value="email" {if $k eq 'email'}selected{/if}>邮箱</option>
+                <option value="ip" {if $k eq 'ip'}selected{/if}>IP</option>
+                <option value="mid" {if $k eq 'mid'}selected{/if}>ID</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$q}" type="text">
+            {*<select name="rank_id">
+                <option value="">-所有等级-</option>
+                {foreach from=$ranklist item=m}
+                <option value="{$m.id}" {if $m.id eq $rank_id}selected{/if}>{$m.rank_name}</option>
+                {/foreach}
+            </select>*}
+            <select name="online">
+                <option value="">-在线状态-</option>
+                <option value="1" {if 1 eq $online}selected{/if}>在线</option>
+            </select>
+            <select name="status">
+                <option value="">-用户状态-</option>
+                <option value="99" {if 99 eq $status}selected{/if}>禁用</option>
+                <option value="1" {if 1 eq $status}selected{/if}>开启</option>
+            </select>
+            <select name="verify_mobile">
+                <option value="">-手机状态-</option>
+                <option value="99" {if 99 eq $verify_mobile && isset($verify_mobile)}selected{/if}>待认证</option>
+                <option value="1" {if 1 eq $verify_mobile && isset($verify_mobile)}selected{/if}>已认证</option>
+                <option value="-1" {if -1 eq $verify_mobile && isset($verify_mobile)}selected{/if}>未拨通</option>
+            </select>
+            <label class="ui-label w80">注册时间：</label>
+            <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" />
+            <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|strip_tags}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" />
+
+            <select name="sortby" id="sortby">
+                <option value="a.mid" {if $sortby eq 'a.mid'}selected{/if}>ID</option>
+                <option value="a.user_money" {if $sortby eq 'a.user_money'}selected{/if}>可用余额</option>
+                <option value="a.pay_points" {if $sortby eq 'a.pay_points'}selected{/if}>积分</option>
+                <option value="a.commission" {if $sortby eq 'a.commission'}selected{/if}>佣金</option>
+                <option value="a.ivt_count" {if $sortby eq 'a.ivt_count'}selected{/if}>推荐数</option>
+            </select>
+            <select name="sortorder" id="sortorder">
+                <option value="DESC" {if $sortorder eq 'DESC'}selected{/if}>降序</option>
+                <option value="ASC" {if $sortorder eq 'ASC'}selected{/if}>升序</option>
+            </select>
+            <select name="is_robots">
+                <option value="">全部</option>
+                <option value="0" {if $is_robots eq 0 && $is_robots !=""}selected{/if}>会员</option>
+                <option value="1" {if $is_robots eq 1}selected{/if}>虚拟数据</option>
+            </select>
+            <!-- <button type="submit" id="submit" style="margin:1px 20px 0 10px;float:left;" class="uiBtn BtnBlue" onclick="if($('#batch').val()){ if(!confirm('确认此批量操作吗？')) return false; }">搜索</button> -->
+            <button type="submit" id="submit" style="margin:1px 20px 0 10px;float:left;" class="uiBtn BtnBlue">搜索</button>
+
+        </div>
+    </form>
+
+    <div class="tips">
+        <span id="online"></span>
+    </div>
+    <form action="#!member/batch_edit" method="post" id="memberForm">
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="w30"><input type="checkbox" class="checkall"></th>
+            <th class="w30">ID</th>
+            <th align="left" colspan="2">用户名</th>
+            <th align="left">真实姓名</th>
+            <th align="left">手机/邮箱</th>
+            <th class="w100">可用余额</th>
+            {*<th class="w100">积分</th>*}
+            {if C('comss')}
+            <th align="center">被推荐</th>
+            <th class="w140" align="center">推荐数</th> 
+            <th class="w100">佣金</th>
+            {/if}
+            <th class="w140">状态/创建时间/注册IP</th>
+            <th class="w160">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr>
+            <td><input type="checkbox" name="mid" value="{$m.mid}"></td>
+            <td align='center'>{$m.mid}</td>
+            <td width="50"><a href="#!member/avatar/{$m.mid}?com=xshow|上传头像" title="上传头像"><img src="{$m.photo|photo}" width="50" style="border-radius: 50%" /></a></td>
+            <td align='left'>
+                <a href="/welcome/auth_login/{$m.mid}" target="_blank" title="点击直接登录">
+                    {$m.username}
+                    {if $m.is_robots eq 1}
+                    <img src="/admin/images/robots.png">
+                    {/if}
+                </a><br />
+                {if $m.oauth_login}
+                <img src="/images/qq.png" style="vertical-align: middle" title="QQ登录用户" />
+                {/if}
+            </td>
+            <td align='left'>{$m.nickname}</td>
+            <td align='left'>
+                {$m.mobile}
+                {*{if $m.mobile}
+                    {if $m.verify_mobile eq 1}
+                    <a class="c-green" href="#!member/edit/{$m.mid}?act=mobile&com=xshow|手机状态">已认证</a>
+                    {else if $m.verify_mobile eq -1}
+                    <a class="c-orange" href="#!member/edit/{$m.mid}?act=mobile&com=xshow|手机状态">未拨通</a>
+                    {else}
+                    <a class="c-gray" href="#!member/edit/{$m.mid}?act=mobile&com=xshow|手机状态">待认证</a>
+                    {/if}
+                {/if}*}                
+                {if $m.email}
+                <br />
+                {$m.email}
+                {if $m.verify_email eq 1}
+                <span class="c-green">已认证</span>
+                {/if}
+                {/if}
+            </td>
+            <td align='center'><b style="color:#f80">{$m.user_money}</b></td>
+            {*<td align='center'>{$m.pay_points}</td>*}
+            {if C('comss')}            
+            <td align='center'><a href="#!member/index?k=itv&q={$m.ivt_name}">{$m.ivt_username}</a></td>
+            <td align='center'>{$m.ivt_count} {if $m.ivt_count}[<a class="" href="#!member/ivt_level/{$m.mid}?com=xshow|[{$m.username}]下级会员">下级</a>]&nbsp;[<a class="" href="#!order/index?total=1&k=ivt_id&q={$m.mid}">下级订单</a>]{/if}</td>           
+            <td align='center'>总：{$m.commission_total}<br>可用：{$m.commission}</td>
+            {/if}
+            <td align='center'>
+                {if $m.status eq 1}
+                <a href="javascript:;" onclick="main.chang_status('{$m.mid}','member','status','mid')" class="c-green" title="点击禁用">开启</a>
+                {else}
+                <a href="javascript:;" onclick="main.chang_status('{$m.mid}','member','status','mid')" class="c-red" title="点击开启">禁用</a>
+                {/if}
+                <span class="c-gray">{$m.c_time|date_format:'Y-m-d H:i'}</span><br>
+                {$m.ip}
+            </td>
+            <td class="opera" nowrap>
+                <a class="uiBtn" href="#!member/detail/{$m.mid}?com=xshow|会员详情"> 详情</a>
+                <a class="uiBtn" href="#!member/edit/{$m.mid}?com=xshow|会员信息">编辑</a>
+                <a class="uiBtn" href="#!member/change_account/{$m.mid}?com=xshow|调整账户">调整</a>
+                <!--<a class="uiBtn" href="#!member/account_log/?mid={$m.mid}">明细</a>-->
+                <p style="height:5px;"></p>
+                {if C('comss')}   <a class="uiBtn" href="#!member/commission?k=username&q={$m.username}">佣金</a>{/if}
+                <a class="uiBtn" href="#!coupon/logs?filters[mid]={$m.mid}">优惠券</a>
+                <a class="uiBtn" href="#!order/index?k=username&q={$m.username}">订单</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+        <input type="checkbox" class="checkall">全选 &nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;" onclick="members.del_all()" >批量删除</a>&nbsp;&nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;"  onclick="members.res_all()">批量恢复</a>&nbsp;&nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;"  onclick="members.export_member()">导出会员</a>&nbsp;&nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;"  onclick="members.bacth_redpack()">批量发红包</a>&nbsp;&nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;"  onclick="members.bacth_coupon()">批量发优惠券</a>&nbsp;&nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;"  onclick="members.bacth_message()">批量发送站内信</a>&nbsp;&nbsp;
+        <a class="uiBtn BtnGreen"  href="javascript:;"  onclick="members.bacth_wxtemplate()">发送微信推文</a>&nbsp;&nbsp;
+        <input type="hidden" name="type" value="delete" />
+        <input type="hidden" name="ids" value="" />
+    </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    //var url = '/manage/member/batch_member?page={if (!empty($smarty.get.page))}{$smarty.get.page}{/if}&k={$smarty.get.k}&q={$smarty.get.q}&rank_id={$smarty.get.rank_id}&online={$smarty.get.online}&status={$smarty.get.status}&verify_mobile={$smarty.get.verify_mobile}&start_time={$smarty.get.start_time}&end_time={$smarty.get.end_time}&sortby={$smarty.get.sortby|default:"a.mid"}&sortorder={$smarty.get.sortorder|default:"DESC"}';
+    var arr = location.hash.split("?");
+    var get = arr[1]?('?'+arr[1]+'&'):'?';
+    var url = '/manage/member/batch_member'+get;
+   {literal}
+   $.loadJs('/admin/js/manage/member.js',function(){
+        /*member.online();
+        window.setInterval(function(){
+            member.online();
+        },10000);*/
+    });
+     var checkboxs=document.getElementsByName("mid");
+
+    $('.checkall').click(function(){
+        var checkboxs=document.getElementsByName("mid");
+        for (var i=0;i<checkboxs.length;i++) {
+            var e=checkboxs[i];
+            e.checked=!e.checked;
+        }
+    });
+    var members=function(){
+    };members.prototype={
+        del_all:function(){
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            if(ids!=''){
+                str="确定删除用户？\n";
+            }
+            if(confirm(str)){
+                $post({
+                    url:'member/batch_edit',
+                    data:{type:'delete',ids:ids},
+                    callback:function(x){
+                       main.refresh();
+                    }
+                });
+            }
+         },
+         res_all:function(){
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            if(ids!=''){
+                str="确定恢复用户？\n";
+            }
+
+            if(confirm(str)){
+               $post({
+                    url:'member/batch_edit',
+                    data:{type:'res',ids:ids},
+                    callback:function(x){
+                         main.refresh();
+                    }
+                });
+            }
+        },
+        export_member:function(){
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            if(ids!=''){
+                str="确定导出记录？\n";
+            }else{
+                str='确定导出所有记录，这可能会需要较多时间。';
+            }            
+            if(confirm(str)){
+                location.href=url+'act=export&ids='+ids;
+                //location.href='/manage/member/export_member/?ids=';
+            }
+        },
+        bacth_redpack:function(){  
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            $.ajax({
+                url:url+"act=send_redpack&ids="+ids,    
+                type:'get',                
+                callback:function(x){
+                    com.xshow("发红包", x, { hideBtn: true });                    
+                }
+            });                                    
+        },
+        bacth_coupon:function(){  
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            $.ajax({
+                url:url+"act=send_coupon&ids="+ids,    
+                type:'get',                
+                callback:function(x){
+                    com.xshow("发优惠券", x, { hideBtn: true });                    
+                }
+            });                                    
+        },
+        bacth_message:function(){
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            $.ajax({
+                url:url+"act=bacth_message&ids="+ids,    
+                type:'get',                
+                callback:function(x){
+                    com.xshow("群发站内信", x, { hideBtn: true });                    
+                }
+            }); 
+        },
+        bacth_wxtemplate:function(wxid){
+            wxid=wxid?parseInt(wxid):0;
+            var ids = "";
+            for (var i=0;i<checkboxs.length;i++) {
+                var e=checkboxs[i];
+                if(e.checked) ids = ids ? ids+','+e.value : e.value;
+            }
+            $.ajax({
+                url:url+"act=bacth_wxtemplate&ids="+ids+"&wxid="+wxid,
+                type:'get',
+                callback:function(x){
+                    com.xshow("发送微信推文", x, { hideBtn: true });
+                }
+            });
+        }
+    };var members=new members;
+
+</script>
+{/literal}

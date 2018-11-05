@@ -1,0 +1,165 @@
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/express/editExpressShipping">
+        <input type="hidden" name="p[express_id]" value="{$smarty.get.express_id}">
+        <input type="hidden" name="id" value="{$id|default:''}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>配送区域名称：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w220" name="p[name]" value="{$row.name|default:''}">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>初始重量：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w220" name="p[config][cs_weight]"  value="{$row.config.cs_weight|default:''}">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>初始费用：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w220" name="p[config][cs_price]"  value="{$row.config.cs_price|default:''}">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>每KG续费：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w220" name="p[config][xf_weight]"  value="{$row.config.xf_weight|default:''}">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>所辖地区：</label></td>
+                <td class="td-input">
+                    <div id="checkbox">
+                        {foreach $row.linkage as $k=>$m}
+                        <label id="{$m.id}">
+                            <input type="checkbox" name="p[linkage_id][]" value="{$m.id}" checked>{$m.name}
+                        </label>
+                        {/foreach}
+                    </div>
+                    <div style="display: inline-block;">
+                        <div style="float: left">
+                            {linkage(0, '', 0)}
+                        </div>
+                        <div style="margin-left:5px;float: left">
+                            <a href="javascript:;" class="uiBtn BtnBlue" onclick="addShipping()">添加</a> <a href="javascript:;" class="uiBtn BtnBlue" onclick="addProvince()">添加所有未设置省份</a>
+                        </div>
+                        <br>
+                        <div style="margin-top: 5px;">
+                            <a href="javascript:;" class="uiBtn BtnBlue" onclick="checkAll()">全选</a>
+                            <a href="javascript:;" class="uiBtn BtnBlue" onclick="checkNone()">取消全选</a>
+                            <a href="javascript:;" class="uiBtn BtnBlue" onclick="checkReverse()">反选</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<script>
+    var id= '{$id}';
+    var express_id = '{$smarty.get.express_id}';
+</script>
+{literal}
+<script>
+    $.loadJs('/style/js/jquery-1.11.2.min.js',function(){
+        jQuery.noConflict();
+    });
+    function addShipping(){
+        var length = jQuery('select').length;
+        var i = length - 1;
+        for (i; i>=0; i--){
+            var select = jQuery('select')[i];
+            var value = select.value;
+            if(value != ''){
+                var options = select.options;
+                var index = select.selectedIndex;
+                var selectedText = options[index].text;
+                var html = '<label id="'+value+'"><input type="checkbox" name="p[linkage_id][]" value="'+value+'" checked/>'+selectedText+'</label>';
+                if (id != ''){
+                    var D = {linkage_id:value,express_id:express_id,id:id}
+                }else {
+                    var D = {linkage_id:value,express_id:express_id}
+                }
+                $post({
+                    url:'express/ajaxExpressShipping',
+                    method:'post',
+                    newLink:true,
+                    data:D,
+                    callback:function(x){
+                        if(x != '[]'){
+                            var data = eval('(' + x + ')');
+                            var pArr = data.arrparentid.split(',');
+                            var pLength = pArr.length;
+                            for (var j=0; j<pLength; j++){
+                                if (jQuery('#'+pArr[j]).length >0){
+                                    jQuery('#'+pArr[j]).remove();
+                                }
+                            }
+                            var cArr = data.arrchildid.split(',');
+                            var cLength = cArr.length;
+                            for (var j=0; j<cLength; j++){
+                                if (jQuery('#'+cArr[j]).length >0){
+                                    jQuery('#'+cArr[j]).remove();
+                                }
+                            }
+                            jQuery('#checkbox').append(html);
+                        }else {
+                            alert('此地区或父级已被设置')
+                        }
+                    }
+                });
+                return false;
+            }
+        }
+    }
+    function addProvince(){
+        var html = '';
+        jQuery('#checkbox label').remove();
+        if (id != ''){
+            var D = {parentid:1,express_id:express_id,id:id}
+        }else {
+            var D = {parentid:1,express_id:express_id}
+        }
+        $post({
+            url:'express/ajaxExpressShippingProvince',
+            method:'post',
+            newLink:true,
+            data:D,
+            callback:function(x){
+                if(x != '[]'){
+                    var data = eval('(' + x + ')');
+                    for (var i=0; i<data.length; i++){
+                        var obj = data[i];
+                        html += '<label id="'+obj.id+'"><input type="checkbox" name="p[linkage_id][]" value="'+obj.id+'" checked/>'+obj.name+'</label>';
+                    }
+                    jQuery('#checkbox').append(html);
+                }else {
+                    alert('所有省份已被设置');
+                }
+            }
+        });
+    }
+    function checkAll(){
+        jQuery('#checkbox label input[type=checkbox]:checkbox').prop("checked", true);
+    }
+    function checkNone(){
+        jQuery('#checkbox label input[type=checkbox]:checkbox').prop("checked", false);
+    }
+    function checkReverse(){
+        var items = jQuery("#checkbox label input[type=checkbox]");
+        items.each(function () {
+            jQuery(this).prop("checked", !jQuery(this).is(':checked'));
+        });
+    }
+</script>
+{/literal}

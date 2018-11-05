@@ -1,0 +1,39 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+    <table class="list">
+        <thead>
+            <tr>
+                <th align="left">用户名</th>
+                <th align="left">备注</th>
+                <th class="w120">角色</th>
+                <th class="w140">加入时间</th>
+                <th class="w140">最后登入</th>
+                <th class="w80">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$data.list item=m}
+            <tr>
+                <td>{$m.username}</td>
+                <td>{$m.desc}</td>
+                <td align="center">{$m.name}</td>
+                <td align="center">{$m.c_time|date_format:'Y-m-d H:i'}</td>
+                <td align="center">{$m.u_time|date_format:'Y-m-d H:i'}</td>
+                <td class='opera' align='center' nowrap>
+                    <a href='#!admin/edit/?id={$m.uid}&com=xshow|编辑管理员({$m.username})' class='iconfont icon-a' title='编辑'>&#xe603;</a>
+                    <a href='javascript:;' onclick="main.confirm_del('admin/del','{$m.uid}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+    </form>
+
+</div>
+

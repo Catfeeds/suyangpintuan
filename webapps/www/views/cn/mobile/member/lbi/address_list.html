@@ -1,0 +1,11 @@
+
+<div class="area-box address-list {$addr.id} li-radio-check" data-target="#address" data-id="{$addr.id}">
+   <a href="javascript:;" class="no-address li-radio-check-triger " data-target="#address_id_checked" data-id="{$addr.id}">
+       <p>{$addr.name}，{$addr.mobile}</p>
+       {$addr.area} {$addr.address}
+    </a>
+    <div class="address-btn2 clearfix">
+       <button type="button" onclick="window.location.href='/member/address/{$addr.id}?back={$back}'"><span class="modify-bt">修改</span></button>
+       <button type="button" onclick="del_confirm({$addr.id})"><span class="delete-bt">删除</span></button>
+    </div>
+ </div>

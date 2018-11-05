@@ -1,0 +1,378 @@
+{$headTit="确认订单"} {include file="public_header.html"}
+<form action="/flow/done" target="iframeNews" id="orderForm" method="post">
+    <input id="token" type="hidden" name="token" value="{createToken()}" />
+    <input id="order_sn" type="hidden" name="order_sn" value="{if !empty($order_sn)}{$order_sn}{/if}" />
+    <input type="hidden" name="ids" value="{if !empty($ids)}{$ids}{/if}" />
+    <input type="hidden" name="extension_code" value="{$data.cart_type}" />
+    <input id="coupon_forced" type="hidden" name="coupon_forced" value="0" />
+    <div class="dd-gwqd">
+        <section>
+            <span class="title"><i class="icon iconfenxiao">&#xe634;</i> 购物清单</span>
+        </section>
+        <ul class="dd-gwqd-ul">
+            {assign var="goodsTotal" value=0} {foreach from=$data.cart_goods item=goods}
+            <li>
+                <a href="/goods/show/{$goods.goods_id}"><img src="{zz mod=fileurl source=$goods.img_src type=1}" /></a>
+                <div>
+                    <h3>
+                    <a href="/goods/show/{$goods.goods_id}">{$goods.goods_name}</a>
+                </h3>
+                    	<p class="p3">{$goods.goods_spec}</p>
+                    <p class="p2 amount"><i class="p1">数量：{$goods.qty}</i>￥<span class="flow-good-subtotal">{$goods.subtotal}</span> </p>
+                </div>
+            </li>
+            {$goodsTotal=formatPrice($goods.subtotal+$goodsTotal)} {/foreach}
+        </ul>
+        <section>
+            <span class="fr">共{$data.cart_goods|count}件商品 合计：<span class="amount">￥<i>{$goodsTotal}</i></span></span>
+            <span>总重量: {$data.weight} 千克</span>
+        </section>
+    </div>
+    <div class="message">
+        <div class="message-content">
+            <span>给卖家留言：</span>
+            <input type="text" name="order_tip" value="{if isset($order.order_tip)}{$order.order_tip}{/if}" />
+        </div>
+    </div>
+    <div class="dd-shr">
+        <input id="address_id_checked" type="hidden" name="address_id_checked" value="{if !empty($address_id_checked)}{$address_id_checked}{/if}" />
+        <ul class="dd-shr-ul toggle-modal" data-title="请选择收货地址" data-target="#modal-address-select">
+            <a href="javascript:;">
+                <i class="icon iconfenxiao">&#xe611;</i>
+                <div id="address">
+                    {if empty($data.address)}
+                    <p>点击设置收货地址</p>
+                    {else}
+                    <p><span>姓名:</span>{$data.address.name}</p>
+                    <p><span>电话:</span>{$data.address.mobile}</p>
+                    <p><span>地址:</span>{$data.address.area} {$data.address.address}</p>
+                    {/if}
+                </div>
+            </a>
+        </ul>
+        {* modal start *}
+        <div class="modal modal-checkout" id="modal-address-select">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="modal-close close" href="javascript:;"></a>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="dzxuanzhe li-radio-box">
+                            <ul id="address-list" class="dzxuanzhe-ul">
+                                {foreach from=$data.address_list item=addr} {include file="member/lbi/address_list.html"}{/foreach}
+                            </ul>
+                            <div class="xinzhang">
+                                <a class="toggle-modal" data-title="新增收货地址" data-target="#modal-address-edit" data-url="/member/address_ajax_edit/add?back={if !empty($back)}{$back}{/if}&checked={if !empty($checked)}{$checked}{/if}" href="javascript:;">新增收货地址</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {* modal end *}
+    </div>
+    <div id="freight-selection" class="dd-ysfs">
+        {if !empty($data.address)} {include file="member/lbi/freight_list.html"} {/if}
+    </div>
+    <div class="dd-zffs">
+        <ul class="dd-zffs-ul">
+            <li class="li0">
+                <div class="li-checkbox {if (!empty($order.surplus) and $order.surplus gt 0) || empty($order_sn) || !empty($data.flow_user_money)}on{/if}">
+                    <span>使用余额（共<span id="flow-user-money" class="amount">{if empty($data.flow_user_money)}0.00{else}{$data.flow_user_money}{/if}</span>元）</span>
+                    <label>
+                        <em></em>
+                        <input type="checkbox" name="balance_pay" value="1" {if (!empty($order.surplus) and $order.surplus gt 0) || empty($order_sn) || !empty($data.flow_user_money)}checked="checked" {/if}>
+                    </label>
+                </div>
+            </li>
+            <li class="li1 chose_zf">
+                支付方式
+                <span>
+                    <i class="icon iconfenxiao select-right-arrow fr">&#xe611;</i>
+                    <span id="chose_zf">{if empty($order.pay_name)}选支付方式{else}{$order.pay_name}{/if}</span>
+                <input type="hidden" name="pay_id" id="pay_id" value="{if !empty($order.pay_id)}{$order.pay_id}{/if}">
+                </span>
+            </li>
+            <li class="li2 toggle-modal" data-title="请选择可用优惠券" data-target="#modal-coupon-select">
+                优惠券
+                <span>
+                    <i class="icon iconfenxiao select-right-arrow fr">&#xe611;</i>
+                    <span>{if empty($data.coupon_list)}暂无可用优惠券{else}选择优惠券{/if}</span>
+                </span>
+            </li>
+            <li class="coupon-result" id="coupon">
+                {if !empty($coupon)}
+                <p>{$coupon.title}</p>
+                <p>
+                    {if $coupon.need_amount gt 0}<span>满{$coupon.need_amount}</span>{/if}<span>立减{$coupon.amount}</span>
+                    <span>有效期:{if !empty($coupon.start_time)}{date('Y-m-d', $coupon.start_time)}{/if}{if empty($coupon.expire_time)}不限{else}到{date('Y-m-d', $coupon.expire_time)}{/if}</span>
+                </p>
+                {if !empty($coupon.target_name)}
+                <p>限品类:{$coupon.target_name}</p>{/if}{/if}
+            </li>
+            <div class="zf_xl" style="display: none" onclick="$('.zf_xl').hide();">
+                <ul>
+                    <dd> 支付方式
+                        <a href="javascript:;" onclick="$('.zf_xl').hide();" class="close"></a>
+                    </dd>
+                    {foreach from=$data.payment item=m name=f}
+                    <li class="zf-list">
+                        <a href="javascript:" class="zf-list-ico " title="{$m.pay_name}" data-payid='{if !empty($m.pay_id)}{$m.pay_id}{/if}'>
+                            <label><i class="icon iconfenxiao">&#xe611;</i><img src="/style/images/ico-zf-{if !empty($m.pay_id) and $m.pay_id==1}zfb{elseif !empty($m.pay_id) and $m.pay_id==7}wx{/if}.jpg" />{$m.pay_name}
+                                <input type="radio" name="zf" {if !empty($order.pay_id) and !empty($m.pay_id) and $order.pay_id eq $m.pay_id}checked{/if} /> </label>
+                        </a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </ul>
+        <div class="modal modal-checkout" id="modal-coupon-select">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="modal-close close" href="javascript:;"></a>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="coupon-list li-radio-box on">
+                            <ul class="coupon-list-ul useable">
+                                {foreach from=$data.coupon_list.useable item=m}
+                                <li class="li-radio-check total {if !empty($order.coupon_id) and $m.id eq $order.coupon_id} {assign var='coupon' value=$m} on{/if}" data-target="#coupon" data-id="$m.id">
+                                    <span class="set-target li-radio-check-triger" data-target="#flow-coupon-total" data-value="{if $goodsTotal gte $m.need_amount }-{formatPrice($m.amount)}{else}0.00{/if}">
+                                    <label>
+                                        <em></em>
+                                        <input type="radio" name="coupon_id" value="{if !empty($m.id)}{$m.id}{/if}" {if !empty($order.coupon_id) and $m.id eq $order.coupon_id}checked="checked"{/if}>
+                                    </label>
+                                    <section>
+                                        <p>{$m.title}</p>
+                                        <p>
+                                            {if $m.need_amount gt 0}<span>满{$m.need_amount}</span>{/if}<span>立减{$m.amount}</span>
+                                            <span>有效期:{if !empty($m.start_time)}{date('Y-m-d', $m.start_time)}{/if}{if empty($m.expire_time)}不限{else}到{date('Y-m-d', $m.expire_time)}{/if}</span>
+                                        </p>
+                                        {if !empty($m.target_name)}
+                                        <p>限品类:{$m.target_name}</p>
+                                        {/if}
+                                    <a class="coupon-remove" href="javascript:;" title="取消优惠券" data-id="$m.id">
+                                        <i class="icon iconfenxiao">&#xe61b;</i>
+                                    </a>
+                                    </section>
+                                    <span>
+                                </li>
+                                {foreachelse} <h3 class="text-center">暂无可用优惠券</h3> {/foreach}
+                            </ul>
+                            <ul class="coupon-list-ul disable">
+                                {foreach from=$data.coupon_list.disable item=m}
+                                <li class="" data-id="$m.id" style="padding-left:20px;">
+                                    <section>
+                                        <p>
+                                        <span>
+                                            {if ($m.status eq 3 and $m.share eq 1)}<span class="tag">待分享</span>{/if}
+                                            {if !empty($m.target_name)}<span class="tag">限品类</span>{/if}
+                                            {if !empty($m.unreach_need_amount)}<span class="tag">限品类金额</span>{/if}
+                                        </span>
+                                        {$m.title}
+                                        </p>
+                                        <p>
+                                            {if $m.need_amount gt 0}<span>满{$m.need_amount}</span>{/if}<span>立减{$m.amount}</span>
+                                            <span>有效期:{if !empty($m.start_time)}{date('Y-m-d', $m.start_time)}{/if}{if empty($m.expire_time)}不限{else}到{date('Y-m-d', $m.expire_time)}{/if}</span>
+                                        </p>
+                                        {if !empty($m.target_name)}
+                                            <p>限品类:{$m.target_name}</p>
+                                        {/if}
+                                    </section>
+                                    <span>
+                                </li>
+                                {foreachelse} 暂无优惠券 {/foreach}
+                            </ul>
+                            {if !empty($data.coupon_list.disable)}
+                                <div class="coupon-list-change">
+                                    <a class="useable">查看不可用优惠券</a>
+                                    <a class="disable">查看可用优惠券</a>
+                                </div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dd-zong">
+        <p><span>商品金额</span><span class="amount fr">￥<i id="flow-goods-total">{$goodsTotal}</i></span></p>
+                                    <p><span>运费金额</span><span class="amount fr">￥<i id="flow-freight-fee">{if $goodsTotal gte $freight.freight_free and $freight.freight_free gt 0}0.00{else}{formatPrice($freight.shipping_fee)}{/if}</i></span></p>
+                                    <p><span>优惠金额</span><span class="fr">￥<i id="flow-coupon-total">{if isset($coupon) and $goodsTotal gte $coupon.need_amount}{-$coupon.amount}{else}0.00{/if}</i></span></p>
+                        </div>
+                        <div class="gwc_tb3">
+                            <section>
+                                应付
+                                <span class="amount">￥<span id="flow-total" class="flow-total">0.00</span></span>
+                            </section>
+                            <a href="javascript:;" class="jz2 on" id="jz2">结算</a>
+                        </div>
+                        <div class="gwc_tb4"></div>
+</form>
+<div class="modal modal-checkout" id="modal-address-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="modal-close close" href="javascript:;"></a>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<script src="/style/js/common-modal.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+    // 计算结果标识 防止连续提交
+
+    var totaling, total = function() {
+        var goodsTotal = parseFloat($('#flow-goods-total').html() || 0),
+            couponTotal = parseFloat($('#flow-coupon-total').html() || 0),
+            freightFee = parseFloat($('#flow-freight-fee').html() || 0),
+            total = (goodsTotal + freightFee + couponTotal).toFixed(2);
+
+        if (total < 0) {
+            total = 0;
+        }
+
+
+        $('.flow-total').html(total);
+        $('#chose_zf').html($('.zf-list-ico:first').attr('title'));
+        $("#pay_id").val($('.zf-list-ico:first').attr('data-payid'));
+    };
+
+    total();
+
+    $('.zf-list-ico').bind('click', function() {
+        $('#chose_zf').html($(this).attr('title'));
+        $("#pay_id").val($(this).attr('data-payid'));
+        $('.zf_xl').hide();
+    });
+
+    $('.chose_zf').click(function() {
+        $('.zf_xl').show();
+    });
+
+    $(document).on('click', '.get-freight', function() {
+        var address_id = $(this).data('value'),
+            order_sn = $('#order_sn').val(),
+            param = {
+                address_id: address_id,
+                order_sn: order_sn
+            },
+            url = '/flow/getFreight?' + (+new Date());
+        $.getJSON(url, param, function(res) {
+            if (0 === res.error) {
+                $('#freight-selection').html(res.html);
+            } else {
+                $('#freight-selection').html('');
+            }
+
+            $('input[name="fright_id"]').prop('checked', false);
+            $('#flow-freight-fee').html('0.00');
+            total();
+        });
+    }).on('click', '.coupon-remove', function() {
+        $('#coupon').html('');
+        $('#flow-coupon-total').html('0.00');
+        $('input[name="coupon_id"]').prop('checked', false);
+        var id = $(this).data('id');
+        $('.coupon-list-ul li[data-id="' + id + '"]:first').removeClass('on');
+        total();
+    }).on('click', '.address-remove', function() {
+        var $this = $(this),
+            url = $this.data('url');
+
+        layer.confirm('确定删除所选吗', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            $.post(url, function(res) {
+
+                if (res.error === 0) {
+                    $this.closest('.li-radio-check').remove();
+
+                    if (!$('.dzxuanzhe-ul .li-radio-check').length) {
+                        $('#address').html('<p>点击设置收货地址</p>');
+                        $('#freight-selection').html('');
+                    }
+                    layer.msg(res.msg, {
+                        icon: 1
+                    });
+
+                } else {
+                    layer.msg(res.msg, {
+                        icon: 2
+                    });
+                }
+
+            }, 'json');
+        });
+
+    }).on('click', '.total', function() {
+        total();
+    }).on('click', '.coupon-list-change', function() {
+        var $this = $(this);
+
+        $this.closest('.coupon-list').toggleClass('on')
+    })
+
+
+
+    var orderForm = $('#orderForm').Validform({
+        ajaxPost: true,
+        postonce: true,
+        btnSubmit: '#jz2',
+        showAllError: false,
+        tiptype: function(msg, o, cttl) {
+            validTip(msg, o, cttl);
+        },
+        beforeSubmit: function(curform) {
+
+            var $forced = $('#coupon_forced');
+
+            if (1 == $forced.val()) {
+                $forced.val(0);
+                return true;
+            }
+
+            var goodsTotal = parseFloat($('#flow-goods-total').html() || 0),
+                couponTotal = parseFloat($('#flow-coupon-total').html() || 0),
+                freightFee = parseFloat($('#flow-freight-fee').html() || 0);
+
+            if (couponTotal < 0 && (couponTotal + freightFee + goodsTotal) < 0) {
+                layer.confirm('优惠券金额大于本单金额, 超出的金额将作废. 坚持使用本优惠券吗?', function() {
+                    $forced.val(1);
+                    orderForm.submitForm(true);
+                }, function() {
+                    $forced.val(0);
+                });
+                return false;
+            }
+        },
+        callback: function(res) {
+            if (res.msg) {
+                layer.alert(res.msg, {
+                    icon: 0
+                });
+            }
+            if (0 === res.error) {
+                window.location = res.url;
+            } else {
+                if (res.data.token) {
+                    $('#token').val(res.data.token);
+                }
+
+            }
+        }
+    });
+
+});
+</script>
+{include file="public_footer.html"}

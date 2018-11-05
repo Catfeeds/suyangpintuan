@@ -1,0 +1,368 @@
+{$headTit="确认订单"} {include file="public_header.html"}
+<body>
+    <form action="/flow/done" target="iframeNews" id="orderForm" method="post">
+    <input id="token" type="hidden" name="token" value="{createToken()}" />
+    <input id="order_sn" type="hidden" name="order_sn" value="{if !empty($order_sn)}{$order_sn}{/if}" />    
+    <input type="hidden" name="extension_code" value="{$data.cart.type}" />
+    <input id="coupon_forced" type="hidden" name="coupon_forced" value="0" />
+    <input id="deposit" type="hidden" name="deposit" value="{$data.goods.deposit}" />
+    <div class="address-box">
+        {* modal start *}
+        <div class="modal modal-checkout" id="modal-address-select">            
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header p-pop">
+                        <a class="modal-close close" href="javascript:;"></a>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <div class="area-box address-list" id="address-list">
+                         {foreach from=$data.address_list item=addr} 
+                         {include file="member/lbi/address_list.html"}
+                         {/foreach}                           
+                        </div>
+                        <div class="add-btn">
+                            <button type="button" class="mui-btn mui-btn-danger toggle-modal" data-title="新增收货地址" data-target="#modal-address-edit" data-url="/member/address_ajax_edit/add?back={if !empty($back)}{$back}{/if}&checked={if !empty($checked)}{$checked}{/if}" >添加收货地址</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal modal-checkout" id="modal-address-edit">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="modal-close close" href="javascript:;"></a>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {* modal end *}
+    </div>
+    <div class="area-box">
+        
+        <div class="payment-t">
+            {if $data.goods.sid>0}{$data.goods.store_name}{else}{C('site_name')}{/if}
+        </div>
+        
+        <dl class="fx-cpbox clearfix">
+            <dt>
+            <a href="/goods/show/{$data.goods.id}"><img src="{zz mod=fileurl source=$data.goods.img_cover}"/></a>
+            </dt>
+            <dd>
+                <h3>{$data.goods.name}</h3>
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int">{$data.cart.goods_price}</span>
+                    <span class="price-ori">¥{$data.cart.market_price}</span>
+                    {if $data.goods.goods_spec}<p>{$data.goods.goods_spec}</p>{/if}
+                </div>
+                <div class="gmsl">
+                    <span>数量</span>
+                    <div class="mui-numbox"  data-numbox-min='1' data-numbox-max='{if $data.goods.limit_buy_bumber>0}{$data.goods.limit_buy_bumber}{else}{$data.goods.stock}{/if}'>
+                        <button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+                        <input class="mui-input-numbox" type="number" id="num" name="num" value="{$data.cart.qty}"/>
+                        <button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+                    </div>
+                </div>
+            </dd>
+        </dl>   
+        {if $data.goods.sid>0 && $data.cart.type!=$smarty.const.CART_STEP}
+        <div class="yh-box clearfix toggle-modal coupon-list-change-sid" style="display:block ;"  data-target="#modal-coupon-select" data-title="店铺优惠券" data-url="/flow/coupon_ajax_list/0/2">
+                <div class="yh-tit">
+                        店铺优惠券
+                        {*<div class="yh-dpts">
+                                满39元减3元
+                        </div>*}
+                </div>
+                <!--描述：店铺优惠券 是要领取才可以使用的，而且是有有效期的，只能领取一次或多次，拼团如果失败可以退还-->
+                <div class="dt-hytxt">                       
+                       <span id="coupon-sid">{if empty($data.coupon_list)}暂无可用优惠券{else}选择优惠券{/if}</span> 
+                       <span id="flow-coupon-total-sid" class="hide" >0</span>
+                       <input type="hidden" name="coupon_id_sid" id="coupon_id_sid" value="0" > 
+                </div>
+        </div>
+        {/if}
+        <div class="dp-lybox">
+            <textarea placeholder="给商家留言" name="order_tip">{if isset($order.order_tip)}{$order.order_tip}{/if}</textarea>
+        </div>
+        <div class="dp-hz" >
+            {if $data.goods.typeid==$smarty.const.CART_STEP}
+            合计：<span class="rmb">¥</span><strong id="goods-total">{$data.cart.subtotal}</strong> <span>,定金：<span class="rmb">¥</span><strong id="flow-goods-total">{formatPrice($data.goods.deposit*$data.cart.qty)}</strong> <span>（全场包邮）</span>
+            {else}
+            合计：<span class="rmb">¥</span><strong id="flow-goods-total">{$data.cart.subtotal}</strong> <span>（全场包邮）</span>
+            {/if}
+        </div>
+    </div>
+    <div class="area-box">
+        <div class="add-tab">
+            <div id="segmentedControl" class="mui-segmented-control">
+                <a class="mui-control-item mui-active" href="#item1">快递</a>
+                <a class="mui-control-item" href="#item2">自取</a>
+            </div>
+            <div>
+                <div id="item1" class="mui-control-content mui-active">
+                    {if isset($data.address.take_address_id)}
+                    <input type="hidden" name="take_address_id" value="{$data.address.id}"/>
+                    {else}
+                    <input id="address_id_checked" type="hidden" name="address_id" value="{$data.address.id}"/>
+                    {/if}
+                    <div class="mui-table-view">
+                        <div class="address-box">
+                            {if empty($data.address)}
+                            <a href="#" class="add-address toggle-modal address-frist" id="address" data-title="请选择收货地址" data-target="#modal-address-select">
+                                手动添加收货地址
+                            </a>
+                            {else}
+                            <a href="#" class="no-address {if $data.cart.type!=$smarty.const.CART_AA || $data.cart.common_id==0}toggle-modal{/if}"  id="address" data-title="请选择收货地址" data-target="#modal-address-select" >
+                                <p>{$data.address.name} {$data.address.mobile}</p>
+                                {$data.address.area} {$data.address.address}
+                            </a>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div id="item2" class="mui-control-content">
+                    <div class="mui-table-view mui-zt-box">
+                        {foreach $data.take_address as $v}
+                        <div class="mui-table-view-cell mui-radio mui-right check-select">
+                            <div>
+                                {$v.area}{$v.address}<br />
+                                电话：<span>{$v.mobile}</span>
+                            </div>
+                            <input name="take_address_id" type="radio" value="{$v.id}">
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        {if $data.cart.type!=$smarty.const.CART_STEP}
+    <div class="area-box">
+        <div class="yh-box clearfix toggle-modal coupon-list-change"  data-target="#modal-coupon-select" data-title="通用优惠券" data-url="/flow/coupon_ajax_list/0/1">
+            <div class="yh-tit">
+                通用优惠券
+            </div>
+            <!--描述：通用优惠券不用领取，也有时间限制的，一张只能使用一次，优惠券的来源有两种，一种是成功交易领取的，一种是自动发放的-->
+            <div class="dt-hytxt">                
+                <!--描述：这个状态是刚进入页面的状态-->
+                <span id="coupon">{if empty($data.coupon_list)}暂无可用优惠券{else}选择优惠券{/if}</span>                
+            </div>
+            <span id="flow-coupon-total" class="hide" >0</span>
+            <input type="hidden" name="coupon_id" id="coupon_id" value="0" >
+        </div>
+    </div>
+        {/if}
+    {if $data.cart.common_id==0 && $data.cart.type>=1 && $data.goods.discount_type>0}     
+    <div class="area-box">
+            <div class="yh-box clearfix">
+                    {if $data.goods.discount_type==2}
+                    <div class="yh-tit">
+                            团长优惠
+                    </div>                    
+                    <div class="dt-hytxt dt-hytxt2">                            
+                            <span id="flow-discount-total">-{$data.goods.discount_amount}</span>
+                    </div>
+                    {elseif $data.goods.discount_type==1}
+                    <div class="yh-tit">
+                            团长免单
+                    </div>  
+                    <div class="dt-hytxt dt-hytxt2">                            
+                            <span id="flow-discount-total">-{$data.cart.subtotal}</span>
+                    </div>
+                    {/if}
+            </div>
+    </div>
+    {/if}
+    {* modal start *}
+    <div class="modal" id="modal-coupon-select">
+    <div class="modal-body">
+    </div>
+    </div>
+    {* modal end *}
+    {if C('app_checking')}
+    <div class="area-box  mui-input-row mui-radio mui-left">
+	<label>可用余额（共<span id="flow-user-money" class="amount">{if empty($data.member.user_money)}0.00{else}{$data.member.user_money}{/if}</span>元）</label>
+	<input name="balance_pay" value="1" checked="checked" type="checkbox">
+    </div> 
+    {/if}
+    <div class="area-box payment-xz">
+        <ul class="mui-table-view">
+            {foreach from=$data.payment item=m name=f key=k}
+            <li class="mui-table-view-cell mui-radio mui-left">
+                <input  type="radio" {if $k==0}checked="checked"{/if} name="pay_id" value="{if !empty($m.pay_id)}{$m.pay_id}{/if}"><i><img src="{zz mod=fileurl source=$m.thumb}"/></i>{$m.pay_name}
+            </li>
+            {/foreach}            
+        </ul>
+        <div class="zf-ts">
+                <p><span>付款完成后请分享到微信朋友圈邀请好友一起拼团吧~</span>，超过{$data.goods.team_day*24+$data.goods.team_hour}小时后人数不足系统自动退款</p>
+        </div>
+    </div>
+</div>
+<nav class="mui-bar mui-bar-tab payment-btn">
+    <span class="payment-jg">
+        {if $data.goods.typeid==$smarty.const.CART_STEP}支付定金{else}实付款{/if}：<span class="rmb">¥</span><strong class="flow-total">0.00</strong>
+    </span>
+    <button type="button" class="mui-btn mui-btn-danger " id="jz2">{if $data.cart.common_id>0}确认参团{else}立即支付{/if}</button>
+</nav>    
+</form>
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<script src="/style/js/common-modal.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var total = function() {
+        var goodsTotal = parseFloat($('#flow-goods-total').html() || 0),
+            couponTotal = parseFloat($('#flow-coupon-total').html() || 0),           
+            discountTotal = parseFloat($('#flow-discount-total').html() || 0),           
+            couponTotalSid = parseFloat($('#flow-coupon-total-sid').html() || 0),
+            total = (goodsTotal + couponTotal + discountTotal+couponTotalSid).toFixed(2);
+
+        if (total < 0) {
+            total = 0;
+        }
+        $('.flow-total').html(total);       
+    }
+    total();
+    var numBox=document.getElementById("num");
+    numBox.addEventListener('change',function(){
+        var max = '{if $data.goods.limit_buy_bumber>0}{$data.goods.limit_buy_bumber}{else}{$data.goods.stock}{/if}';
+        var goods_price = {$data.cart.goods_price};
+        var deposit = {$data.goods.deposit|default:0};
+        var num = parseFloat(numBox.value);
+        num = num>max?max:num;
+        num = num<0?1:num;
+        var id = {$data.goods.id};
+        var type = {$data.cart.type};
+        var common_id = {$data.cart.common_id|default:0};
+        {literal}
+        $.post('/flow/add_cart',{id:id,num:num,type:type,common_id:common_id}, function(res) {
+            if (res.error === 'success') {
+                if($('#goods-total').length>0){
+                   var goodsTotal = parseFloat(deposit*num);
+                   var allTotal = parseFloat(goods_price*num);
+                   $('#flow-goods-total').html(goodsTotal.toFixed(2));
+                   $('#goods-total').html(allTotal.toFixed(2));
+                }else{
+                   var goodsTotal = parseFloat(goods_price*num);
+                   $('#flow-goods-total').html(goodsTotal.toFixed(2));
+                }
+                total();
+            } else {
+                mui.alert(res.msg);
+            }
+        }, 'json');
+       {/literal}
+        var goodsTotal = parseFloat(goods_price*1);
+        $('#flow-goods-total').html(goodsTotal.toFixed(2));
+        total();   
+    });
+    
+    $(document).on('tap', '.address-remove', function() {
+        var $this = $(this),
+            url = $this.data('url');
+            mui.confirm('确定删除所选吗',  function(e) {
+                if (e.index == 1) {
+                        $.post(url, function(res) {
+                            if (res.error === 0) {
+                                $this.closest('.li-radio-check').remove();
+                                mui.alert(res.msg);
+                            } else {
+                                mui.alert(res.msg); 
+                            }
+                        }, 'json');
+                } 
+        })
+    }).on('tap', '.buy-option-open', function() {
+       $(".pop-dbox").hide();
+    }).on('tap', '.modal-coupon-check', function() {
+       var $this = $(this),$parent = $(this).parent();
+       $parent.siblings('.modal-coupon').find(".modal-coupon-check").removeClass('active');
+       $this.addClass("active");
+       $parent.closest('.modal').hide();
+       $($this.data("target")).val($this.data('id'));
+       $($parent.data("target")).html($parent.data('title'));
+       $("#flow-coupon-total").html($parent.data('amount'));
+       $(".coupon-list-change").data("url","/flow/coupon_ajax_list/"+$this.data('id')+"/1");
+       total();
+    }).on('tap', '.modal-coupon-check-sid', function() {
+       var $this = $(this),$parent = $(this).parent();
+       $parent.siblings('.modal-coupon-sid').find(".modal-coupon-check-sid").removeClass('active');
+       $this.addClass("active");
+       $parent.closest('.modal').hide();
+       $($this.data("target")).val($this.data('id'));
+       $($parent.data("target")).html($parent.data('title'));
+       $("#flow-coupon-total-sid").html($parent.data('amount'));
+       $(".coupon-list-change-sid").data("url","/flow/coupon_ajax_list/"+$this.data('id')+"/2");
+       total();
+    }).on('tap', '.coupon_get', function() {
+       var $this = $(this),$parent = $(this).parent();  
+       var id = $this.data('coupon');
+       $.post("/coupon/ajax_coupon_get/"+id, function(res) {
+            if (res.error === 0) {
+                $this.parent().addClass("active");
+                $this.html("已领取");
+                $this.data("coupon",0);
+                mui.toast(res.msg);
+                //$parent.closest('.modal').hide();
+            } else {
+                mui.toast(res.msg); 
+            }
+        }, 'json');
+    })
+    
+    var orderForm = $('#orderForm').Validform({
+        ajaxPost: true,
+        postonce: true,
+        btnSubmit: '#jz2',
+        showAllError: false,
+        tiptype: function(msg, o, cttl) {
+            //mui.toast(msg);
+        },
+        beforeSubmit: function(curform) {
+
+            var $forced = $('#coupon_forced');
+
+            if (1 == $forced.val()) {
+                $forced.val(0);
+                return true;
+            }
+
+            var goodsTotal = parseFloat($('#flow-goods-total').html() || 0),
+                couponTotal = parseFloat($('#flow-coupon-total').html() || 0);
+
+            if (couponTotal < 0 && (couponTotal + goodsTotal) < 0) {
+                mui.confirm('优惠券金额大于本单金额, 超出的金额将作废. 坚持使用本优惠券吗?',  function(e) {
+                    if (e.index == 1) {
+                        $forced.val(1);
+                        orderForm.submitForm(true);
+                    }else{
+                        $forced.val(0);
+                    }
+                })              
+                return false;
+            }
+        },
+        callback: function(res) {
+            if (res.msg) {                
+                mui.toast(res.msg);
+            }
+            if (0 === res.error) {
+                window.location = res.url;
+            } else {         
+                mui.toast(res.msg);
+                if (typeof(res.data.token)!='undefined') {
+                    $('#token').val(res.data.token);
+                }
+            }
+        }
+    });
+</script>
+{include file="public_footer.html"}
+
+
+

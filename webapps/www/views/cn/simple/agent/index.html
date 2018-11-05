@@ -1,0 +1,82 @@
+{include file="public_header.html"}
+<div class="fenxiao-top">
+	<section>
+		<a class="tuoxiang" href="/member" style="background-image:url({photo($member.mid)})">
+
+		</a>
+		<p class="p1">
+			<i>{L('unit_comm')}：￥{$member.commission}</i>{$member.username|nickname:$member.nickname:1}
+		</p>
+		<p class="p2">
+			<a href="/agent/withdraw_commission">提现</a>加入时间：{$member.agent_time|date_format:"Y-m-d"}
+		</p>
+	</section>
+</div>
+<ul class="fenxiao-ppul">
+	<li>
+		<a href="/agent/mshop_setting">
+			<em><i class="iconfenxiao">&#xe649;</i></em>店铺设置
+		</a>
+	</li>
+	<li>
+		<a href="/agent/mshop_edit">
+			<em>
+				<i class="icon iconfenxiao">&#xe64d;</i>
+			</em>首页装修
+		</a>
+	</li>
+	<li>
+		<a href="">
+			<em>
+				<i class="icon iconfenxiao">&#xe64b;</i>
+			</em>消息通知
+		</a>
+	</li>
+	<li>
+		<a href="">
+			<em>
+				<i class="icon iconfenxiao">&#xe63e;</i>
+			</em>推荐粉丝
+		</a>
+	</li>
+</ul>
+<div class="fenxiao-list">
+	<ul>
+		<li>
+			<a href="/agent/myivt_pic/{$member.mid}"><i class="icon iconfenxiao fr"><em>想赚钱就分享</em>&#xe611;</i><i class="icon iconfenxiao">&#xe622;</i><span>推广图片</span></a>
+		</li>
+		<li>
+			<a href="/agent/myivt_card/{$member.mid}"><i class="icon iconfenxiao fr"><em>分享发展团队</em>&#xe611;</i><i class="icon iconfenxiao">&#xe61c;</i><span>推广名片</span></a>
+		</li>
+		<li>
+			<a href="/agent/promotion"><i class="icon iconfenxiao fr"><em>上下架{L('unit_distribution')}商品</em>&#xe611;</i><i class="icon iconfenxiao">&#xe63a;</i><span>推广商品</span></a>
+		</li>
+	</ul>
+</div>
+<div class="fenxiao-list">
+	<ul>
+		<li>
+			<a href="/agent/agent_sort"><i class="icon iconfenxiao fr">&#xe611;</i><i class="icon iconfenxiao">&#xe619;</i><span>{L('unit_distribution')}排行榜</span></a>
+		</li>
+	</ul>
+</div>
+{if C('is_rate') || C('is_area')}
+<div class="fenxiao-list">
+	<ul>		
+                <li>
+                    {if $member.partner_rank=='-1'}
+                    <a href="/agent/comms_list?level=-1"><i class="icon iconfenxiao fr">&#xe611;</i><i class="icon iconfenxiao">&#xe64f;</i><span>省{L('unit_agent')}{L('unit_comm')}</span></a>
+                    {elseif  $member.partner_rank=='-2'}
+                    <a href="/agent/comms_list?level=-2"><i class="icon iconfenxiao fr">&#xe611;</i><i class="icon iconfenxiao">&#xe64f;</i><span>市{L('unit_agent')}{L('unit_comm')}</span></a>
+                    {elseif  $member.partner_rank>0}  
+                    <a href="/agent/comms_list?level=0"><i class="icon iconfenxiao fr">&#xe611;</i><i class="icon iconfenxiao">&#xe64f;</i><span>合伙人{L('unit_comm')}</span></a>
+                    {else}
+                    <a href="/agent/apply"><i class="icon iconfenxiao fr">&#xe611;</i><i class="icon iconfenxiao">&#xe64f;</i><span>我要成为{L('unit_agent')}</span></a>
+                    {/if}
+                </li>
+	</ul>
+</div>
+{/if}
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+{include file="public_footer.html"}

@@ -1,0 +1,13 @@
+{include file="public_header.html"}
+{if !$smarty.get.client}
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+	<h1 class="mui-title">关于我们</h1>
+</header>
+{/if}
+<div class="problem-xq refreshContainer mui-scroll-wrapper haotao-guan" style="overflow:visible">
+	<div class="problem-xq-txt">
+		{zz mod=block mark='app_about'}
+	</div>
+</div>
+{include file="public_footer.html"}

@@ -1,0 +1,87 @@
+{$slider=1}
+{include file="public_header.html"}
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        {include file="store/nav.html"}
+        {zz mod=fileurl source=$data.info.ad var=ad_list}
+        {if $ad_list}
+        <div id="slider" class="mui-slider" >
+            <div class="mui-slider-group mui-slider-loop">
+                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                {$ad_end=end($ad_list)}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="{$ad_end.title|default:'javascript:;'}">
+                        <img src="{$ad_end.path}">
+                    </a>
+                </div>
+                {foreach from=$ad_list item=m}                
+                <div class="mui-slider-item">
+                    <a href="{$ad_end.title|default:'javascript:;'}">
+                        <img src="{$m.path}">
+                    </a>
+                </div>
+                {/foreach}
+                <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                {$ad_fir=$ad_list[0]}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="{$ad_fir.title|default:'javascript:;'}">
+                        <img src="{$ad_fir.path}">
+                    </a>
+                </div>
+            </div>
+            <div class="mui-slider-indicator">
+                {foreach from=$ad_list item=m key=k}  
+                <div class="mui-indicator {if $k==0}mui-active{/if}"></div>
+                {/foreach}
+            </div>
+        </div>
+        {/if}
+        {if $data.coupon}
+        <div class="shop-tt">优惠券</div>
+        <ul class="coupon-box">
+            {foreach from=$data.coupon item=m}
+            <li class="coupon_get" data-coupon="{$m.id}" >                
+                <div class="rmb-t">
+                    <span>￥</span>
+                    <em>{$m.amount}</em>
+                    优惠券
+                </div>		  	
+                <p>{if $m.need_amount>0}满{$m.need_amount}元可以使用{else}全场通用{/if}</p>
+                <p>有效期{if empty($m.end_time)}不限{else}至{date('Y-m-d', $m.end_time)}{/if}</p>
+            </li>
+            {/foreach}
+        </ul>
+        {/if}
+        <div class="shop-tt">全部商品</div>
+        <div class="hot-list shop-commodity clearfix"> 
+        </div>
+    </div>		
+</div>
+<script>
+    $(document).on('tap', '.coupon_get', function() {   
+       var mid = '{$smarty.const.MID|default:0}';
+       if(mid==0)mui.alert("请先登录"); 
+       var $this = $(this); 
+       var id = $this.data('coupon');
+       $.post("/store/ajax_coupon_get/"+id, function(res) {
+            if (res.error === 0) {    
+                mui.alert(res.msg);                
+            } else {
+                mui.alert(res.msg); 
+            }
+        }, 'json');
+    })
+</script>    
+<nav class="mui-bar mui-bar-tab shop-button">
+    <a href="/store/info/{$data.sid}" class="btn">店铺详情</a>
+    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$data.info.qq}&site=qq&menu=yes" class="btn">客服</a>
+</nav>
+<script>  
+    var sid = '{$data.sid}';
+    {literal}var D = {load: 1};{/literal}//load:1必填
+    var ajax_url = "/store/goods/"+sid+"/";//请求的地址  
+    var ajax_class = ".hot-list";//加载的元素
+    var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

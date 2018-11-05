@@ -1,0 +1,26 @@
+<li>
+        <div>
+                <i>
+                        <img src="{zz mod=fileurl source=$m.thumb width=$m.img_w height=$m.img_h type=$m.img_type}" />
+                </i>
+                <h3>
+                        <a href="{$m.url}">{$m.act_name}</a>
+                </h3>
+                <p class="p1">原价：￥{$m.price}</p>
+                <p class="p2">剩余时间：<i id="leftTimeJx{$m.act_id}">00天00时00分00秒</i></p>
+		<script>onload_leftTime_jx({$m.act_id},{$m.diff_time},"going");</script>
+                <section>
+                        <p>         
+                            <span>团购价：￥{$m.act_price}</span>
+                            {if $m.status eq $smarty.const.PRE_START}                           
+                            <a class="auction_ms_{$m.act_id} jjks">即将开始</a>
+                            <script>onload_leftTime_jx({$m.act_id},{$m.diff_time},"start");</script>
+                            {elseif $m.status eq $smarty.const.UNDER_WAY && $m.act_stock neq $m.act_sell}                            
+                            <a class="auction_ms_{$m.act_id}"  href="javascript:;" onclick="promptAuc(this)" data-param="{ 'type':'{$smarty.const.CART_TUAN}','id':'{$m.act_id}','min_num':'{$m.min_num}','unit':'{$m.unit|default:$site_config.unit}' }">立即团购</a>
+                            {else}                            
+                            <a class="auction_ms_{$m.act_id} jjks" href="javascript:;">已结束</a>
+                            {/if}                                
+                        </p>
+                </section>
+        </div>
+</li>

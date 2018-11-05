@@ -1,0 +1,104 @@
+{include file="public_header.html"}
+<div class="user-grxx">
+    <ul>
+        <li>
+            <a href="/member/chpass">修改密码</a>
+        </li>
+        <li>
+            <a href="/member/info">完善账号</a>
+        </li>
+        <li class="on">
+            <a href="/member/verifyidcard">安全中心</a>
+        </li>
+    </ul>
+</div>
+{if $verify && $verify.status neq 3}
+<div class="user-grxx-tx" id="fenxiao-dpsz-txdz">
+    {if $verify.status eq 1}
+    <font color="red">您提交的认证身份证，我们正在审核中请耐心等待！</font>{/if}
+    <ul>
+        <li>
+            <section>
+                <div>
+                    <span><i>*</i>真实姓名</span> {$verify.realname}
+                </div>
+            </section>
+        </li>
+        <li>
+            <section>
+                <div>
+                    <span><i>*</i>身份证号</span> {$verify.card}
+                </div>
+            </section>
+        </li>
+    </ul>
+    <div class="fenxiao-dpsz-dz">
+        <h3>身份证正面照</h3>
+        <section>
+            <img src="{$verify.card_image}" />
+        </section>
+    </div>
+    <div class="fenxiao-dpsz-dz">
+        <h3>身份证反面照</h3>
+        <section>
+            <img src="{$verify.card_image2}" />
+        </section>
+    </div>
+</div>
+{else}
+<form action="" target="iframeNews" method="post" id="submit_form" enctype="multipart/form-data">
+    <div class="user-grxx-tx">
+        <ul>
+            <li>
+                <section>
+                    <div>
+                        <span><i>*</i>真实姓名</span>
+                        <input id="Text1" type="text" placeholder="请输入您的真实姓名" name="realname" value="" />
+                    </div>
+                </section>
+            </li>
+            <li>
+                <section>
+                    <div>
+                        <span><i>*</i>身份证号</span>
+                        <input id="Text1" type="text" placeholder="请输入您的身份证号" name="card" value="" />
+                    </div>
+                </section>
+            </li>
+        </ul>
+        <div id="fenxiao-dpsz-txdz">
+            <div class="fenxiao-dpsz-dz">
+                <h3>身份证正面照</h3>
+                <p>
+                    请确保身份证全部信息清晰
+                </p>
+                <section>
+                    <input type="file" id="up_img_WU_FILE_0" name="idcard" />
+                    <img id="imgShow_WU_FILE_0" src="/common/idcard.jpg" />
+                </section>
+            </div>
+            <div class="fenxiao-dpsz-dz">
+                <h3>身份证反面照</h3>
+                <p>
+                    请确保身份证背面全部信息清晰
+                </p>
+                <section>
+                    <input type="file" id="up_img_WU_FILE_1" name="idcard2" />
+                    <img id="imgShow_WU_FILE_1" src="/common/idcard2.jpg" />
+                </section>
+            </div>
+        </div>
+    </div>
+    <ul class="dzbianji-tj">
+        <li>
+            <input type="submit" name="Submit" value="保存">
+        </li>
+        <li>
+            <input type="button" value="取消" onclick="javascript:location.href='/member/'">
+        </li>
+    </ul>
+</form>
+{/if}
+<div class="ft"></div>
+<script src="/style/js/uploadPreview.js"></script>
+{include file="public_footer_nav.html"} {include file="public_footer.html"}

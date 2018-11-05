@@ -1,0 +1,40 @@
+{include file="public_header.html"}
+<form action="" target="iframeNews" id="myform" name="myform" method="post">
+<div class="yjfk">
+	<ul>
+		<li>
+			<i>
+				<em>
+					<label>
+						手机号码
+					</label>
+					<input type="text" placeholder="请留下您的手机号码，谢谢！" name="mobile" value="{$member.mobile}"/>
+				</em>
+			</i>
+		</li>
+		<li>
+			<i>
+				<em>
+					<label>
+						您的邮箱
+					</label>
+					<input type="text" placeholder="请留下您的Email，谢谢！"  name="email" value="{$member.email}"/>
+				</em>
+			</i>
+		</li>
+		<dd>		 
+			<textarea placeholder="请输入您的反馈内容"  name="content"></textarea>	
+		</dd>
+	</ul>
+	<p>温馨提示：您提交的内容请不要超过500字符！</p>
+</div>
+<ul class="dzbianji-tj">
+	<li>
+		<input type="submit" value="保存" name="Submit"/>
+	</li>
+	<li>
+		<input type="button" value="取消" onclick="javascript:window.history.go(-1)"/>
+	</li>
+</ul>
+</form>
+{include file="public_footer.html"}

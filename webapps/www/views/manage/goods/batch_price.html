@@ -1,0 +1,136 @@
+<h3 class="info-tag">
+    <a class="uiBtn BtnGreen r" href="javascript:;" onclick="exportMember()">导出商品</a>
+    {foreach from=$btnMenu item=m key=k}
+    <a class="uiBtn{if $btnNo==$k} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+{if $smarty.request.cid>0}
+<form target="iframeNewsTarget" action="/manage/goods/batch_price_save" method="post">
+    <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label">修改价格说明:</td>
+                <td class="td-input">
+                    价格修改成功后会被下架，请确认无误后再批量上架</td>
+            </tr>
+            <tr>
+                <td class="td-label">根据价格计算</td>
+                <td class="td-input">
+                    <input type='radio' name='typeid' value='1' checked="checked" class="typeid">价格
+                    <select name="act" class="act"><option value="+">加</option><option value="-">减</option><option value="*">乘</option><option value="/">除</option></select><input type="text" name="options" value=""  class="form-i w180 options"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="td-label">根据规格计算</td>
+                <td class="td-input">
+                    <input type='radio' name='typeid' value='2' class="typeid">计算公式：<input type="text" name="fanshi" value="" class="form-i w220 fanshi"/>比如：$spec[1]+$spec[2]*200<br>
+                参数：{foreach from=$spec item=m}
+                {$m.name}|$spec[{$m.id}]&nbsp;
+                {/foreach} <br><font color="red">注意：此方法只会修改包含规格的商品并且计算的参数必须包含有数字。黄金：工费70元、4.5克</font>
+            </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button class="uiBtn BtnGreen" name="Submit" type="submit">提&nbsp;&nbsp;交</button>
+                    <button class="uiBtn" type="reset">重&nbsp;&nbsp;置</button>
+                    <input type="hidden" name="cid" value="{$smarty.request.cid}" />
+                </td>
+            </tr>
+            </tbody>
+    </table>         
+</form>
+{else}
+    <div ><font color="red">请先选择分类</font></div>
+{/if}
+
+<div class="html-box">
+<form class="cond-form clear" action="#!goods/batch_price?com=xshow|批量修改价格" onsubmit="return xForm.submit(this)">
+    <div class="f-unit">
+        <select name="k" id="k">
+            <option value="name" {if $k eq 'name'}selected{/if}>商品名称</option>
+            <option value="id" {if $k eq 'id'}selected{/if}>ID</option>
+        </select>
+        <input id="q" class="form-i w160 sitem" name="q" value="{if isset($q)}{$q}{/if}" type="text">
+        <select name="cid"><option value="">商品分类</option> {$select_categorys}</select>
+        <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+    </div>
+</form>
+  
+<table class="list">
+    <thead>
+    <tr>        
+        <th class="w30">ID</th>
+        <th colspan="2" class="title">商品名称</th>
+        <th class="title">商品分类</th>
+        <th class="w100">价格</th>
+        <th class="w60">库存</th>
+        <th class="w100">重量/单位</th>
+        <th class="title">规格</th>
+        <th class="w40">上架</th>  
+    </tr>
+    </thead>
+
+    <tbody>
+    {if $data.list}
+    {foreach from=$data.list item=m}
+    <tr>        
+        <td align='center'>{$m.id}</td>
+        <td width="60"><img src="{$m.img_src}" height="60"></td>
+        <td class="title">
+            <div class="oBlk">{$m.name}</div>
+            <p class="c-gray">{$m.desc}</p>
+        </td>
+        <td class="title">{$m.cat_name_str}</td>
+        <td align='center'><b class="c-orange">{$m.price}￥</b></td>
+        <td align='center'><span class="c-gray">{$m.stock}</span></td>
+        <td align="center">
+	{if isset($m.cid)}
+            {if $m.cid neq $smarty.const.CATE_GIFT}
+            {$m.weight|default:0}{if $m.weight_unit}{$m.weight_unit}/{/if}每{$m.unit|default:$common.unit}
+            {/if}
+	{/if}
+        </td>
+        <td align='center'>
+            <table>
+            {foreach from=$m.item item=n}    
+            <tr><td>{$n.goods_spec}</td><td><b class="c-orange">￥{$n.price}</b></td></tr>
+            {/foreach}
+            </table>
+        </td>      
+        <td align='center'>
+            {if $m.is_sale==1}
+            <a href="javascript:;" onclick="main.chang_status('{$m.id}','goods','is_sale')" class="c-green" title="当前上架状态">上架</a>
+            {else}
+            <a href="javascript:;" onclick="main.chang_status('{$m.id}','goods','is_sale')" class="c-red" title="当前下架状态">下架</a>
+            {/if}
+        </td> 
+    </tr>
+    {/foreach}
+    {/if}
+    </tbody>
+</table>
+<div class="foot-btn">
+    <div class="pager r">{$page}</div>
+    <button type="button" class="uiBtn BtnGreen" onclick="batch.batch_sale(1)">批量上架</button>
+    <button type="button" class="uiBtn BtnGreen" onclick="batch.batch_sale(0)">批量下架</button>
+</div>
+</div>
+
+<script type="text/javascript">   
+var cid = '{$smarty.request.cid}';   
+{literal}
+var batch=function(){
+};batch.prototype={   
+    batch_sale:function(is_sale){
+        $post({
+            url:'/goods/batch_sale',
+            data : {'cid' : cid,'is_sale':is_sale},
+            callback:function(x){                
+                com.xshow('批量修改价格',x,{isText:true, hideBtn : true});               
+            }
+        });
+    }
+};batch=new batch;
+{/literal}
+</script>

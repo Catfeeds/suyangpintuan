@@ -1,0 +1,35 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="oid w40">ID</th>
+            <th class="w120">收件人</th>
+            <th class="w120">所在地区</th>
+            <th class="title">街道地址</th>
+            <th class="w80">邮编</th>
+            <th class="w80">手机</th>
+            <th class="w40">使用次数</th>
+        </tr>
+        </thead>
+        <tbody>
+        {if $list}
+        {foreach from=$list item=m}
+        <tr>
+            <td class="oid">{$m.id}</td>
+            <td align='center'>{$m.name}</td>
+            <td align='center'>{$m.area}</td>
+            <td>{$m.address}</td>
+            <td align='center'>{$m.zip}</td>
+            <td align='center'>{$m.mobile}</td>
+            <td align='center'>{$m.use_num}</td>
+        </tr>
+        {/foreach}
+        {else}
+        <tr>
+            <td colspan="6" align='center'>用户暂时没有收货地址</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+</div>

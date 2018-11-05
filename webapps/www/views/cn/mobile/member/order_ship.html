@@ -1,0 +1,23 @@
+{$headTit="物流详情"} {include file="public_header.html"}
+<h2 class="wl-title">物流详情</h2>
+<div class="page-box">
+        <dl class="wl-hz clearfix">
+                <dt><img src="/style/img/kd.png"/></dt>
+                <dd>
+                        <p>物流公司:{$express.name}</p>
+                        <p>快递单号:{$row.express_num}</p>
+                        <p>官方电话:<a href="tel://{C('business_tel')}">{C('business_tel')}</a></p>
+                </dd>
+        </dl>
+
+        <div class="area-box wl-gz">
+                <h2>物流跟踪</h2>
+                <div class="wl-txt">
+                		{foreach from=$wuliu.data item=m}
+                        <p>{$m.time}:{$m.context}</p>
+                        {/foreach}
+                </div>
+        </div>		
+        {include file="public_rand.html"}		
+</div>
+{include file="public_footer.html"}

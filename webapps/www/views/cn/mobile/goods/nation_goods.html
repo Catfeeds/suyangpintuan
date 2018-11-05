@@ -1,0 +1,55 @@
+{$nav = 1}{$slider = 1}{$active = 3}
+{include file="public_header.html"}
+<header id="header" class="mui-bar mui-bar-nav">
+    <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="mui-scroll">
+            {if $data.row.parentid==0 && $smarty.request.all==''}
+            <a class="mui-control-item {if $data.id==0}mui-active{/if}" href="/goods/nation_goods">全部</a>
+            {else}
+            <a class="mui-control-item {if $data.top==$data.id}mui-active{/if}" href="/goods/nation_goods/{$data.top}?all=1&top={$data.top}">
+                全部
+            </a>
+            {/if}
+            {foreach from=$data.cat_list item=m}
+            <a class="mui-control-item {if $data.id==$m.id}mui-active{/if}" href="/goods/nation_goods/{$m.id}{if $smarty.get.country_id>0}?country_id={$smarty.get.country_id}{/if}">{$m.catname}</a>
+            {/foreach}    
+        </div>
+    </div>
+ </header>
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">
+    <div class="mui-scroll">
+        {if $data.cat_isrec && $data.row.id}
+        <ul class="nav-fl clearfix">
+            {foreach from=$data.cat_isrec item=m key=k}
+            {if $k<9}
+            <li>
+                <a href="/goods/nation_goods/{$m.id}?all=1&top={$m.id}{if $smarty.get.country_id>0}&country_id={$smarty.get.country_id}{/if}">
+                    <img src="{zz mod=fileurl source=$m.thumb}"/>
+                    <p>{$m.catname}</p>
+                </a>
+            </li>
+            {/if}
+            {/foreach}
+            <li>
+                <a href="/goods/nation_goods/{$data.row.id}?all=1&top={$data.row.id}{if $smarty.get.country_id>0}&country_id={$smarty.get.country_id}{/if}">
+                    <img src="/style/img/f9.png"/>
+                    <p>查看全部</p>
+                </a>
+            </li>
+        </ul>
+        {/if}
+        <div class="hot-list">                
+        </div>
+    </div>
+</div>
+<script>
+  var nation_id = '{$data.id}';
+  var country_id = '{$data.country_id}';
+  //load:1必填
+  {literal}var D = {load: 1,nation_id:nation_id,country_id:country_id};{/literal}
+  var ajax_url = "/goods/index/0/";//请求的地址  
+  var ajax_class = ".hot-list";//加载的元素
+  var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

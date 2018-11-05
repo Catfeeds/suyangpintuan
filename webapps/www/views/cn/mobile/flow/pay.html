@@ -1,0 +1,16 @@
+{$headTit="订单支付"}
+{$slider=1}
+{include file="public_header.html"}
+<div class="new-order clearfix">
+    <div class="new-order1 clearfix">
+        <div class="new-order-li">
+            <p>订单编号：{$order.order_sn}</p>
+            <strong>￥{$order.amount|price_format}</strong>
+            <span>支付方式：{$payment_info.pay_name}</span>
+        </div>
+    </div>
+    <div class="new-order2 clearfix">
+        {$payment_info.pay_button}
+    </div>
+</div>
+{include file="public_footer.html"}

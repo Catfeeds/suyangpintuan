@@ -1,0 +1,18 @@
+<form method="post" action="#!company/info/createSlider" style="width:400px; padding:30px 15px 20px" id="sliderInfoForm">
+
+    <div class="f-unit">
+        <label class="ui-label w60" for="slider_name">名称：</label>
+        <input type="text" class="form-i w200" name="slider_name" id="slider_name" value="">
+    </div>
+
+    <div class="f-unit">
+        <label class="ui-label w60" for="addslider-w">尺寸：</label>
+        <label class="ui-label" for="addslider-w">宽度</label>
+        <input id="addslider-w" name="slider_width" class="form-i w40"{if isset($imageWidth)} value="{$imageWidth}"{/if}>
+        <label class="ui-label">px</label>
+        <label class="ui-label" for="addslider-h">高度</label>
+        <input id="addslider-h" name="slider_height" class="form-i w40"{if isset($imageHeight)} value="{$imageHeight}"{/if}>
+        <label class="ui-label">px</label>
+    </div>
+
+</form>

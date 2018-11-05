@@ -1,0 +1,104 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!score/log" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <span class="input-group">
+                <span class="input-group-addon-left">ID</span>
+            <input class="form-i" type="text" name="filters[id]" value="{if isset($filters['id'])}{$filters['id']}{/if}" placeholder="id需是整数">
+            </span>
+            <span class="input-group">
+                <span class="input-group-addon-left">用户 ID</span>
+            <input class="form-i" type="text" name="filters[mid]" value="{if isset($filters['mid'])}{$filters['mid']}{/if}" placeholder="用户id需是整数">
+            </span>
+            <span class="input-group">
+                <span class="input-group-addon-left">手机号</span>
+            <input class="form-i" type="text" name="filters[mobile][1]" value="{if isset($smarty.get.filters['mobile'][1])}{$smarty.get.filters['mobile'][1]}{/if}" placeholder="输入要查找的手机号">
+            <label class="input-group-addon-right">
+                <input type="hidden" name="filters[mobile][0]" value="cs">
+                <input type="checkbox" name="filters[mobile][0]" value="eq" {if isset($smarty.get.filters['mobile'][0]) && $smarty.get.filters['mobile'][0] eq 'eq'}checked="checked" {/if}> 精确
+            </label>
+            </span>
+            <span class="input-group">
+                <span class="input-group-addon-left">用户名</span>
+            <input class="form-i" type="text" name="filters[username][1]" value="{if isset($smarty.get.filters['username'][1])}{$smarty.get.filters['username'][1]}{/if}" placeholder="输入要查找的用户名">
+            <label class="input-group-addon-right">
+                <input type="hidden" name="filters[username][0]" value="cs">
+                <input type="checkbox" name="filters[username][0]" value="eq" {if isset($smarty.get.filters['username']) && $smarty.get.filters['username'][0] eq 'eq'}checked="checked" {/if}> 精确
+            </label>
+            </span>
+            <span class="input-group">
+                <span class="input-group-addon-left">备注</span>
+            <input type="hidden" name="filters[remark][0]" value="cs">
+            <input class="form-i" type="text" name="filters[remark][1]" value="{if isset($filters['remark '][1])}{$filters['remark '][1]}{/if}" placeholder="输入要查找的备注信息">
+            </span>
+            <span class="input-group">
+                <input class="form-i w120 sitem" name="filters[c_time][0][1]" value="{if isset($filters['c_time '][0][1])}{$filters['c_time '][0][1]}{/if}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00 ' })" autocomplete="false" placeholder="创建时间起" />
+                <input type="hidden" name="filters[c_time][0][0]" value="ge"/>
+                <input type="hidden" name="filters[c_time][0][2]" value="timestamp"/>
+                <input type="hidden" name="filters[c_time][1][0]" value="le"/>
+                <input type="hidden" name="filters[c_time][1][2]" value="timestamp"/>
+                <input class="form-i w120 sitem border-left-none" name="filters[c_time][1][1]" value="{if isset($filters['c_time '][1][1])}{$filters['c_time '][1][1]}{/if}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59 ' })" autocomplete="false" placeholder="创建时间止" />
+            </span>
+            <span class="input-group" style="border-left:1px solid #ccc;margin-top:-1px;">
+                <select class="form-i border-left-none" name="filters[type]">
+                    <option value="">类型不限</option>
+                    {foreach from=$data.score_types item=m key=k}
+                        <option value="{$k}" {if isset($filters['type ']) && $filters['type '] eq $k}selected="selected"{/if}>{$m}</option>
+                    {/foreach}
+                </select>
+            </span>
+        </div>
+        <div class="f-unit">
+            <span class="l">
+                {for $i=0 to 2}
+                    <span class="input-group">
+                        <span class="input-group-addon-left">排序{$i+1}</span>
+            <select class="form-i" name="orders[{$i}][key]">
+                {foreach from=$fields item=item key=key}
+                <option value="{$key}" {if !empty($orders[$i][ 'key ']) and $orders[$i][ 'key '] eq $key}selected="selected" {/if}>{$item}</option>
+                {/foreach}
+            </select>
+            <select class="form-i border-left-none" name="orders[{$i}][desc]">
+                <option value="0">升序</option>
+                <option value="1" {if !empty($orders[$i][ 'desc '])}selected="selected" {/if}>降序</option>
+            </select>
+            </span>
+            {/for}
+            </span>
+            <button type="submit" style="margin-left: 10px;" class="uiBtn BtnBlue l">搜索</button>
+            <a style="margin-left: 10px;" class="uiBtn" href="/manage#!score/log">重置</a>
+        </div>
+    </form>
+    <table class="list">
+        <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th class="w80">类型</th>
+                <th class="w30">用户id</th>
+                <th class="w30">手机号</th>
+                <th class="w160">用户名</th>
+                <th class="w300">日志</th>
+                <th class="w80" align="left">创建时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {if $data.list} {foreach from=$data.list item=m}
+            <tr>
+                <td align='center '>{$m.id}</td>
+                <td>{$m.score_type}</td>
+                <td>{$m.mid}</td>
+                <td>{$m.mobile}</td>
+                <td>{$m.username}</td>
+                <td>{$m.remark}</td>
+                <td>{date('Y-m-d H:i:s ',$m.c_time)}</td>
+            </tr>
+            {/foreach} {/if}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/score.js');
+</script>

@@ -1,0 +1,85 @@
+{$headTit="订单支付"} {include file="public_header.html"}
+<style>
+.ddzf-input {
+    background-color: #fff;
+}
+ .ddzf-input .ddzf-input-ul {
+    padding: 0 0.4rem;
+    border-bottom: 1px solid #dcdcdc;
+    padding-top: 0.2rem;
+}
+.ddzf-input .ddzf-input-ul li {
+    height: 2.0rem;
+    margin-bottom: 0.2rem;
+    position: relative;
+    line-height: 1.4rem;
+}
+.ddzf-input .ddzf-input-ul li section {
+    border-bottom: 1px solid #dcdcdc;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.ddzf-input .ddzf-input-ul li div {
+    color: #818181;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+}
+.ddzf-input .ddzf-input-ul li div span {
+    left: 0;
+    height: 100%;
+    color: #434343;
+}
+
+.text-center {
+    text-align: center;
+}
+.ddzf-sub {
+    padding: 0.4rem;
+}
+</style>
+<div class="ddzf-input">
+    <ul class="ddzf-input-ul">
+        <li>
+            <section>
+                <div>
+                    <span>
+                        订单号：
+
+                    </span> {$order.order_sn}
+                </div>
+            </section>
+        </li>
+        <li>
+            <section>
+                <div>
+                    <span>
+                        支付金额：
+
+                    </span> {$order.amount|price_format}
+                </div>
+            </section>
+        </li>
+        <li style="display: none;">
+            <section>
+                <div>
+                    <span>手续费用：</span> {$payment_info.pay_fee}
+                </div>
+            </section>
+        </li>
+        <li>
+            <section>
+                <div>
+                    <span>支付方式：</span> {$payment_info.pay_name}
+                </div>
+            </section>
+        </li>
+    </ul>
+</div>
+<div class="ddzf-sub text-center" >
+    {$payment_info.pay_button} {*
+    <button type="submit">{$payment_info.pay_button}</button> *}
+</div>
+{include file="public_footer.html"}

@@ -1,0 +1,52 @@
+{include file="public_header.html"}
+<div class="tixian">
+	<ul>
+		<li>
+			<em>可用{L('unit_comm')}</em>
+			<b>￥{$member.commission}</b>
+		</li>
+		<li>
+			<a href="">
+				<i class="icon iconfenxiao">&#xe611;</i>
+				<em>冻结{L('unit_comm')}</em>
+				<b>￥{$member.deduct_commission}</b>
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="fenxph">
+	<ul>
+		<li class="on">
+			<a href="/agent/withdraw_commission">充值到余额</a>
+		</li>
+		<li >
+			<a href="/agent/withdraw">提现</a>
+		</li>
+
+	</ul>
+</div>
+<form action='' method="post" target="iframeNews">
+<input type="hidden" name="Submit" value="1" >
+<input type="hidden" name="token" value="{createToken()}" />
+<div class="tixian-input">	
+	<ul class="tixian-input-ul">		
+		<li>
+			<section>
+				<div>
+					<span>
+						<i>*</i>充值金额
+					</span>
+					<input id="amount" name="amount" type="text" value="" placeholder="请输入充值金额">
+				</div>
+			</section>
+		</li>		
+	</ul>
+</div>
+<div class="tixian-sub">
+	<button type="submit">申请充值</button> 
+</div>
+</form>
+<!-- <p class="tixian-sub-gz">
+	<a href="">{L('unit_distribution')}提现规则</a>
+</p> -->
+{include file="public_footer.html"}

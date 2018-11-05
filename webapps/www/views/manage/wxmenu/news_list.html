@@ -1,0 +1,39 @@
+<div style="height:400px; padding:10px; width:600px; overflow:auto">
+<table class="tb-goods" style="width:100%">
+    <thead>
+    <tr>
+        <th class="oid" colspan="3">图文</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+
+{foreach from=$list item=wxitem key=k}
+    <tr><td colspan="5" class="sep-row"></td></tr>
+    <tr class="order-head"><td colspan="5">
+        {if count($wxitem.items)==1}单图文消息{else}多图文消息{/if}，
+        创建时间：<span class="order-date">{date('Y-m-d H:i:s',$wxitem.c_time)}</span>，
+        修改时间：<span class="order-date">{date('Y-m-d H:i:s',$wxitem.c_time)}</span>
+    </td></tr>
+
+    {foreach from=$wxitem.items item=m key=index}
+    <tr>
+        <td class="bdl w5"></td>
+        <td class="w50"><img src="{$m.imgurl_thumb}" width="50"/></td>
+        <td class="bdr"><div class="oi-name">{$m.title}</div></td>
+
+        {if $index==0}
+        <td class="ac bdr" rowspan="{count($wxitem.items)}">
+            <a href="javascript:;" class="uiBtn e2-wxmenu-editTabSet-news-{$wxitem.id}">添加</a>
+        </td>
+        {/if}
+
+    </tr>
+    {/foreach}
+
+{/foreach}
+</table>
+    <div class="e2-wxmenu-getNewsListPage">
+        {$page}
+    </div>
+
+</div>

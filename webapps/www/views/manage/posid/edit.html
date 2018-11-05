@@ -1,0 +1,27 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/posid/edit">
+    <input type="hidden" name="post[id]" value="{$row.id}" />
+
+    <table class="table-list">
+    <tbody>
+
+        <tr>
+            <td class="td-label"><label>推荐位名称：<span class="c-red">*</span></label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" name="post[name]" value="{$row.name}" />
+            </td>
+        </tr>
+
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+            </td>
+        </tr>
+
+    </tbody>
+    </table>
+
+    </form>
+</div>

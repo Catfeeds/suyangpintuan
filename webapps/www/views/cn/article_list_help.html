@@ -1,0 +1,39 @@
+{include file="public_header.html"}
+<div class="help-box" style="background: url({zz mod=fileurl source=$data.ban_thumb}) no-repeat center top; height: 250px;">
+	<div class="content-box clearfix">
+		<div class="pull-left help-l">
+			<p>竭诚为您服务，欢迎前来咨询！</p>
+			<h2>{$data.row.catname}</h2>
+		</div>
+		<div class="pull-right help-r">
+			<p>客服热线：{C("business_tel")}</p>
+			<p>工作时间：8:30—20:30</p>
+		</div>
+	</div>
+</div>
+<div class="news-box">
+	<div class="content-box hot-box">
+		<ul class="hot-list">
+			{foreach from=$data.list item=m}
+			<li>
+				<h2><a href="{$m.url}">{$m.title}</a></h2>
+				<p>{$m.content|strip_tags|truncate:100}</p>
+			</li>
+			{/foreach}
+		</ul>
+		{if $data.list && $page}
+		<div class="new-page">
+			<a {$page.prev}><</a>
+			{foreach from=$page.links item=v key=k}
+			{if $k==$page.nonce}
+			<a {$v} class="dq">{$k}</a>
+			{else}
+			<a {$v}>{$k}</a>
+			{/if}
+			{/foreach}
+			<a {$page.next}>></a>
+		</div>
+		{/if}
+	</div>
+</div>
+{include file="public_footer.html"}

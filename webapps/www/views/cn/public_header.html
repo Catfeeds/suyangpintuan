@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>{$seo.title}</title>
+        <meta name="description" content="{$seo.keywords}" />
+        <meta name="keywords" content="{$seo.description}" />
+		<link rel="stylesheet" type="text/css" href="/default/css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="/default/css/main.css"/>
+        <link rel="shortcut icon" href="{yunurl(C('favicon.ico', 'images'))}" />
+		<script src="/default/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/default/js/jquery.SuperSlide.2.1.1.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+        <div class="top-box">
+            <div class="content-box clearfix">
+                <div class="pull-left top-logo">
+                    <a href="/"><img src="{yunurl(C('logo.png','images'))}"/></a>
+                </div>
+                <ul class="nav pull-left">
+                    <li><a href="/">首页</a></li>　　　
+                    {foreach from=0|cate item=m  }
+                    {if $m.parentid eq 0 && $m.ismenu eq 1 }
+                    <li><a href="{$m.url}">{$m.catname}</a></li>　
+                    {/if}
+                    {/foreach}
+                </ul>
+                {if $smarty.session.b_id}
+                {if $data.b_info.status==1 && ($data.b_info.pay_status==1 || $data.b_info.amount==0)}
+                <!--描述：入驻成功-->
+                <div class="top-abtn">
+                    <div class="top-dlh clearfix">
+                        <div class="top-dlhdiv">欢迎：<span>{$smarty.session.b_user}</span></div>
+                        <a href="/business" class="top-a1">商家中心</a>
+                    </div>
+                </div>
+                {elseif ($data.b_info.status==0 || $data.b_info.status==2 || ($data.b_info.pay_status==0 && $data.b_info.amount>0)) && $data.b_info.name!='' && $data.b_info.card_image!='' }
+                <!--描述：提交入驻申请后-->
+                <div class="top-abtn">
+                    <div class="top-dlh clearfix">
+                        <div class="top-dlhdiv">欢迎：<span>{$smarty.session.b_user}</span></div>
+                        <a href="/content/applythree" class="top-a1">查看入驻进度</a>
+                    </div>
+                </div>
+                {else}
+                <!--描述：登录的状态-->
+                <div class="top-abtn">
+                    <div class="top-dlh clearfix">
+                        <div class="top-dlhdiv">欢迎：<span>{$smarty.session.b_user}</span></div>
+                        <a href="/content/apply" class="top-a1">马上入驻</a>
+                    </div>
+                </div>
+                {/if}
+                {else}
+                <!--描述：用户没有登录的状态-->
+                <div class="top-abtn">
+                    <a href="javascript:;" class="top-a1 login_reg">登录/注册商家</a>
+                </div>
+                {/if}
+            </div>
+        </div>

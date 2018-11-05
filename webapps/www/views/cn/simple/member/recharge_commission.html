@@ -1,0 +1,20 @@
+{$headTit="充值到余额"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<form action="" method="post" target="iframeNews">
+<input type="hidden" name="bank_id" value="{$bank.id}" />
+<input type="hidden" name="token" value="{createToken()}" />
+<dl class="main pd_10 f14 beijing2 top_b income2">
+    <dd class="income1_1">
+        <strong>￥{$member.commission}</strong>
+        <p>您目前可充值金额：</p>
+    </dd>
+    <dd>
+        <span>请输入充值金额：</span>
+        <p><input type="text" name="change_money" value="" /></p>
+    </dd>
+    <dd class="income1_2"><input type="submit" name="Submit" value="立即充值" /></dd>
+</dl>
+</form>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

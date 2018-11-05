@@ -1,0 +1,7 @@
+{foreach from=$data.list item=item key=key name=name}
+    <li data-group_id="{$item.group_id}">
+        <img src="{$item.avatar}" class="avatar">{$item.name}
+        <a href="javascript:;" onclick="main.confirm_del('chat/records_del/{$item.group_id}')" class="uiBtn BtnBlue r">清空</a>
+    </li>
+{/foreach}
+

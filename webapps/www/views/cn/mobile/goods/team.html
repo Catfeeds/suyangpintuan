@@ -1,0 +1,501 @@
+{$headTit=$data.goods.name}
+{$slider = 1}
+{include file="public_header.html"}
+<script src="/style/js/lefttime.js" type="text/javascript"></script>
+<style type="text/css">
+    .mores-list{
+        padding: 0;
+    }
+    .bq-box{
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+</style>
+{if $data.goods.typeid==$smarty.const.CART_AA}
+<!--描述：AA团提示下面的文字-->
+<div class="aa-pop">
+    此团为AA团，只限与团长是好友、同事、同学、或是离的非常近的小伙伴们进行购买，因为货只发给团长，由团长分配给团成员,可通过右边的拼团玩法了解详细
+</div>
+{/if}
+{if $data.row.team_num_no==0 && $data.goods.typeid!=$smarty.const.CART_STEP || $data.row.status==$smarty.const.TEAM_SUCC}
+<!--描述：拼团已成功显示bg-danger-->
+<div class="bg-danger">
+    <h3>(T_T) 此团已满</h3>
+    <p>掐指一算，您就是下一位团长(☆＿☆)</p>
+</div>
+{elseif $data.row.status==$smarty.const.TEAM_FIELD}
+<!--描述：拼团失败功显示bg-danger-->
+<div class="bg-danger">
+    <h3>(T_T) 拼团购买失败</h3>
+</div>
+{elseif $data.is_join==1}
+<!--自己打开自己的拼团页面,就是已经参加过的团-->
+<div class="bg-success">
+    <h3>( *^_^* )此团正在拼团中</h3>
+    <p>想要快速成团邀请小伙伴一起参与吧！</p>
+</div>
+{elseif $data.limit_one}
+<!--描述：特殊产品只能参团一次，如果在打开相同的团下面的提示如下-->
+<div class="bg-danger">
+    <h3>(T_T) 您已达限购次数，不能参团</h3>
+</div>
+{elseif $data.goods.stock==0}
+<!--描述：秒杀，免费试用 没库存-->
+<div class="bg-danger">
+    <h3>(T_T) 活动已经结束</h3>
+</div>
+{elseif $data.check_team || !$data.is_login}
+<div class="bg-success">
+    终于等到你了，快来参团  (*^_^*)
+</div>
+{/if}
+<div class="page-box">
+    <dl class="fx-cpbox {if $data.row.team_num_no==0 && $data.goods.typeid!=$smarty.const.CART_STEP || $data.row.status==$smarty.const.TEAM_SUCC}ptcg-zk{elseif $data.row.status==$smarty.const.TEAM_FIELD || $data.row.end_time==0}ptsb-zk{/if} clearfix" >
+        <dt>
+        <a href="/goods/show/{$data.goods.id}"><img src="{$data.goods.img_cover}"/></a>
+        </dt>
+        <dd >
+            <h3><span>{goods_typeid($data.goods.typeid)}</span>{$data.goods.name}</h3>
+            {if $data.goods.typeid==$smarty.const.CART_AA}
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int">{$data.goods.team_price_total}</span>
+                    <span class="price-ori">¥{$data.goods.price}</span>
+                </div>
+                <div class="fx-jsbox">
+                        <span>AA团每人{$data.goods.team_price}元</span>
+                        {if $data.goods.rule}<a href="javascript:;" class="mui-pull-right fx-afxa">参团需知</a>{/if}
+                </div>
+            {else}
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int">{$data.row.team_price}</span>
+                    <span class="price-ori">¥{$data.goods.price}</span>
+                </div>
+                <div class="fx-jsbox">
+                    <span>拼团为您节省{$data.goods.price-$data.row.team_price}元</span>
+                    {if $data.goods.rule}<a href="javascript:;" class="mui-pull-right fx-afxa">参团需知</a>{/if}
+                </div>
+                {if $data.goods.typeid==$smarty.const.CART_KILL || $data.goods.typeid==$smarty.const.CART_LUCK || $data.goods.typeid==$smarty.const.CART_FREE}
+                    {if $data.goods.end_time>$smarty.const.RUN_TIME }
+                    <p class="ms-date">距离结束还有<em id="leftTimeJx{$data.goods.id+999}"><span>00</span>时<span>00</span>分<span>00</span>秒</em></p>
+                    <script>onload_leftTime_jx({$data.goods.id+999},{$data.goods.end_time-time()},"span","zh");</script>
+                    {/if}
+                {/if}
+            {/if}
+        </dd>
+    </dl>
+    {if $data.goods.typeid!=$smarty.const.CART_STEP}
+        {if $data.row.team_num_no==0 || $data.row.status==$smarty.const.TEAM_SUCC || $data.row.status==$smarty.const.TEAM_FIELD}{else}<p class="fx-ts1">还差<span>{$data.row.team_num_no}</span>人，组团成功~拼拼更划算哦</p>{/if}
+        <ul class=" fx-cttx">
+            {foreach from=$data.list item=m key=k}
+            {if $k<5}
+            <li>
+                <img src="{photo($m.mid)}" style="width: 56px;height: 56px"/>
+                {if $k==0}<span>团长</span>{/if}
+            </li>
+            {/if}
+            {/foreach}
+            {if $data.row.status!=$smarty.const.TEAM_SUCC}
+            <li>
+                <img src="/style/img/txbg.png"/>
+            </li>
+            {/if}
+        </ul>
+    {else}
+        <div class="ladder-box1 clearfix">
+            <p class="fx-ts1">还差<span>{if $data.goods.team_max>=$data.row.team_num_yes}{$data.goods.team_max-$data.row.team_num_yes}{else}0{/if}</span>人，就可以拼购到最低价~拼拼更划算哦</p>
+            <div class="jtt-jjbox">
+                <h3><span>{$data.row.team_num_yes}</span>人参团/当前价：<span>{$data.row.team_price}元</span></h3>
+                <div class="jtt-jdtbg">
+                    <span style="width:  {$data.goods.team_scale}%"></span>
+                </div>
+            </div>
+            <div class="jtt-jglist">
+                <h3>阶梯团价：</h3>
+                {foreach from=$data.goods.step_array item=m key=k}
+                <p class="{if $data.row.team_price==$m}jd{/if}">{$k}人/<span>¥{formatPrice($m)}</span> </p>
+                {/foreach}
+            </div>
+        </div>
+    {/if}
+    {if $data.goods.typeid!=$smarty.const.CART_AA && $data.row.team_num_no>0}
+    {if $data.row.team_num_no==1}
+    <!--描述：拼团只差一个时显示下面的提示-->
+    <p class="fx-ts2">参团支付成功后，立马组团成功，为您节省了{$data.goods.price-$data.goods.team_price}元</p>
+    {else}
+    <p class="fx-ts2">参团支付成功后，如果人数不足，系统会自动退款</p>
+    {/if}
+    {/if}
+    <div class="fx-box2">
+        <div class="group-tit">
+            {if $data.row.status==$smarty.const.TEAM_FIELD || $data.row.status==$smarty.const.TEAM_SUCC || $data.row.end_time==0 || $data.goods.stock==0}
+            <span>拼团已结束</span>
+            {else}
+            <span>剩余<em id="leftTimeJx{$data.row.id}"><label>00</label>:<label>00</label>:<label>00</label></em>结束</span>
+            <script>onload_leftTime_jx({$data.row.id},{$data.row.end_time},"label","");</script>
+            {/if}
+        </div>
+    </div>
+    {if  $data.goods.stock==0}
+    {elseif ($data.row.team_num_no==0 && $data.goods.typeid!=$smarty.const.CART_STEP) || $data.row.end_time==0  || $data.row.status==$smarty.const.TEAM_FIELD || $data.row.status==$smarty.const.TEAM_SUCC }
+    <div class="fx-ctbtn"><button type="button" class="mui-btn mui-btn-danger ct-btn1"  onclick="ajax_cart({$data.goods.id},{$data.goods.typeid|default:1},1,'','')">开团</button></div>
+        {include file="goods/team_list.html"}
+        {if $data.team_list}
+        <div class="area-box fx-area-box">
+            <div class="group-tit">
+                <span>不想开团，参加以下的团购</span>
+            </div>
+            <ul class="group-list">
+                {foreach from=$data.team_list item=m key=k}
+                <li>
+                    <a href="/goods/team/{$m.id}">
+                        <div class="group-tx">
+                            <img src="{photo($m.mid)}"/>
+                        </div>
+                        <div class="pt-l">
+                            <p>{$m.username}</p>
+                            <p>等你来拼 (^_^)</p>
+                        </div>
+                        <div class="pt-r">
+                            <p class="red">{if $m.team_num==$m.team_num_yes}已有{$m.team_num_yes}人参团{else}还差{$m.team_num-$m.team_num_yes}人成团{/if}</p>
+                            <p>剩余<em id="leftTimeJx{$m.id+10000}">00:00:00</em>结束</p>
+                            <script>onload_leftTime_jx({$m.id+10000},{$m.end_time},"","");</script>
+                        </div>
+                        <div class="mui-btn mui-btn-danger">去参团 ></div>
+                    </a>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+        {/if}
+    {elseif $data.is_join}
+    <div class="fx-ctbtn"><button type="button" class="mui-btn mui-btn-danger ct-btn1" onclick="$('#fx-pop').removeClass('hide')">还差{$data.row.team_num-$data.row.team_num_yes}人成团，点击右上角邀请好友</button></div>
+        {include file="goods/team_list.html"}
+    {elseif $data.limit_one}
+    <div class="fx-ctbtn"><button type="button" class="mui-btn mui-btn-danger ct-btn1"  onclick="tourl('/member/team')">您已经购买过此商品，看看是否成团</button></div>
+        {include file="goods/team_list.html"}
+    {else}
+    <div class="fx-ctbtn"><button type="button" class="mui-btn mui-btn-danger ct-btn1 buy_team">一键参团</button></div>
+        {include file="goods/team_list.html"}
+    {/if}
+    <div class="area-box fxy-ptwf clearfix show_note">
+        <h2>拼团玩法</h2>
+        <p>开团/参团 > 邀请参团 > 人满成团</p>
+    </div>
+    {if $data.nav}
+    <ul class="mui-table-view mui-grid-view mui-grid-9" style="border-top: 10px #f3f4f6 solid;">
+        {foreach from=$data.nav item=m}
+        <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="{$m.linkurl}">
+            <span class="mui-icon"><img src="{zz mod=fileurl source=$m.img}"/></span>
+            <div class="mui-media-body">{$m.title}</div></a>
+        </li>
+        {/foreach}
+    </ul>
+    {/if}
+    {$ad = getAd(2)}
+    {zz mod=fileurl source=$ad var=ad_list type=3}
+    {if $ad_list}
+    <div class="area-box">
+            <div id="slider" class="mui-slider" >
+                    <div class="mui-slider-group mui-slider-loop">
+                            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                            {$ad_end=end($ad_list)}
+                            <div class="mui-slider-item mui-slider-item-duplicate">
+                                <a href="{$ad_end.title|default:'javascript:;'}">
+                                    <img src="{$ad_end.path}">
+                                </a>
+                            </div>
+                            {foreach from=$ad_list item=m}
+                            <div class="mui-slider-item">
+                                <a href="{$m.title|default:'javascript:;'}">
+                                    <img src="{$m.path}">
+                                </a>
+                            </div>
+                            {/foreach}
+
+                            <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                            {$ad_fir=$ad_list[0]}
+                            <div class="mui-slider-item mui-slider-item-duplicate">
+                                <a href="{$ad_fir.title|default:'javascript:;'}">
+                                    <img src="{$ad_fir.path}">
+                                </a>
+                            </div>
+                    </div>
+                    <div class="mui-slider-indicator">
+                            {foreach from=$ad_list item=m key=k}
+                            <div class="mui-indicator {if $k==0}mui-active{/if}"></div>
+                            {/foreach}
+                    </div>
+            </div>
+    </div>
+    {/if}
+    {include file="public_rand.html"}
+</div>
+{if C('is_contact')}
+{$tsupport=1}
+{include file="public_contact.html"}
+{/if}
+{*
+{if $data.row.team_num_no==0}
+<!--描述：此团已经人满显示下面这个 class="fx-abs01" style="bottom: 180px;"要删除掉-->
+<a href="/goods/square" class="fx-abs01" style="bottom: 180px;">
+    快速<br />拼团
+</a>
+{else}
+<a href="/content/index/22" class="fx-abs01">
+    拼团<br />玩法
+</a>
+{/if}
+{if  $data.goods.stock==0}
+<!--描述：拼团失败显示这个按钮或是自己已经参过这个团或是开过个团，显示这个按钮-->
+<nav class="mui-bar mui-bar-tab mui-bar-ct" >
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1 ct-btn3"  onclick="tourl('/')">去看看其它的团，点这返回首页</button>
+</nav>
+{elseif $data.row.team_num_no==0 && $data.is_join}
+<!--描述：此团已经人满显示下面这个-->
+<nav class="mui-bar mui-bar-tab mui-bar-ct " >
+    <button type="button" class="mui-btn  ct-btn2" onclick="tourl('/')">更多拼团</button>
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1"  onclick="tourl('/member/order')">查看订单</button>
+</nav>
+{elseif ($data.row.team_num_no==0 && $data.goods.typeid!=$smarty.const.CART_STEP) || $data.row.end_time==0  || $data.row.status==$smarty.const.TEAM_FIELD || $data.row.status==$smarty.const.TEAM_SUCC }
+<!--描述：此团已经人满显示下面这个-->
+<nav class="mui-bar mui-bar-tab mui-bar-ct " >
+    <button type="button" class="mui-btn  ct-btn2" onclick="tourl('/')">更多拼团</button>
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1"  onclick="tourl('/goods/show/{$data.goods.id}')">我也要开团</button>
+</nav>
+{elseif $data.is_join}
+<!--描述：团长或是已经参加的人看到的页面，前提是这个团人数还没有满 -->
+<nav class="mui-bar mui-bar-tab mui-bar-ct">
+        <button type="button" class="mui-btn  ct-btn2"  onclick="tourl('/')">更多拼团</button>
+        <button type="button" class="mui-btn mui-btn-danger ct-btn1" onclick="$('#fx-pop').removeClass('hide')">还差{$data.row.team_num-$data.row.team_num_yes}人成团</button>
+</nav>
+{elseif $data.limit_one}
+<!--描述： 特殊产品只能参团一次，如果在打开相同的团下面的提示如下-->
+<nav class="mui-bar mui-bar-tab mui-bar-ct" >
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1 ct-btn3"  onclick="tourl('/')">您已经购买过次商品，看看是否成团</button>
+</nav>
+{else}
+<nav class="mui-bar mui-bar-tab mui-bar-ct " >
+    <button type="button" class="mui-btn  ct-btn2" onclick="tourl('/')">更多拼团</button>
+    <!--<button type="button" class="mui-btn mui-btn-danger ct-btn1" onclick="tourl('/goods/show/{$data.goods.id}?common_id={$data.row.id}')">我要参团</button>-->
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1 buy_team" >我要参团</button>
+</nav>
+{/if}
+*}
+<div id="qrcode_share" style="display: none">
+    <div class="qrcode_share">
+        <dl class="name">
+            <dt><img src="{zz mod=fileurl source=$site_config.mobile_logo}" /></dt>
+            <dd>{$site_config.site_name}</dd>
+        </dl>
+        <div class="pic mui-clearfix" style="text-align: center">
+            <img  id="goods_thumb"  src="{$data.goods.img_cover}" style="height: 100%" />
+        </div>
+        <br>
+        <h2>{$data.goods.name}</h2>
+        <div class="qrcode"><img id="goods_code" src="{$qrurl}" width="70"></div>
+        <div class="tip">
+            【分享方式】<br/>
+            1.长按图片，发送给好友<br/>
+            2.长按保存图片,发送朋友圈
+        </div>
+
+        <div style="clear: both"></div>
+    </div>
+</div>
+<div class="view-qrcode {if !$data.is_join || $data.row.team_num_no==0 || $data.row.end_time==0  || $data.row.status==$smarty.const.TEAM_FIELD}hide{/if}"><div>查看分享二维码</div></div>
+<script src="/style/js/layer1.8.5/layer.min.js"></script>
+<script src="/style/js/html2canvas.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $('.view-qrcode').bind('click',function(){
+        $('.pic').height(($(window).width()*.7)*0.7);
+        $.layer({
+            type: 1,
+            title: '',
+            fadeIn: 300,
+            area: ['70%', 'auto'],
+            page: { dom: $('#qrcode_share') },
+            success: function(index){
+                if(!$("#qrcode_share").hasClass('hasqr')){
+                    {if C('cloudsave')==1}
+                    $("#goods_thumb").attr("src","/goods/get_pic/?picurl={$data.goods.img_cover}");
+                    {/if}
+                    var canvas = document.querySelector("canvas");
+                    html2canvas(document.getElementById("qrcode_share"), { canvas: canvas }).then(function(canvas) {
+                        document.getElementById("qrcode_share").appendChild(canvas);
+                        $("canvas").hide();
+                        $("#qrcode_share").html('').addClass('hasqr');
+                        document.getElementById("qrcode_share").appendChild(convertCanvasToImage(canvas));
+                    });
+                }
+            }
+        });
+    })
+
+    function convertCanvasToImage(canvas) {
+        var image = new Image();
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+</script>
+<div id="fx-pop" class="{if !$data.is_join || $data.row.team_num_no==0 || $data.row.end_time==0  || $data.row.status==$smarty.const.TEAM_FIELD}hide{/if}" onclick="$(this).addClass('hide');$('.view-qrcode').hide();">
+        <div class="pop-box2">
+            <div class="pop-jt1">
+                <img src="/style/img/{if !$site_config.hide_timeline}jt1.png{else}jt1-2.png{/if}"/>
+            </div>
+            <h2>还差<span>{$data.row.team_num-$data.row.team_num_yes}</span>人，邀请好友参团吧</h2>
+            {if !$site_config.hide_timeline}
+            <h3>
+                <div class="fx-txt1">点击右上角，分享给<span>朋友</span>或者<span>朋友圈</span></div>
+                <i></i>
+            </h3>
+            {/if}
+        </div>
+		<dl class="jt-new hide" >
+			<dt><img src="/style/img/jt-n1.png"/></dt>
+			<dd><img src="/style/img/jt-n2.png"/></dd>
+		</dl>
+</div>
+<div class="pop-dbox" style="display: none;">
+    <div class="buy-option" >
+        <div class="buy-option-open"></div>
+        <div class="buy-cp clearfix">
+            <img src="{$data.goods.img_src}" class="cp-img" />
+            <div class="buy-cpt">
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int price-sku">{$data.row.team_price}</span>
+                </div>
+                {if $data.goods.typeid==$smarty.const.CART_STEP}<p class="txt">定金：{$data.goods.deposit}</p>{/if}
+            </div>
+        </div>
+        <div class="buy-auto">
+            {if $data.goods.sp_vals}
+            {foreach from=$data.goods.sp_vals item=m key=k}
+            <dl class="buy-fl">
+                <dt>{$k}</dt>
+                <dd>
+                    {foreach from=$m item=n name=foo key=key}
+                    <span {if in_array($key,$data.goods.spec) || (count($data.goods.spec)==0 && $smarty.foreach.foo.index==0)}class="active"{/if} data-val="{$key}">{$n}</span>
+                    {/foreach}
+                </dd>
+            </dl>
+            {/foreach}
+            {/if}
+        </div>
+        <div class="buy-sl">
+            <span>数量</span>
+            <div class="mui-numbox" data-numbox-min='1' data-numbox-max='{if $data.goods.limit_buy_bumber>0}{$data.goods.limit_buy_bumber}{else}{$data.goods.stock}{/if}'>
+                <button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+                <input class="mui-input-numbox" type="number" value="1"/>
+                <button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+            </div>
+        </div>
+        <div class="buy-btn">
+            <button type="button" class="mui-btn mui-btn-danger ajax_cart">{if $data.goods.typeid==$smarty.const.CART_STEP}支付定金{else}确定{/if}</button>
+            <input type="hidden" class="spec" name="spec" value="">
+            <input type="hidden" class="buy_type" name="buy_type" value="{$data.goods.typeid}">
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        {if $data.goods.sp_val}
+            //立即参团
+            $(".buy_team").click(function(){
+                $(".mui-bar-ct").hide();
+                $(".pop-dbox").show();
+                $(".buy_type").val('{$data.goods.typeid}');
+                $(".price-int").html({$data.row.team_price});
+                getSelecteds();
+            });
+
+            //关闭规格选择
+            $(".buy-option-open").click(function(){
+                $(".pop-dbox").hide();
+                $(".mui-bar-ct").show();
+            });
+
+            //提交
+            $(".ajax_cart").click(function(){
+                var num = $('.mui-input-numbox').val();
+                var spec = $('.spec').val();
+                var buy_type = $('.buy_type').val();
+                var commmon_id = {$data.row.id};
+                var option = '';
+                //alert(spec);return false;
+                ajax_cart({$data.goods.id},buy_type,num,spec,commmon_id,option);
+            });
+        {else}
+            $(".buy_team").click(function(){
+                var commmon_id = {$data.row.id};
+                ajax_cart({$data.goods.id},{$data.goods.typeid|default:1},1,'',commmon_id);
+            });
+        {/if}
+    });
+
+    //选择规格返回不同的图片和规格
+    var goods_id = '{$data.goods.id}';
+    var img_src = '{$data.goods.img_src}';
+    var team_num = '{$data.goods.team_num}';
+    $('.buy-fl dd span').click(function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        if(typeof($(this).attr('data-val'))!='undefined'){
+            getSelecteds();
+        }else{
+            $(".price-int").html($(this).attr('data-teamprice'));
+        }
+    });
+    {literal}
+    function getSelecteds() {
+        var result = "";
+        var buy_type = $('.buy_type').val();
+        $(".buy-fl dd span[class='active']").each(function () {
+            result += $(this).attr("data-val")+"-";
+        });
+        $.post("/goods/ajax_goodspec",{spec:result,goods_id:goods_id},function(data){
+            if(data.code=='success'){
+                $(".spec").val(data.spec);
+                if(buy_type!=9 && buy_type!=10){
+                    if(buy_type==7)data.team_price=data.team_price/team_num;//邻居团
+                    $(".price-sku").html(data.team_price);
+                }
+                if(data.path){
+                    $(".cp-img").attr('src',data.path);
+                }else{
+                    $(".cp-img").attr('src',img_src);
+                }
+            }
+        },"json");
+    }
+</script>
+{/literal}
+<div class="ptjj-txt show-rule-content" style="display: none;">
+    <div class="detail">
+        <div class="ptjj-tt">
+            <span class="close_note"><img src="/style/img/gb.png"></span>
+        </div>
+        {$data.goods.rule}
+    </div>
+</div>
+<div class="ptjj-txt show-note-content" style="display: none;">
+    {zz mod=block mark='pintuan_note'}
+</div>
+<script>
+    $(document).ready(function() {
+        $(".show_note").click(function(){
+            $(".show-note-content").show();
+        });
+        $(".fx-afxa").click(function(){
+            $(".show-rule-content").show();
+        });
+        $(".close_note").click(function(){
+            $(".ptjj-txt,.ptjj-txt-rule").hide();
+        });
+    });
+</script>
+{if $data.goods.typeid!=$smarty.const.CART_STEP}
+{$share_price = $data.row.team_price}
+{/if}
+{include file="public_footer.html"}

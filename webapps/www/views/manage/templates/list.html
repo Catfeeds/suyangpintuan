@@ -1,0 +1,61 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!templates/index" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <select name="type">
+                <option value="mail" {if $type eq 'mail'}selected{/if}>邮件模板</option>
+                <option value="sms" {if $type eq 'sms'}selected{/if}>短信模板</option>
+            </select>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+        <table class="list">
+            <thead>
+            <tr>
+                <th align="left">模板名称【标识】</th>
+                <th class="w140">修改日期</th>
+                <th class="w140">最后发送</th>
+                <th class="w100">发送次数</th>
+                <th class="w40">系统模板</th>
+                <th class="w40">状态</th>
+                <th class="w60">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$data.list item=m}
+            <tr>
+                <td nowrap>{$m.template_subject}<span class="c-gray">【{$m.template_code}】</span></td>
+                <td align="center">{$m.last_modify|date_format:'Y-m-d H:i:s'}</td>
+                <td align="center">{$m.last_send|date_format:'Y-m-d H:i:s'}</td>
+                <td align="center">{$m.send_number}</td>
+                <td align="center">
+                    {if $m.is_system==1}
+                    <span class="c-green">√</span>
+                    {else}
+                    <span class="c-red">×</span>
+                    {/if}
+                </td>
+                <td align="center">
+                    {if $m.status == 1}
+                    <a href="javascript:;" onclick="main.chang_status('{$m.template_id}','templates','status','template_id')" class="c-green" title="点击禁用">开启</a>
+                    {else}
+                    <a href="javascript:;" onclick="main.chang_status('{$m.template_id}','templates','status','template_id')" class="c-red" title="点击开启">禁用</a>
+                    {/if}
+                </td>
+                <td class='opera' align='center' nowrap>
+                    <a href='#!templates/edit/?code={$m.template_code}&com=xshow|编辑模板（{$m.template_code}）' class='iconfont icon-a' title='编辑'>&#xe603;</a>
+                    {if $m.is_system eq 0}
+                    <a href='javascript:;' onclick="main.confirm_del('templates/del','{$m.template_id}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        <div class="foot-btn">
+            <div class="pager r">{$page}</div>
+        </div>
+    </form>
+</div>
+

@@ -1,0 +1,28 @@
+{include file="public_header.html"}
+{$ad = getAd(52)}
+<div class="ban1" style="background:url({zz mod=fileurl source=$ad}) no-repeat center top; height: 400px;"></div>		
+<div class="sy-box2">
+	<div class="content-box clearfix">
+		<ul class="clearfix jm-list">
+		{foreach from=$data.list item=m}
+			<li>
+				<img src="{zz mod=fileurl source=$m.thumb}"/>
+				<dl class="clearfix">
+					<dt>
+						<img src="{zz mod=fileurl source=$m.logo}"/>
+					</dt>
+					<dd>
+						<h2>{$m.title}</h2>
+						<p>{$m.content}</p>
+					</dd>
+				</dl>
+				<div class="jm-abs">
+					<div class="rwm"><img src="{zz mod=fileurl source=$m.ewm}"/></div>
+				</div>						
+			</li>			
+		{/foreach}
+		</ul>
+	</div>
+</div>
+{include file="public_ewm.html"}
+{include file="public_footer.html"}

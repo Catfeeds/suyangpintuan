@@ -1,0 +1,101 @@
+﻿{$nav = 1}{$slider = 1}{$active = 1}{$notice = 1}
+{$headTit="领奖进度"} {include file="public_header.html"}
+<!-- 这里是分销样式 ：大转盘-->
+    <link href="/style/style/common.css" rel="stylesheet" />
+    <link href="/style/style/style.css" rel="stylesheet" />
+    <link href="/style/style/media.css" rel="stylesheet" />
+    <!-- 以上是分销样式： 大转盘 -->
+<style>
+H4 {
+	line-height:3;
+}
+</style>
+<div class="lingjiangpin" style="margin:0">
+    <div class="lingjiang-title">
+        <h4>{$data.prize.remark}</h4>
+    </div>
+    <div class="lingjiangpin-xx">
+        <a href="/goods/show/{$data.prize.good_id}">
+            <img src="{zz mod=fileurl source=$data.prize.good.img_src type=1}">
+            <table style="width:100%;">
+                <tr>
+                    <td>
+                        {$data.prize.good.name}
+                    </td>
+                </tr>
+            </table>
+        </a>
+    </div>
+</div>
+</div>
+<div class="lingjiang-jd-psdz">
+    <div class="lingjiang-title">
+        <h4>配送地址</h4>
+    </div>
+    <ul class="lingjiang-jd-psdz-ul">
+        <li>
+            <span>姓名</span>{$data.address.name}
+        </li>
+        <li>
+            <span>电话</span>{$data.address.mobile}
+        </li>
+        <li>
+            <span>地址</span>{$data.address.address}
+        </li>
+    </ul>
+{if $data.prize.message_from}
+<div class="lingjiang-lxfs">
+    <div class="lingjiang-title">
+        <h4>给商家留言</h4>
+    </div>
+    <div class="lingjiang-lxfs-ph">
+        {$data.prize.message_from}
+    </div>
+</div>
+{/if}
+</div>
+
+<div class="lingjiang-jd-wl">
+    {if $data.prize.status eq 2}
+    <div class="lingjiang-title">
+        <h4 class="c-red">正在准备发奖中,请稍候</h4>
+    </div>
+    {elseif $data.prize.status eq 1}
+    <div class="lingjiang-title">
+        <h4>物流信息</h4>
+    </div>
+    <div class="lingjiang-jd-wl-dh">
+        <ul>
+            <dt> 快递单号：{$data.prize.express_sn} <span class="fr"> {$data.prize.express_name}</span></dt>
+            <li>
+            </li>
+        </ul>
+    </div>
+    {/if}
+</div>
+
+{if $data.prize.message_to}
+<div class="lingjiang-lxfs">
+    <div class="lingjiang-title">
+        <h4>来自商家留言</h4>
+    </div>
+    <div class="lingjiang-lxfs-ph">
+        {$data.prize.message_to}
+    </div>
+</div>
+{/if} {if $hotline}
+<div class="lingjiang-lxfs">
+    <div class="lingjiang-title">
+        <h4>商家联系方式：</h4>
+    </div>
+    <div class="lingjiang-lxfs-ph">
+        客服电话：{$hotline}
+    </div>
+</div>
+{/if} {*
+<div class="qrlj-but">
+    <input id="Submit1" type="submit" value="确认收货" />
+</div>
+*}
+<div class="ft"></div>
+{include file="public_footer.html"}

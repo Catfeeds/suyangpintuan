@@ -1,0 +1,112 @@
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">实名认证</h1>
+</header>
+{if $verify && $verify.status neq 3}
+<div class="page-box add-dzbox" id="fenxiao-dpsz-txdz">
+    {if $verify.status eq 1}<p class="c-red">您提交的认证身份证，我们正在审核中请耐心等待！</p>{/if}
+    <dl class="clearfix add-dl">
+        <dt>真实姓名：</dt>
+        <dd>
+            {$verify.realname}
+        </dd>
+    </dl>
+    <dl class="clearfix add-dl">
+        <dt>身份证号：</dt>
+        <dd>
+            {$verify.card}
+        </dd>
+    </dl>
+    <div class="dpsz-dz">
+        <h3>身份证正面照</h3>
+        <section>
+            <img src="{$verify.card_image}" />
+        </section>
+    </div>
+    <div class="dpsz-dz">
+        <h3>身份证反面照</h3>
+        <section>
+            <img src="{$verify.card_image2}" />
+        </section>
+    </div>
+</div>
+{else}
+<form action="" target="iframeNews" method="post" id="submit_form" enctype="multipart/form-data">
+    <div class="page-box add-dzbox">
+        <dl class="clearfix add-dl">
+            <dt>真实姓名：</dt>
+            <dd>
+                <input type="text" name="realname" value="{if !empty($row.realname)}{$row.realname}{/if}" placeholder="请输入您的真实姓名" />
+            </dd>
+        </dl>
+        <dl class="clearfix add-dl">
+            <dt>身份证号：</dt>
+            <dd>
+                <input type="text" name="card" value="{if empty($row.card)}{$row.card}{/if}" placeholder="请输入您的身份证号" />
+            </dd>
+        </dl>
+        <div class="clearfix dpsz-dz" id="up-box">
+            <ul>
+            <li>
+                <h3>身份证正面照</h3>
+                <p class="c-red">
+                    请确保身份证全部信息清晰
+                </p>
+                <section>
+                    <input type="file" id="up_img_WU_FILE_0" name="idcard" />
+                    <img id="imgShow_WU_FILE_0" src="/common/idcard.jpg" />
+                </section>
+            </li>
+            <li>
+                <h3>身份证反面照</h3>
+                <p class="c-red">
+                    请确保身份证背面全部信息清晰
+                </p>
+                <section>
+                    <input type="file" id="up_img_WU_FILE_1" name="idcard2" />
+                    <img id="imgShow_WU_FILE_1" src="/common/idcard2.jpg" />
+                </section>
+            </li>
+            </ul>
+        </div>
+    </div>
+    <div class="add-btn">
+        <button type="submit" class="mui-btn mui-btn-danger">保存</button>
+        <input type="hidden" name="Submit" value="1">
+        <input type="hidden" name="id" value="{if !empty($row.id)}{$row.id}{/if}">
+        <input type="hidden" name="checked" value="{if !empty($checked)}{$checked}{/if}">
+    </div>
+</form>
+{/if}
+<style>
+    .dpsz-dz{
+        margin-bottom: 50px;
+    }
+    .dpsz-dz h3{
+        margin: 5px 20px;
+        font-size: 14px;
+    }
+    .c-red{
+        margin: 5px 20px;
+        color: red;
+    }
+    .dpsz-dz section{
+        height: 250px;
+    }
+    .dpsz-dz section img {
+        width: 100%;
+        height: inherit;
+    }
+    .dpsz-dz section input {
+        position: absolute;
+        /*left: 0;
+        top: 0;*/
+        width: 100%;
+        height: inherit;
+        opacity: 0;
+    }
+</style>
+<div class="ft"></div>
+<script src="/style/js/uploadPreview.js"></script>
+{include file="public_footer.html"}

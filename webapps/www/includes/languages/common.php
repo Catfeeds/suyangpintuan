@@ -1,0 +1,1 @@
+<?php$L['msg_bad_data'] = '数据发送自未被信任的域名，如有疑问，请联系管理员';$L['unit_buy'] = '立即购买';$L['unit_cart'] = '加入购物车';$L['unit_distribution'] = '分销';$L['unit_comm'] = '佣金';$L['unit_agent'] = '代理';$L['unit_score'] = '积分';

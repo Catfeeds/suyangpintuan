@@ -1,0 +1,111 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/special/edit" enctype="multipart/form-data">
+        <input type="hidden" name="post[id]" value="{$data.info.id}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>专题模型：<span class="c-red">*</span></label></td>
+                <td>
+                    <select name="post[special_model_id]" id="special" style="min-width: 150px;" onchange="change()">
+                        <option value="">请选择</option>
+                        {foreach $data.special as $m}
+                            <option value="{$m.id}" {if $m.id eq $data.info.special_model_id}selected{/if}>{$m.file_name}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>标题：<span class="c-red">*</span></label></td>
+                <td><input class="form-i w360" type="text" name="post[title]" value="{$data.info.title}" /></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>商品：<span class="c-red">*</span></label></td>
+                <td>
+                    <span class="form-tip">请在输入框中直接填写商品ID</span>
+                    <a href="javascript:;" class="uiBtn BtnBlue" id="add_goods">添加商品</a>
+                    <ul class="goods-list">
+                        {foreach $data.info.goods_id as $m}
+                        <li>
+                            <input type="text" class="form-i w160" name="post[goods_id][]" value="{$m}" placeholder="请输入商品ID" onkeyup="this.value = filterValue(this.value)">
+                            <a href="javascript:;" onclick="removeTag(this)" class="iconfont icon-a goods_del" title="删除"></a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>状态：</label></td>
+                <td class="td-input">
+                    <input type="radio" class="tab-btn" name="post[status]" value="0" {if $data.info.status eq 0}checked="checked"{/if}>正常
+                    <input type="radio" class="tab-btn" name="post[status]" value="1" {if $data.info.status eq 1}checked="checked"{/if}>禁用
+                </td>
+            </tr>
+            {$html}
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn" onclick="resetFun()">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{literal}
+<script>
+    $.loadJs('/admin/js/upload.js',function(){ $.loadJs('/admin/js/manage/upfiles.js')});
+    $.loadJs('/style/js/jquery-1.11.2.min.js',function(){
+        jQuery.noConflict();
+        var html =
+                '<li> ' +
+                '<input type="text" class="form-i w160" name="post[goods_id][]" placeholder="请输入商品ID" onkeyup="this.value = filterValue(this.value)"> ' +
+                '<a href="javascript:;" onclick="removeTag(this)" class="iconfont icon-a goods_del" title="删除"></a>' +
+                '</li>';
+        jQuery('#add_goods').on('click', function(){
+            jQuery('.goods-list').append(html);
+        });
+    });
+
+    function removeTag(tag){
+        tag.parentNode.remove();
+    }
+
+    function resetFun(){
+        $('.special').remove();
+    }
+
+    function filterValue(str){
+        if(str == null){
+            str = "";
+        }
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    function change(){
+        resetFun();
+        var special = document.getElementById('special');
+        var special_model_id = special.value;
+        if (special_model_id != ''){
+            $post({
+                url:'special/ajax_model_config',
+                method:'post',
+                newLink: true,
+                data:{special_model_id:special_model_id},
+                callback:function(x){
+                    var data = eval('(' + x + ')');
+                    if(data.code != 0){
+                        alert(data.msg);
+                    }else {
+                        var btn = "<tr class='tr-btn'>" + jQuery('.tr-btn').html() + "</tr>";
+                        jQuery('.tr-btn').remove();
+                        jQuery('.table-list').append(data.html + btn)
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+{/literal}

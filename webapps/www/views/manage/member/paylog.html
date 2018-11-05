@@ -1,0 +1,77 @@
+<h3 class="info-tag">[{$member.username}]的消费记录(共{$page_total}条记录)<span></span>
+</h3>
+
+<div class="html-box">
+
+    {if !empty($list)}
+    <table class="list" style="width:100%">
+        <tr>
+            <th class="oid w40">ID</th>
+            <th>类型</th>
+            <th>金额</th>
+            <th>消费/支付状态</th>
+            <th>余额</th>
+            <th>游戏区服</th>
+            <th>时间</th>
+        </tr>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td class="oid">{$m.id}</td>
+            <td>{if $m.type=='1'}消费{else}充值{/if}</td>
+            <td>
+                {if $m.type=='1'}
+                <span style="color:#f80">-{$m.pay_money}元</span>
+                {else}
+                <span style="color:#090">+{$m.pay_money}元</span>
+                {/if}
+            </td>
+            <td>成功</td>
+            <td>{$m.balance}</td>
+            <td>{if $m.type=='1'}{$m.sid}区{else}-{/if}</td>
+            <td>{date('Y-m-d H:i',$m.c_time)}</td>
+        </tr>
+        {/foreach}
+    </table>
+    <div style="padding-top:20px">
+        {$page}
+    </div>
+
+    {else}
+    <div style="line-height:40px; height:40px; text-align:center; color:#666; font-size:14px">暂无充值/消费记录</div>
+    {/if}
+
+
+</div>
+
+<script src="/js/manage/member.js"></script>
+{literal}
+<script type="text/javascript">
+    function exportMember(obj){
+        var conds='';
+        var typename = {nickname:'昵称','start_time':'关注开始时间','end_time':'关注结束时间','prov':'省份','city':'城市'};
+        var str='';
+        $('input,select','#condForm').each(function(){
+            conds+='&'+encodeURIComponent(this.name)+'='+encodeURIComponent(this.value);
+            if(this.value!=''){
+                if(this.tagName.toLowerCase()=='select'){
+                    str+="\n"+typename[this.name]+': '+this.options[this.selectedIndex].innerHTML;
+                }else{
+                    str+="\n"+typename[this.name]+": "+this.value;
+                }
+            }
+        });
+
+        if(conds!='')conds='?'+conds.substr(1);
+
+        if(str!=''){
+            str="确定导出记录？\n"+str;
+        }else{
+            str='确定导出所有记录，这可能会需要较多时间。';
+        }
+
+        if(confirm(str)){
+            location.href='/member/exportExcel/'+conds;
+        }
+    }
+</script>
+{/literal}

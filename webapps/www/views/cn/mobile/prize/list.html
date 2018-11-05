@@ -1,0 +1,37 @@
+{$nav = 1}{$slider = 1}{$active = 1}{$notice = 1}
+{$headTit="中奖记录"} {include file="public_header.html"}
+<!-- 这里是分销样式 ：大转盘-->
+    <link href="/style/style/common.css" rel="stylesheet" />
+    <link href="/style/style/style.css" rel="stylesheet" />
+    <link href="/style/style/media.css" rel="stylesheet" />
+    <!-- 以上是分销样式： 大转盘 -->
+<header class="mui-bar mui-bar-nav">
+    <ul class="regiment-tit">
+        <li>中奖纪录</li>
+    </ul>
+</header>
+<div class="lingjiang" style="margin-top:20px;">
+    
+    {if empty($list)}
+    <ul>
+        <li class="norecord">暂无中奖记录</li>
+    </ul>
+    {else}
+    <div class=" refreshContainer mui-scroll-wrapper">
+    <div class="list mui-scroll">
+    	<div class="area-box">
+        {foreach from=$list item=m} {include file="prize/lbi/list.html"} {/foreach}
+        </div>
+    </div>
+    </div>
+	{$params = "load:1"}
+    <script>
+    var D = {literal}{{/literal}{$params}{literal}}{/literal};//load:1必填
+        var ajax_url = "/prize/index/";//请求的地址
+        var ajax_class = ".area-box";//加载的元素
+        var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+	</script>
+    {include file="public_scroll.html"}{/if}
+</div>
+<div class="ft"></div>
+{include file="public_footer.html"}

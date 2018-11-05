@@ -1,0 +1,32 @@
+<div class="html-box">
+<form target="iframeNewsTarget" method="post" action="/business/order/goods?id={$row.id}">
+    <table class="table-list">
+        <tbody>
+
+        <tr>
+            <td class="td-label"><label>商品名称：</label></td>
+            <td class="td-input">
+                {$row.goods_name}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>商品备注：</label></td>
+            <td class="td-input">
+                <textarea name="post[goods_info]">{$row.goods_info}</textarea>
+            </td>
+        </tr>
+
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input td-button">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</form>
+</div>

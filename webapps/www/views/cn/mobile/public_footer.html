@@ -1,0 +1,195 @@
+	{if $nav == 1}
+	<nav class="mui-bar mui-bar-tab">
+		{if $nav_b}
+		{foreach from=$nav_b item=m key=k}
+		<a class="mui-tab-item {if $durl==$m.linkurl || $durl=='/home' && $m.linkurl=='/'}mui-active{/if}" target="_blank" href="{$m.linkurl}">
+			<span class="mui-icon">
+				{zz mod=fileurl source=$m.img type=3 var=bimg}
+				<img src="{$bimg.0.path}" class="f-im1" />
+				<img src="{$bimg.1.path}" class="f-im2" />
+			</span>
+			<span class="mui-tab-label">{$m.title}</span>
+		</a>
+		{/foreach}
+		{else}
+		<a class="mui-tab-item {if $active == 1}mui-active{/if}" target="_blank" href="/">
+			<span class="mui-icon">
+				<img src="/style/img/f-ico1.png" class="f-im1" />
+				<img src="/style/img/f-ico1-1.png" class="f-im2" />
+			</span>
+			<span class="mui-tab-label">首页</span>
+		</a>
+		<a class="mui-tab-item {if $active == 2}mui-active{/if}" target="_blank" href="/goods/news">
+			<span class="mui-icon" >
+				<img src="/style/img/f-ico2.png" class="f-im1" />
+				<img src="/style/img/f-ico2-2.png" class="f-im2" />
+			</span>
+			<span class="mui-tab-label">新品</span>
+		</a>
+		<a class="mui-tab-item {if $active == 3}mui-active{/if}"  href="/goods/nation">
+			<span class="mui-icon">
+				<img src="/style/img/f-ico3.png" class="f-im1" />
+				<img src="/style/img/f-ico3-2.png" class="f-im2" />
+			</span>
+			<span class="mui-tab-label">全球购</span>
+		</a>
+		<a class="mui-tab-item {if $active == 4}mui-active{/if}" target="_blank" href="/goods/cat">
+			<span class="mui-icon" >
+				<img src="/style/img/f-ico4.png" class="f-im1" />
+				<img src="/style/img/f-ico4-2.png" class="f-im2" />
+			</span>
+			<span class="mui-tab-label">搜索</span>
+		</a>
+		<a class="mui-tab-item {if $active == 5}mui-active{/if}" target="_blank" href="/member/index">
+			<span class="mui-icon">
+				<img src="/style/img/f-ico5.png" class="f-im1" />
+				<img src="/style/img/f-ico5-2.png" class="f-im2" />
+			</span>
+			<span class="mui-tab-label">我的</span>
+		</a>
+		{/if}
+	</nav>
+	{/if}
+        {if $notice==1}
+		<!--拼团提示弱窗-->
+		<a class="backtop hide" href="#">
+			<div class="tx">
+				<img src="/style/img/tx.jpg"/>
+			</div>
+					<p class="message">
+				1秒前，团长137887***成功开团,等你来拼
+			</p>
+		</a>
+        <script src="/upload/{$smarty.const.MERID}/tmp/order_json.js?v={$smarty.const.RUN_TIME}"></script>
+		<script>
+			var t;
+			window.setInterval(function(){
+				if(user.length>0){
+					clearTimeout(t);
+					var i = Math.floor(Math.random()*user.length);
+					$(".backtop").attr("href",user[i].url);
+					$(".backtop .tx img").attr("src",user[i].avatar);
+					$(".message").html(user[i].message);
+					$(".backtop").removeClass("hide");
+					t = setTimeout("hideTip()",2000);
+				}
+			},5000);
+			function hideTip(){
+				$(".backtop").addClass("hide");
+			}
+		</script>
+        {/if}
+	<script src="/style/js/main.js" type="text/javascript"></script>
+</body>
+{if $smarty.const.IS_WECHAT}
+<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+wx.config({
+    debug: false,
+    appId: '{$signPackage.appId}',
+    timestamp: '{$signPackage.timestamp}',
+    nonceStr: '{$signPackage.nonceStr}',
+    signature: '{$signPackage.signature}',
+    jsApiList: [
+        //所有要调用的 API 都要加到这个列表中
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'hideMenuItems',
+        'getLocation',
+        'openLocation',
+    ]
+});
+var title = $("title").eq(0).html();
+var desc = $("meta[name='description']").eq(0).attr('content');
+var pic = $('img').eq(0).attr('src');
+{if $share_price>0}
+title = '我{$share_price}元拼了"'+title+'"';
+{/if}
+{if $data.row.share_img}
+pic = '{zz mod=fileurl source=$data.row.share_img}';
+{elseif $data.goods.share_img}
+pic = '{zz mod=fileurl source=$data.goods.share_img}';
+{elseif $share_logo}
+pic = '{$share_logo}';
+{/if}
+{if $share_content}
+desc = '{$share_content}';
+{/if}
+if(pic.indexOf('://')<0){ pic = '{$smarty.const.RootUrl}'+pic; }
+wx.ready(function() {
+    //分享给好友
+    wx.onMenuShareAppMessage({
+        title: title,
+        desc: desc,
+        link: '{$share_url}',
+        imgUrl: pic
+    });
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+        title: title,
+        link: '{$share_url}',
+        imgUrl: pic
+    });
+    //隐藏分享朋友圈
+    {if $site_config.hide_timeline}
+    wx.hideMenuItems({
+        menuList: ['menuItem:share:timeline'], // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        success: function (res) {
+        }
+    });
+    {/if}
+    {if !isset($smarty.session.latitude)}
+    //获取地理位置
+    wx.getLocation({
+        success: function (res) {
+            {literal}$.post("/store/save_lbs",{'latitude':res.latitude,'longitude':res.longitude},function () {});{/literal}
+        },
+        cancel: function (res) {
+            //alert('用户拒绝授权获取地理位置');
+        }
+    });
+    {/if}
+    wx.error(function(res) {
+        //alert(res.errMsg);
+    });
+});
+function showmap(latitude,longitude,name,address){
+    latitude = Number(latitude);
+    longitude = Number(longitude);
+    wx.openLocation({
+
+        latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+
+        longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+
+        name: name, // 位置名
+
+        address: address, // 地址详情说明
+
+        scale: 28, // 地图缩放级别,整形值,范围从1~28。默认为最大
+
+        infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+
+    });
+}
+</script>
+{/if}
+<div id="subscribe" class="pop-gz hide">
+	<div class="pop-gznr">
+		<a href="javascript:;" class="pop-gbbtn">关闭</a>
+		<h2>扫描或长按图中的二维码</h2>
+		<p>为了接收发货通知，购买前需先关注</p>
+		<div class="rwm-box">
+			<img src="{yunurl(C('qr_code.png','images'))}"/>
+		</div>
+		<p>或请回到微信首页搜索关注{C('site_name')}</p>
+	</div>
+</div>
+<script>
+	$(".pop-gbbtn").on("click",function(){
+		$(".pop-gz").addClass("hide");
+	});
+</script>
+<iframe name="iframeNews" style="display:none;"></iframe>
+</html>

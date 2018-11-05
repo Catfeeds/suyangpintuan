@@ -1,0 +1,20 @@
+<div class="fx-cdlist">
+    <div class="explain-txt"  id="explain-txt2">
+        <div class="detail">
+            <ul>
+                {foreach from=$data.list item=m key=k}
+                <li>
+                    <img src="{photo($m.mid)}"/>
+                    <span>{$m.username|nickname:$m.nickname:1|truncate:8}</span>
+                    <span class="time">
+                        {$m.c_time|date_format:"Y.m.d H:i"} {if $k==0}开团{else}参团{/if}
+                    </span>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+        <div class="explain-open"  id="explain-open2">
+            <span></span>
+        </div>
+    </div>
+</div>

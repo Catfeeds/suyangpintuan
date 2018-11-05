@@ -1,0 +1,133 @@
+{if $typeid==$smarty.const.CART_FREE || $typeid==$smarty.const.CART_LUCK }
+<div class="mui-card {if $m.start_time>$smarty.const.RUN_TIME}jjks-list{elseif $m.end_time<$smarty.const.RUN_TIME}end-mf{/if}">
+        <div class="mui-card-header mui-card-media">
+                <a href="/goods/show/{$m.id}"><img src="{$m.img_src}"/></a>
+                {if $m.typeid==$smarty.const.CART_LUCK}
+                <div class="ribbon">
+                        <span>抽奖</span>
+                        <span>{$m.team_num}人团</span>
+                </div>
+                <div class="buying-info">
+                        <p>载止：{$m.end_time|date_format:"m月d日 H:i"}</p>
+                </div>
+                {/if}
+        </div>
+        <div class="mui-card-content">
+                <div class="mui-card-content-inner">
+                        <p><span>{goods_typeid($m.typeid)}</span>{$m.name}</p>
+                </div>
+        </div>
+        <div class="mui-card-footer">
+                <div class="mui-card-link">
+                        <span class="rmb">¥</span>
+                        <span class="price-int">{$m.team_price}</span>
+                        <span class="price-ori">¥{$m.price}</span>
+                </div>	
+                {if $m.typeid==$smarty.const.CART_FREE}
+                <div class="mui-card-link">
+                    {if $m.end_time<$smarty.const.RUN_TIME }活动已经结束{else}限量{$m.luck_num}件{/if}
+                </div> 
+                {/if}
+                <div class="mui-card-link syt-box">                        
+                        {if $m.start_time>$smarty.const.RUN_TIME}
+                        <button type="button" class="mui-btn sy-btn">{$m.team_num}人团</button>
+                        <button type="button" class="mui-btn mui-btn-danger" onclick="location.href='/goods/show/{$m.id}'" >即将开始</button>
+                        {elseif $m.end_time<$smarty.const.RUN_TIME}
+                        <button type="button" class="mui-btn mui-btn mui-btn-warning" onclick="location.href='/goods/luck/{$m.id}'" >查看活动结果</button>
+                        {elseif $m.typeid==$smarty.const.CART_FREE}
+                        <button type="button" class="mui-btn sy-btn">{$m.team_num}人团</button>
+                        <button type="button" class="mui-btn mui-btn-danger" onclick="location.href='/goods/show/{$m.id}'" >申请试用</button>
+                        {elseif $m.typeid==$smarty.const.CART_LUCK}
+                        <button type="button" class="mui-btn mui-btn-danger" onclick="location.href='/goods/show/{$m.id}'" >马上拼团</button>
+                        {/if}                        
+                </div>
+        </div>
+</div>
+{elseif C('goods_list')==1 && $typeid}{*双列显示*}
+<div class="fl-list2">
+    <a href="/goods/show/{$m.id}">
+        <img src="{$m.img_cover}">
+        <p class="pro-name">{$m.name}</p>
+        <div class="mui-card-footer pintuan-title">
+            <div class="mui-card-link">
+                <span class="rmb">¥</span>
+                <span class="price-int">{$m.team_price}</span>
+                <span class="price-ori">¥{$m.price}</span>
+            </div>
+            <div class="mui-card-link">
+                <p>已团<span>{formatNum($m.sell+$m.sales_num)}</span>件</p>
+            </div>
+        </div>
+    </a>
+</div>
+{else}{*单列显示*}
+{$talist = getTA()}
+{if  $k%3==0 && $k!=0}
+{$show_key = (int)$k/3-1}
+{if $talist && isset($talist[$show_key])}
+<div class="sy-hot">
+    <div class="hot-title">
+        <span>{$talist[$show_key].name}<a href="/topic/index/{$talist[$show_key].id}">查看更多</a></span>
+    </div>
+    <div id="hot-gd" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="mui-scroll">
+            {foreach from=$talist[$show_key].apply_list item=t}
+            <a class="mui-control-item" href="/goods/show/{$t.id}">
+                <img src="{$t.img_cover}"/>
+                <p>{$t.name}</p>
+                <div class="mui-card-footer">
+                    <div class="mui-card-link">
+                        <span class="rmb">¥</span>
+                        <span class="price-int">{$t.team_price}</span>
+                        <span class="price-ori">¥{$t.price}</span>
+                    </div>
+                </div>
+            </a>
+            {/foreach}
+            <a class="mui-control-item hot-agd" href="/goods/index/?is_best=1" style="display: none;">
+                查看<br />全部
+            </a>
+        </div>
+    </div>
+</div>
+{/if}
+{/if}
+<div class="mui-card">
+    <div class="mui-card-header mui-card-media">
+        <a href="/goods/show/{$m.id}"><img src="{$m.img_src}"/></a>
+        <div class="ribbon">
+            <span>{discount($m.price,$m.team_price)}折</span>
+            <span>{$m.team_num}人团</span>
+        </div>
+        <div class="buying-info">
+            <p> 已团<span>{formatNum($m.sell+$m.sales_num)}人</span>件</p>
+        </div>
+    </div>
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            <p><span>{goods_typeid($m.typeid)}</span>{$m.name}</p>
+        </div>
+    </div>
+    <div class="mui-card-footer {if $m.typeid==$smarty.const.CART_AA}aa-list{/if}">
+        {if $m.typeid==$smarty.const.CART_AA}     
+        <div class="mui-card-link mui-card-link-aa">
+                <div>
+                        <span class="rmb">{$m.team_num}人团总价：{$m.team_price}元</span>
+                        <span class="price-ori">¥{$m.price}</span>
+                </div>
+                <span class="rmb ">每人{round($m.team_price/$m.team_num)}元</span>	
+        </div>
+        {else}
+        <div class="mui-card-link">
+            <span class="rmb">¥</span>
+            <span class="price-int">{$m.team_price}</span>
+            <span class="price-ori">¥{$m.price}</span>
+        </div>        
+        {/if}
+        <div class="mui-card-link">
+            {*<button type="button" class="mui-btn mui-btn-warning">马上拼团 ></button>*}
+            <button type="button" onclick="location.href='/goods/show/{$m.id}'" class="mui-btn mui-btn-danger">马上开团></button>
+        </div>
+    </div>
+</div>
+{/if}

@@ -1,0 +1,60 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!templates/send" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="content" {if $k eq 'content'}selected{/if}>发送内容</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$q}" type="text">
+            <select name="type">
+                <option value="">-发送类型-</option>
+                <option value="mail" {if $type eq 'mail'}selected{/if}>邮件</option>
+                <option value="sms" {if $type eq 'sms'}selected{/if}>短信</option>
+            </select>
+            <select name="status">
+                <option value="">-状态-</option>
+                <option value="99" {if $status eq '99'}selected{/if}>未发送</option>
+                <option value="1" {if $status eq '1'}selected{/if}>已发送</option>
+            </select>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+            <button type="button" class="uiBtn BtnOrange" onclick="cron.init('sendtpl')">点击全部发送</button>
+        </div>
+    </form>
+
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+        <table class="list">
+            <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th align="left" class="w120">用户名</th>
+                <th align="left">发送模板</th>
+                <th align="left">发送内容</th>
+                <th align="left" class="w160">添加时间</th>
+                <th align="left" class="w160">发送时间</th>
+                <th align="left">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$data.list item=m}
+            <tr>
+                <td nowrap>{$m.id}</td>
+                <td align="left">{$m.username}</td>
+                <td align="left">{$m.template_code}</td>
+                <td align="left">{$m.content}</td>
+                <td align="left">{if $m.add_time}{$m.add_time|date_format:'Y-m-d H:i:s'}{else}---{/if}</td>
+                <td align="left">{if $m.send_time}{$m.send_time|date_format:'Y-m-d H:i:s'}{else}---{/if}</td>
+                <td class='c-gray'>
+                    <a href='javascript:;' onclick="main.confirm_del('templates/del_send','{$m.id}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+
+        <div class="foot-btn">
+            <div class="pager r">{$page}</div>
+        </div>
+    </form>
+
+</div>

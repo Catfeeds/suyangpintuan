@@ -1,0 +1,73 @@
+{$slider = 1}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav hot-top">
+        <a href="/member/fav" class="active">商品</a>
+        <a href="/member/store_fav">店铺</a>
+</header>
+{if $data.list}
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <div class="hot-list collection">
+            {foreach $data.list as $m}
+            <div class="area-box">
+                <dl class="fx-cpbox clearfix">
+                    <dt>
+                        <img src="{zz mod=fileurl source=$m.goods_thumb type=1}"/>
+                    </dt>
+                    <dd>
+                        <h3>{$m.goods_name}</h3>
+                        <div class="mui-card-link">
+                            <span class="tuan-rs">{$m.goods_team_num}人团</span>
+                            <span class="rmb">¥</span>
+                            <span class="price-int">{$m.goods_team_price}</span>
+                            <span class="sc-xin active" onclick="delFav('{$m.id}',this);"></span>
+                        </div>
+                        <div class="mui-card-link">
+                            <button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/goods/show/{$m.goods_id}')">去开团></button>
+                        </div>
+
+                    </dd>
+                </dl>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
+{else}
+{$empty_tip = "您还没有收藏!"}
+{include file="public_empty.html"}
+{/if}
+ <script>
+{literal}var D = {load: 1};{/literal}//load:1必填
+var ajax_url = "/member/fav/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}
+{literal}
+<script type="text/javascript">    
+
+    mui.init({
+        swipeBack:true, //启用右滑关闭功能
+    });
+    var gallery = mui('#slider');
+    gallery.slider({
+        interval:5000 //自动轮播周期，若为0则不自动播放，默认为0；
+    });
+
+    function delFav(ids,obj){
+        var btnArray = ['否', '是'];
+        mui.confirm('确定取消收藏？', '提示', btnArray, function(e) {
+            if (e.index == 1) {
+                $.get('/member/del_fav/'+ids, function(data) {
+                    mui.toast('取消成功');
+                    $(obj).parents('.area-box').remove()
+                })
+            }
+        });
+    }
+
+
+</script>
+{/literal}

@@ -1,0 +1,23 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <p class="c-red">请先导出待发货订单，填写对应的快递公司ID和快递单号</p>
+    <form target="iframeNewsTarget"  method="post" action="/business/order/excelOrderSend" enctype="multipart/form-data">
+        <input type="hidden" name="leadExcel" value="true">
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>订单excel</label></td>
+                <td class="td-input">
+                    <input type="file" name="inputExcel"  class="form-i w200" />                   
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

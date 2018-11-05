@@ -1,0 +1,118 @@
+{$headTit="订单详情"}
+{include file="public_header.html"}
+<form action="" target="iframeNews" method="post" id="myform">
+<input type="hidden" name="post[order_id]" value="{$order.id}" >
+<input type="hidden" name="post[mid]" value="{$order.mid}" >
+<input type="hidden" name="Submit" value="1" >
+{foreach from=$order.goods item=g key=k}
+<input type="hidden" name="post[good_id][{$g.id}]" value="{$g.good_id}" >
+<input type="hidden" name="post[buy_num][{$g.id}]" value="{$g.buy_num}" >
+<input type="hidden" name="post[goods_spec][{$g.id}]" value="{$g.goods_spec}" >
+<input type="hidden" name="post[sid][{$g.id}]" value="{$order.sid}" >
+<div class="my-message">	
+        <dl class="clearfix">
+                <dt>
+                        <img src="{zz mod=fileurl source=$g.img_src width=90 height=90 type=1}"/>
+                </dt>
+                <dd>
+                        <div class="mui-content-padded">
+                                <div class="mui-inline">评分</div>
+                                <div class="icons mui-inline" style="">
+                                        <i data-index="1" class="mui-icon mui-icon-star-filled"></i>
+                                        <i data-index="2" class="mui-icon mui-icon-star-filled"></i>
+                                        <i data-index="3" class="mui-icon mui-icon-star-filled"></i>
+                                        <i data-index="4" class="mui-icon mui-icon-star-filled"></i>
+                                        <i data-index="5" class="mui-icon mui-icon-star-filled"></i>
+                                </div>
+                        </div>
+                </dd>
+        </dl>
+	<div class="area-box">
+		<textarea name="post[content][{$g.id}]" placeholder="商品是否给力？快分享你的购买心得吧~"></textarea>
+                <input name="post[star][{$g.id}]" value="5" class="rating" type="hidden">
+	</div>
+</div>
+
+{/foreach}
+<div class="add-btn">        
+	<button type="submit" class="mui-btn mui-btn-danger">提交</button>
+</div>
+</form>
+<script type="text/javascript">
+        //应用评分
+        mui('.icons').on('tap','i',function(){
+               var index = parseInt(this.getAttribute("data-index"));
+               var parent = this.parentNode;
+               var children = parent.children;
+               if(this.classList.contains("mui-icon-star")){
+                       for(var i=0;i<index;i++){
+                               children[i].classList.remove('mui-icon-star');
+                               children[i].classList.add('mui-icon-star-filled');
+                       }
+               }else{
+                       for (var i = index; i < 5; i++) {
+                               children[i].classList.add('mui-icon-star')
+                               children[i].classList.remove('mui-icon-star-filled')
+                       }
+               }
+               $(".rating").val(index);
+               starIndex = index;
+        });
+</script>
+{*
+<script src="/style/js/rating_simple.js"></script>
+<form action="" target="iframeNews" method="post" id="myform">
+<input type="hidden" name="post[order_id]" value="{$order.id}" >
+<input type="hidden" name="post[mid]" value="{$order.mid}" >
+{foreach from=$order.goods item=g key=k}
+<input type="hidden" name="post[good_id][{$g.id}]" value="{$g.good_id}" >
+<input type="hidden" name="post[buy_num][{$g.id}]" value="{$g.buy_num}" >
+<input type="hidden" name="post[goods_spec][{$g.id}]" value="{$g.goods_spec}" >
+<input type="hidden" name="post[sid][{$g.id}]" value="{$g.sid}" >
+<div class="bgwhite">
+	<div class="user-ddxq-gwqd-qrzt">
+		<ul class="user-ddxq-gwqd-qrzt-ul">
+			<dt>产品信息</dt>
+			<li>
+				<a href="/goods/show/{$g.good_id}"><img src="{zz mod=fileurl source=$g.img_src width=90 height=90 type=1}"></a>
+				<div>
+					<h3>
+						<a href="/goods/show/{$g.good_id}">{$g.goods_name}</a>
+					</h3>					
+                                        <p class="p3">{$g.goods_spec}</p>
+                                        <p class="p2 amount"><i class="p1">数量：{$g.buy_num}</i>￥<span class="flow-good-subtotal">{$g.sell_price}</span> </p>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="cpdengji">
+		<span>产品等级：</span>
+		<section class="star">
+			<input name="post[star][{$g.id}]" style="display:none;" value="3" id="rating_simple{$g.id}" type="text">
+		</section>
+	</div>
+	<div class="cpdengji-nr">
+		<textarea placeholder="亲，您的评价对其他买家有很大的帮助哦！" name="post[content][{$g.id}]"></textarea>
+		温馨提示：您提交的内容请不要超过500字符！
+	</div>
+</div>
+<script language="javascript" type="text/javascript">
+	$(function () {
+		$("#rating_simple{$g.id}").webwidget_rating_simple({
+			rating_star_length: '5',
+			rating_initial_value: '5',
+			rating_function_name: '',//this is function name for click
+			directory: '/style/images/'
+		});		
+	});
+</script>
+{/foreach}	
+<ul class="dzbianji-tj">
+	<li>
+		<input type="submit" name="Submit" value="提交评论">
+	</li>
+</ul>
+</form>
+<script src="/style/js/common.js"></script>
+*}
+{include file="public_footer.html"}

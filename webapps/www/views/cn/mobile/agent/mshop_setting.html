@@ -1,0 +1,58 @@
+{include file="public_header.html"}
+<div class="fenxiao-dpsz">
+	<ul>
+		<li class="on">
+			<a href="/agent/mshop_setting">店铺资料</a>
+		</li>
+		<li>
+			<a href="/agent/mshop_edit">店铺素材</a>
+		</li>
+		<li>
+			<a href="/agent/mshop_share">分享设置</a>
+		</li>
+	</ul>
+</div>
+<form action="" method="post" target="iframeNews" >
+<div class="fenxiao-dpsz-tx">
+	<ul>		
+		<li>
+			<section>
+				<div>
+					<span>
+						店铺名称
+					</span>
+					<input type="text" name="post[mshop_name]" value="{$row.mshop_name}" placeholder="店铺名称" />
+				</div>
+			</section>
+		</li>		
+		<li>
+			<section>
+				<div>
+					<span>
+						微信号
+					</span>
+					<input type="text" name="post[wx]" value="{$row.wx}" placeholder="微信号" />
+				</div>
+			</section>
+		</li>
+		<dd>
+			<section>
+				<div>
+					<span>
+						店铺公告
+					</span>
+					<textarea rows="6" name="post[mshop_notice]" placeholder="请输入您的店铺公告内容（120字以内）" >{$row.mshop_notice}</textarea>
+				</div>
+			</section>
+		</dd>
+	</ul>
+</div>
+<ul class="fenxiao-dpsz-tj">
+	<li>
+		<input type="submit" name="Submit" value="保存">
+	</li>
+</ul>
+</form>
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+{include file="public_footer.html"}

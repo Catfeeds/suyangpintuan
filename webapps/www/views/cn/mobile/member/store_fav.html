@@ -1,0 +1,28 @@
+{$slider = 1}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav hot-top">
+        <a href="/member/fav" >商品</a>
+        <a href="/member/store_fav" class="active">店铺</a>
+</header>
+{if $data.list}
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <div class="hot-list ">
+            {foreach $data.list as $m}
+            {include file="member/lbi/store_list.html"}
+            {/foreach}
+        </div>
+    </div>
+</div>
+{else}
+{$empty_tip = "您还没有收藏!"}
+{include file="public_empty.html"}
+{/if}
+ <script>
+{literal}var D = {load: 1};{/literal}//load:1必填
+var ajax_url = "/member/store_fav/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,14 @@
+<section>
+    <span>运送方式</span>
+</section>
+<ul class="dd-ysfs-ul">
+    {foreach from=$data.fright item=m}
+    <li class="set-target li-radio total {if !empty($order.fright_id) and $m.id eq $order.fright_id} on {/if}" data-target="#flow-freight-fee" data-value="{if $goodsTotal gte $m.freight_free and $m.freight_free gt 0}0.00{else}{formatPrice($m.shipping_fee)}{/if}">
+        <label>
+            <em></em>
+            <input type="radio" name="fright_id" value="{$m.id}" {if !empty($order.fright_id) and $order.fright_id eq $m.id}checked="checked"{/if} />
+        </label>
+        <span>{$m.title} {if $m.freight_free gt 0}满{$m.freight_free}包邮{/if} (本单:{if ($m.freight_free gt 0 and $goodsTotal gt $m.freight_free) or $m.shipping_fee eq 0}免运费{else}<span class="amount">￥{$m.shipping_fee}</span>{/if})</span>
+    </li>
+    {/foreach}
+</ul>

@@ -1,0 +1,11 @@
+{$headTit="我的消息"} {include file="public_header.html"}
+<div class="xiaoni-xx">
+    <dl>
+        <dt>{if !empty($data.create_time)}<i>{date('Y-m-d H:i:s', $data.create_time)}</i>{/if}<span>{$data.title}</span></dt>
+        <dd><span>发件人：</span>{if empty($data.sender)}系统{else}{getUsername($data.sender)}{/if}</dd>
+        <li>
+            {$data.content}
+        </li>
+    </dl>
+</div>
+

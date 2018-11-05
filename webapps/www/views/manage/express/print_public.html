@@ -1,0 +1,36 @@
+<div class="selection-content">
+    <table class="list">
+        <thead>
+            <tr>
+                <th class="w30">选择</th>
+                <th class="w30" align="left">ID</th>
+                <th align="left">模版名</th>
+                <th class="w80" align="left">宽度(毫米)</th>
+                <th class="w80" align="left">高度(毫米)</th>
+                <th align="left">描述</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$list item=m}
+            <tr>
+                <td align='center'>
+                    <input type='radio' class='form-i w30 express-print-public' name="public_tpl_id" value='{$m.id}' />
+                </td>
+                <td>{$m.id}</td>
+                <td>{$m.title}</td>
+                <td>{$m.width}</td>
+                <td>{$m.height}</td>
+                <td>{$m.description}</td>
+            </tr>
+            {foreachelse}
+            <tr>
+                <td colspan="10" align="center">本条件暂无记录</td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+        <button type="button" class="uiBtn e2-com-xhide">取消</button>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta name="wap-font-scale" content="no" />
+    <title>{$data.metaTitle}</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <style>
+    body {
+        background-color: #ededed;
+    }
+    .tishi {
+        margin-top: 5.4rem;
+    }
+    .tishi img {
+        display: block;
+        margin: 0 auto;
+        width: 5.8rem;
+        height: 5.8rem;
+    }
+    img {
+        max-width: 100%;
+        background-color: transparent;
+    }
+    .tishi p {
+        text-align: center;
+        color: #474747;
+        font-family: "微软雅黑";
+        margin-bottom: 0.88rem;
+        margin-top: 0.4rem;
+        font-size: 1.1rem;
+    }
+    .qgwa {
+        width: 4.56rem;
+        padding:.6rem 2rem;
+        font-size: 1rem;
+        background-color: #E9120F;
+        color: #fff;
+        display: block;
+        margin: 0 auto;
+        margin-top: 0.4rem;
+        text-align: center;
+        border-radius: 5px;
+    }
+    </style>
+</head>
+    <div class="tishi">
+        <img src="/style/img/tishi-cg.png" />
+        <p>{$data.msg}</p>
+        <p class="jump">
+            <b id="wait">{$data.waitSecond}</b> 秒后页面将自动跳转
+        </p>
+    </div>
+    <a class="qgwa" id="href" href="{$data.url}">立即跳转</a>
+    <script type="text/javascript">
+    (function() {
+        var wait = document.getElementById('wait'),
+            href = document.getElementById('href').href;
+        var interval = setInterval(function() {
+            var time = --wait.innerHTML;
+            if (time <= 0) {
+                location.href = href;
+                clearInterval(interval);
+            }
+        }, 10000);
+        window.stop = function() {
+            clearInterval(interval);
+        };
+    })();
+    </script>
+</body>
+</html>

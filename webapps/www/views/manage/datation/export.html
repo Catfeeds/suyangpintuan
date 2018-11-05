@@ -1,0 +1,156 @@
+<h3 class="info-tag">
+    <a href="#!databack/index/export" class="uiBtn BtnBlue">数据库备份</a>    
+    <a href="#!databack/index/import" class="uiBtn">数据库还原</a>    
+</h3>
+<h3 class="info-tag">    
+    <select class="form-control input-sm setStatus" name="status">
+        <option value="0">批量操作</option>
+        <option value="1">数据表优化</option>
+        <option value="2">数据表修复</option>
+        <option value="3">数据表备份</option>
+    </select>
+    <button type="button"  class="uiBtn BtnGreen setStatusSubmit">应用</button>
+</h3>
+<div class="html-box">         
+    <table class="tb-goods" style="width:100%">
+        <thead>
+            <tr>                
+                <th nowrap class="w40"><input type="checkbox" class="checkall" checked></th>
+                <th nowrap class="w140">数据表名</th>
+                <th nowrap class="w140">类型</th>
+                <th nowrap class="w140">记录数</th>
+                <th nowrap class="w140">数据</th>
+                <th nowrap class="w140">创建时间</th>
+                <th nowrap class="w140">状态</th>
+            </tr>
+        </thead>
+        {foreach from=$list item=m key=key}
+        <tbody>
+            <tr>
+                <td ><input type="checkbox" class="check" name="ids" value="{$m.name}" checked /></td>
+                <td align='left'>{$m.name}</td>                
+                <td align='center'>{$m.engine}</td>
+                <td align='center'>{$m.rows}</td>
+                <td align='center'>{format_bytes($m.data_length)}</td>            
+                <td align='center'>{$m.create_time}</td>            
+                <td align='center' class="bk_status_tab_{$m.name}">未备份</td>
+            </tr>             
+        </tbody>       
+        {/foreach}
+    </table>
+  </div>
+{literal}
+<script>
+$('.checkall').click(function(){
+    var checkboxs=document.getElementsByName("ids");
+    for (var i=0;i<checkboxs.length;i++) {
+        var e=checkboxs[i];
+        e.checked=!e.checked;
+    }
+});
+
+var url;
+var tables;
+var index;   
+//设置状态方法
+$('.setStatusSubmit').click(function(){
+  setStatus = $(".setStatus").val();  
+  var checkboxs=document.getElementsByName("ids");  
+  var ids = new Array();//声明一个存放id的数组
+  for (var i=0;i<checkboxs.length;i++) {
+      var e=checkboxs[i];
+      if(e.checked) ids.push(e.value);
+  }   
+  if(setStatus==0){
+    alert('请选择操作类型');
+    return;
+  }
+  if(ids.length==0){
+    alert('请选择要操作的数据');
+    return;
+  }
+  if(setStatus == 3){ //备份
+      url='databack/export';
+      sendbk(url,ids);
+  }else{ //表优化、修复      
+    if(setStatus==1){ //表优化
+      url = 'databack/optimize';
+    }else{ //表修复
+      url = 'databack/repair';
+    }
+    $post({
+        url:url,
+        method:'post',
+        data:{tables:ids},
+        dataType:'json',
+        callback:function(data){
+            if(data.error==0){
+                com.xtip(data.msg);
+                main.refresh();
+              } else {            
+                com.xtip(data.msg,{type:1});
+              }
+        }
+    });       
+  }
+});
+function sendbk(url,ids){
+    $('.setStatusSubmit').attr("disabled","disabled");
+    $('.setStatusSubmit').html("正在发送备份请求...");   
+    $post({
+        url:url,
+        method:'post',
+        data:{tables:ids},
+        dataType:'json',
+        callback:function(data){              
+                if(data.error==0){
+                    tables = data.data.tables;
+                    $('.setStatusSubmit').html(data.msg + "开始备份，请不要关闭本页面！");
+                    backup(data.data.tab);
+                    window.onbeforeunload = function(){ return "正在备份数据库，请不要关闭！" }
+                } else {
+                    com.xtip(data.msg,{type:1});
+                    main.refresh();
+                }
+        }
+    });     
+    return false;
+}
+
+function backup(tab, status){
+    showmsg(tab.id, "开始备份...(0%)");
+    $post({
+        url:url,
+        method:'post',
+        data:tab,
+        dataType:'json',
+        callback:function(data){             
+            if(data.error==0){
+                if(typeof(data.data.tab)=="undefined"){
+                    id = data.data.tid-1;
+                    showmsg(id, data.msg);
+                    $('.setStatusSubmit').attr("disabled",false);
+                    $('.setStatusSubmit').html("备份完成，点击重新备份");
+                    //window.onbeforeunload = function(){ return null }
+                    return;
+                }else{
+                  if(data.data.tab.start>0){
+                     id = data.data.tab.id;
+                  }else{
+                     id = data.data.tab.id-1;
+                  }                  
+                  showmsg(id, data.msg);
+                  backup(data.data.tab, data.data.tab.id);
+                }
+            } else {                
+                com.xtip(data.msg,{type:1});
+                main.refresh();                
+            }
+        }
+    });
+}
+function showmsg(id, msg){
+    $('.bk_status_tab_'+tables[id]).html(msg);
+}
+</script>
+{/literal}

@@ -1,0 +1,27 @@
+<table class="fxyjlb-list-table" style="width:100%;">
+    <tr>
+        <th>时间</th>
+        <td>{$m.addtime|date_format:"Y-m-d"}</td>
+
+    </tr>
+    <tr>
+        <th>被邀请人</th>
+        <td>{$m.ivt_username}</td>
+
+    </tr>
+    <tr>
+        <th>订单金额</th>
+        <td>{$m.total}</td>
+
+    </tr>
+    <tr>
+        <th>{L('unit_comm')}</th>
+        <td>{$m.commission}</td>
+
+    </tr>
+    <tr>
+        <th>备注</th>
+        <td>{$m.desc}</td>
+    </tr>
+</table>
+            

@@ -1,0 +1,21 @@
+{$headTit="私人定制"}
+{$headNav=1}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+<ul class="mall_one list">
+    {foreach from=$data.list item=m}
+    {include file="auction/lbi/package_list.html"}
+    {foreachelse}
+    <li class="norecord">没有发布套餐！</li>
+    {/foreach}
+</ul>
+<script type="text/javascript">
+    var ExtendOptions = {
+        path: function(index) {
+            return "/package/index/{$data.status}/"+index+"?load";
+        }
+    };
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

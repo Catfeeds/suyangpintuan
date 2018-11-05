@@ -1,0 +1,45 @@
+{$nav = 0}{$slider = 1}
+{include file="public_header.html"}
+{if $row.status==0}
+<div class="page-box tk-box">
+    <div class="tk-sjcg">
+            <h2>您的申请已提交，等待商家处理</h2>
+            {*<p>剩余时间：6天12小时40分26秒</p>
+            <p class="ts">逾期不处理将自动退款</p>*}
+    </div>
+    <button type="button" class="mui-btn mui-btn-danger mui-btn-block" onclick="tourl('/refund/index')">返回</button>
+</div>
+{elseif $row.status==2}
+<div class="page-box tk-box">
+        <div class="tk-sjcg tk-sjcg2">
+                <h2>商家拒绝了您的退款申请</h2>
+                <p>拒绝原因：{$row.mark}</p>
+        </div>
+        <button type="button" class="mui-btn mui-btn-danger mui-btn-block" onclick="tourl('/refund/index')">返回</button>			
+        <button type="button" class="mui-btn  mui-btn-block">联系平台客服</button>
+</div>
+{elseif $row.status==10}    
+    <div class="page-box tk-box">
+        <div class="tk-sjcg">            
+        {if $row.type==1}   
+            {if $row.status_refund==0 }
+            <h2>商家审核通过，等待平台确认</h2>
+            {else}
+            <h2>商家审核通过，平台已确认</h2>
+            {/if}
+        {elseif $row.type==2}
+             {if $row.status_refund==10  && $row.status_shipping==10 }    
+             <h2>商家已收货，平台已确认</h2>
+             {elseif $row.status_refund==0  && $row.status_shipping==10}
+             <h2>商家已收货，等待平台确认</h2>
+             {elseif $row.status_shipping==0 }
+             <h2>等退货</h2> 
+             {elseif $row.status_shipping==1 }
+             <h2>等待商家收货</h2>   
+             {/if}
+        {/if}       
+        </div>
+        <button type="button" class="mui-btn mui-btn-danger mui-btn-block" onclick="tourl('/refund/index')">返回</button>
+    </div>
+{/if}
+{include file="public_footer.html"}

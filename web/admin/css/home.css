@@ -1,0 +1,234 @@
+@charset "UTF-8";
+/* CSS Document */
+
+html{overflow-y:auto;overflow-x:hidden}
+body{margin:0;font:12px/1.7 '微软雅黑','\5B8B\4F53',Tahoma}
+ul,dl,dt,dd,ol,input,h1,h2,h3,h4,h5,h6,p,form{padding:0;margin:0}img{border:none}
+ul,li{list-style:none}i{font-style:normal}button,input{vertical-align:middle}.clear{clear:both}.clear:after{visibility:hidden;display:block;font-size:0;content:'';clear:both;height:0}.clear{zoom:1;/*for IE6 IE7*/}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none}
+button{background:none;border:none;cursor:pointer;padding:0;outline:none}
+a,button{outline:none}
+#overlay{height:100%;width:100%;position:fixed;background-color:#fff;opacity:0.3;filter:alpha(opacity=30);z-index:3;display:none;top:0;left:0}
+/*通用元素*/
+.ac{text-align:center}
+.w80{width:80px}.w60{width:60px}.w40{width:40px}.w30{width:30px}.w20{width:20px}.w100{width:100px}.w120{width:120px}.w140{width:140px}
+.w160{width:160px}.w180{width:180px}.w200{width:200px}.w220{width:220px}.w240{width:240px}.w360{width:360px}
+article,aside,footer,header,section,footer,nav,figure,menu{display:block}
+.l{float:left}.r{float:right}
+.abs_out{position:absolute; left:-999em; top:-999em;}
+/*按钮禁用*/
+.disabled{color:#acacac!important; border-color:#acacac!important; text-shadow:1px 1px #fff!important; outline:0!important; cursor:default!important; pointer-events:none;}
+.disabled:hover{text-decoration:none!important;}
+/*单行文字溢出虚点显示*/
+.ell{text-overflow:ellipsis; white-space:nowrap; overflow:hidden;}
+/*inline-block与float等宽列表*/
+.inline_box{font-size:1em; letter-spacing:-.25em; font-family:Arial;}
+.inline_two, .inline_three, .inline_four, .inline_five, .inline_six, .inline_any{display:inline-block; *display:inline; letter-spacing:0; vertical-align:top; *zoom:1;}
+.float_two, .float_three, .float_four, .float_five, .float_six{float:left;}
+.inline_two, .float_two{width:49.9%;}
+.inline_three, .float_three{width:33.3%;}
+.inline_four, .float_four{width:24.9%;}
+.inline_five, .float_five{width:19.9%;}
+.inline_six, .float_six{width:16.6%;}
+.inline_fix{display:inline-block; width:100%; height:0; overflow:hidden;}
+
+/*头部信息*/
+header{height:65px; background:url(../images/home/tag-bg1.jpg) no-repeat; border-bottom:1px solid #fff; position:relative; background-size: cover}
+/*用户信息*/
+.uinfo{padding-left:10px; position:relative; top:8px; float:left}
+.uinfo a,.uinfo i{float:left; line-height:24px; color:#fff}
+.uinfo i{color:#fff; font-size:10px; padding:0 5px; width:10px; height:10px}
+.uinfo a{padding:0 5px}
+.icon{width:6px; height:9px; margin-right:3px; margin-top:8px}
+.uinfo *{display:block; float:left}
+/*头像*/
+.headimg{width:50px; height:50px; border-radius:25px; overflow:hidden; background-color:#fff; border:2px solid #fff; position:absolute; bottom:-25px; left:25px}
+.headimg img{width:50px; height:50px}
+
+/*>>>>>>>>>字体图标<<<<<<<<<*/
+@font-face {
+	font-family: 'iconfont';
+	src: url('../fonts/iconfont.eot'); /* IE9*/
+	src: url('../fonts/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+	url('../fonts/iconfont.woff') format('woff'), /* chrome、firefox */
+	url('../fonts/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+	url('../fonts/iconfont.svg#uxiconfont') format('svg'); /* iOS 4.1- */
+}
+.iconfont{
+	font-family:"iconfont" !important;
+	font-size:16px;font-style:normal;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-stroke-width: 0.2px;
+	-moz-osx-font-smoothing: grayscale;
+}
+/*__________字体图标End_________*/
+
+
+/*页面标题*/
+.page-tag{float:right; font-size:20px; line-height:65px; color:#fff; position:relative; top:0; right:12px}
+
+/*主体内容*/
+.context{background-color:#f2f2f2; min-height:500px; padding-top:30px}
+.body-wrap{padding:0 26px}
+.page-title{font-size:16px; text-align:center; font-weight:100; border-bottom:1px solid #ddd; line-height:24px; height:24px; padding:8px 0}
+
+.explain-1{color:#999; line-height:18px; font-size:12px}
+
+
+
+/*表单元素*/
+.cond-form{padding:10px 0 10px; margin-bottom:10px}
+.ui-label{line-height:26px; padding:1px 3px 1px 4px}
+.inner-tip{color:#f60; padding-left:8px; line-height:26px}
+
+
+.form-i{height:24px; border:1px solid #ccc; padding:2px 0 2px 5px; border-radius:0; box-shadow:none}
+.form-i:focus{position:relative;z-index:1; outline:none}
+.form-area{height:48px; border:1px solid #ccc; padding:2px 0 2px 5px; border-radius:0; box-shadow:none; margin:0}
+.form-area:focus{position:relative;z-index:1; outline:none}
+.form-radio{margin-top:6px}
+.f-unit{padding:2px 0; margin-bottom:5px}
+.f-unit .ui-label,.f-unit .w80,.f-unit .w60,.f-unit .w100,
+.f-unit .form-i,.f-unit select,.f-unit textarea,.f-unit .form-radio
+{display:block; float:left}
+.f-unit:after{content:"\200B";display:block;height:0;clear:both;}
+.form-i:focus,.f-unit textarea:focus,.form-area:focus{
+	border-color: rgba(82, 168, 236, 0.8);outline: 0;outline: thin dotted \9;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+.uiBtn{color:#fff; line-height:26px; padding:0 15px; display:inline-block}
+.BtnSmall{line-height:22px}
+.BtnBig{line-height:30px}
+.BtnGreen{background-color:#46d950}
+.BtnOrange{background-color:#f60}
+.BtnBlue{background-color:#09f}
+.BtnGray{background-color:#cfcfcf}
+.uiBtn-disabled{background-color:#cacccd;color:#999;cursor:default}
+.uiBtn-disabled:hover{ color: #999; }
+.BtnS1{line-height:22px; height:22px}
+.BtnS2{line-height:24px; height:24px}
+.BtnS3{line-height:26px; height:26px}
+.BtnS4{line-height:28px; height:28px}
+.BtnS5{line-height:30px; height:30px}
+.BtnS6{line-height:32px; height:32px}
+.BtnS7{line-height:34px; height:34px}
+.s14{font-size:14px}
+.s16{font-size:16px}
+.s18{font-size:18px}
+.s20{font-size:20px}
+.s22{font-size:22px}
+.through{text-decoration:line-through}
+.cf60{color:#f60}
+.cf00{color:#f00}
+.c090{color:#090}
+.c999{color:#999}
+.c444{color:#444}
+.c666{color:#666}
+.line_ddd{border-top:1px solid #ddd; height:0}
+
+.form-row{display:box; display:-moz-box; display:-webkit-box; padding:5px 0}
+.form-row .f-label{line-height:30px; display:block}
+.form-row .f-tip{line-height:28px; color:#f60; display:block; text-align:center}
+.form-row .box-auto{-webkit-box-flex:1; display:block; outline:none}
+.form-row .div-auto{-webkit-box-flex:1; display:box; display:-webkit-box; height:28px}
+.flex1{-webkit-box-flex:1; display:block}
+
+
+/*订单查询*/
+.wrap-order{padding:16px}
+.order-list li{border:1px solid #c0c0c0; background-color:#fff; display:block; position:relative; margin-bottom:10px}
+.odhead{text-align:center; border-bottom:1px solid #c0c0c0}
+.odtag{height:18px; display:block; background-color:#e7e7e7; border-radius:8px; text-align:center; line-height:18px; padding:0 5px; width:150px; color:#999; margin:5px auto}
+.oddel{position:absolute; right:0; top:0; height:28px; width:50px; text-align:center; line-height:28px; color:#09f}
+/*订单记录主体*/
+.odbody{padding:10px 8px}
+.oddesc{display:box; display:-moz-box; display:-webkit-box; border-bottom:1px solid #ddd}
+.odpic{width:100px}
+.odinfo{-webkit-box-flex:1}
+.odinfo h5{font-size:16px; font-weight:100; line-height:24px; padding:8px 0}
+.buy_num{font-size:12px; color:#777}
+.buy_price{color:#f60; padding-left:12px}
+.buy_price b{font-size:18px}
+
+.odprogress{display:box; display:-moz-box; display:-webkit-box; line-height:24px; padding:5px 0}
+.od_ctime{width:172px; text-align:right; color:#999}
+.odstatus{-webkit-box-flex:1}
+.odstatus span{color:#090}
+.odBtns{text-align:center; padding-top:6px}
+
+.in-box{display:box; display:-moz-box; display:-webkit-box;}
+.fix-bottom{text-align:center; background-color:#fff; padding:10px; position:fixed; bottom:0; left:0; right:0; border-top:1px solid #ddd; box-shadow:0 -1px 5px #DDD}
+
+.wrap-s1{margin:0 16px; border:1px solid #ddd; padding:8px; background-color:#fff}
+.info-tag{border-bottom:1px solid #ddd; color:#888; line-height:24px; height:24px; padding:0 2px 2px; position:relative}
+
+
+/*收货地址列表*/
+.addrs li{background-color:#fff; border:1px solid #ddd; margin-bottom:10px; position:relative}
+.addrs .uname{font-size:14px; font-weight:bold; color:#444}
+.addrs .mobile{font-size:12px; color:#999; padding-left:12px}
+.addrs .zone,.addrs .zone-detail{color:#888}
+
+.fix-bottom .uiBtn{display:block; width:120px; margin:0 auto}
+.addrs .info{padding:8px;position:relative}
+.arrow-right{position:absolute; right:20px; top:50%; margin-top:-10px; height:20px; width:20px; color:#888}
+.arrow-right i{font-size:20px; line-height:20px; height:20px; width:20px; color:#ccc}
+
+.addrs .opbtn{border-top:1px solid #eee; line-height:24px}
+.addrs .opbtn a{text-align:center; padding:5px; font-size:12px; color:#888; display:block}
+.addrs .opbtn a i{font-size:14px; width:14px; height:14px}
+.addrs .opbtn a:first-child{border-right:1px solid #ddd}
+
+/*购物车*/
+.wrap-cart{padding:16px}
+.cart-list li{border:1px solid #c0c0c0; background-color:#fff; display:block; position:relative; margin-bottom:10px}
+.check-good-list li{border-bottom:1px solid #ddd; background-color:#fff; display:block; position:relative; margin-bottom:10px}
+
+.order-list li{border:1px solid #c0c0c0; background-color:#fff; display:block; position:relative; margin-bottom:10px}
+.odhead{text-align:center; border-bottom:1px solid #c0c0c0}
+.odtag{height:18px; display:block; background-color:#e7e7e7; border-radius:8px; text-align:center; line-height:18px; padding:0 5px; width:150px; color:#999; margin:5px auto}
+.oddel{position:absolute; right:0; top:0; height:28px; width:50px; text-align:center; line-height:28px; color:#09f}
+/*订单记录主体*/
+.cart-item{padding:10px 8px}
+.good-desc{display:box; display:-moz-box; display:-webkit-box; border-bottom:1px solid #eee}
+.good-pic{width:100px; text-align:center; padding-bottom:5px}
+.good-pic a img{display:block; width:85px; height:80px; margin:0 auto}
+.good-info{text-align:center;-webkit-box-flex:1}
+.good-info *{display:block; line-height:24px}
+.good-info a{color:#09f}
+.good-info span{color:#999}
+
+.good-opt{padding:5px 0; border-bottom:1px solid #eee}
+.good-opt table{width:100%}
+.good-opt th,.good-opt td{line-height:24px; padding:5px 2px}
+.good-opt th{color:#999; font-weight:100; text-align:center}
+.good-opt td{color:#444; text-align:center}
+
+.cart-info{position:relative; line-height:24px;}
+.cart-price span{color:#f20}
+
+.cart-count{background-color:#fafaf2; border:1px solid #ddd; padding:5px; line-height:24px}
+.cart-count label{width:80px; text-align:right; display:inline-block; vertical-align:top}
+.cart-count span{display:inline-block; vertical-align:top}
+.pay-money{color:#f20}
+.pay-credit{color:#090}
+.h20{height:20px}
+.h40{height:40px}
+.h60{height:60px}
+
+
+
+/*订单创建成功,前往付款*/
+.succ-tag{font-size:14px; text-align:center; line-height:20px; color:#666; padding:10px 0 20px}
+.succ-tag span{color:#f20}
+.order-desc{padding:15px 5px; line-height:24px; text-align:center; background-color:#ffd; color:#999}
+.order-desc span{color:#444}
+.goto-home{text-align:center; padding:15px 0}
+.goto-home .uiBtn{width:100px}
+.goto-home .homelink{padding-top:12px}
+.goto-home .homelink a{color:#2eadcd; font-size:14px; margin-top:25px}
+
+.pholder{height:18px; border-top:1px solid #ccc; background-color:#f2f2f2; border-bottom:1px solid #c0c0c0}
+.pholder1{height:18px; background-color:#f2f2f2; border-bottom:1px solid #c0c0c0}

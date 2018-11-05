@@ -1,0 +1,78 @@
+{include file='../public_btn.html'}
+<div class="html-box" xmlns="http://www.w3.org/1999/html">
+    <form target="iframeNewsTarget" method="post" action="/manage/special/model_edit" enctype="multipart/form-data">
+        <input type="hidden" name="post[id]" value="{$data.info.id}" />
+        <span class="c-red">提示信息：请按照输入框内的提示信息填写</span>
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>上传模板：<span class="c-red">*</span></label></td>
+                <td><input type="file" name="file" accept="text/html" /></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>文件名称：<span class="c-red">*</span></label></td>
+                <td>
+                    <input class="form-i" type="text" name="post[filename]" value="{$data.info.file_name}" placeholder="文件重命名"/>
+                    <span class="form-tip">请使用字母或数字或下划线，限制1到30个字符</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>配置：<span class="c-red">*</span></label></td>
+                <td>
+                    <a href="javascript:;" class="uiBtn BtnBlue" onclick="addTag()">添加配置</a>
+                    <span class="form-tip">对应上传模板上的值只限1至20个英文</span>
+                    <ul class="list">
+                        {foreach $data.info.config as $k=>$v}
+                        <li>
+                            <div class="f-unit">
+                                <input class="form-i" type="text" name="post[key][]" value="{$k}" placeholder="对应上传模板上的值"/>
+                                <input class="form-i" type="text" name="post[label][]" value="{$v.label}" placeholder="标签"/>
+                                <select name="post[type][]" style="min-width: 150px;">
+                                    <option value="image" {if $v.type == 'image'}selected{/if}>上传图片</option>
+                                    <option value="text" {if $v.type == 'text'}selected{/if}>普通输入框</option>
+                                    <option value="textarea" {if $v.type == 'textarea'}selected{/if}>文本框</option>
+                                </select>
+                                <input class="form-i" type="text" name="post[tip][]" value="{$v.tip}" placeholder="提示信息（可放空）"/>
+                                <a href="javascript:;" onclick="removeTag(this)" class="iconfont icon-a goods_del" title="删除"></a>
+                            </div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn" onclick="resetFun()">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<script>
+    $.loadJs('/style/js/jquery-1.11.2.min.js',function(){
+        jQuery.noConflict();
+    });
+    function removeTag(tag){
+        tag.parentNode.remove();
+    }
+    function addTag(){
+        var html =
+        '<li>'+
+            '<div class="f-unit">'+
+                '<input class="form-i" type="text" name="post[key][]" value="" placeholder="对应上传模板上的值"/>'+
+                '<input class="form-i" type="text" name="post[label][]" value="" placeholder="标签"/>'+
+                '<select name="post[type][]" style="min-width: 150px;">'+
+                    '<option value="image">上传图片</option>'+
+                    '<option value="text">普通输入框</option>'+
+                    '<option value="textarea">文本框</option>'+
+                '</select>'+
+                '<input class="form-i" type="text" name="post[tip][]" value="" placeholder="提示信息（可放空）"/>'+
+                '<a href="javascript:;" onclick="removeTag(this)" class="iconfont icon-a goods_del" title="删除"></a>'+
+            '</div>'+
+        '</li>';
+        jQuery('.list').append(html);
+    }
+</script>

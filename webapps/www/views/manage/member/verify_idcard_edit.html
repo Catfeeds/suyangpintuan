@@ -1,0 +1,52 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/member/verify_idcard_edit/{$row.id}" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$row.id}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>用户名：</label></td>
+                <td class="td-input">{$row.username}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>真实姓名：</label></td>
+                <td class="td-input">{$row.realname}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>身份证号：</label></td>
+                <td class="td-input">{$row.card}<a href="http://www.baidu.com/s?wd=%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E6%9F%A5%E8%AF%A2&rsv_spt=1&issp=1&f=3&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_sug3=21&rsv_sug6=7&rsv_sug1=19&rsv_pq=ce6639f2000c9926&rsv_t=eb5dsKSUWglHCEVkd%2FKpBAt37VsPobuWgLu%2B6n7tRJrJ9fb4wNWK9jOsG5vVUsvm7wMJ&oq=%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7&rsv_sug2=1&rsp=0&inputT=5437&rsv_sug4=5437&qq-pf-to=pcqq.discussion" target="_blank">检测</a></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>身份证正面照：</label></td>
+                <td class="td-input"><img src="{yunurl($row.card_image)}"/></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>身份证反面照：</label></td>
+                <td class="td-input"><img src="{yunurl($row.card_image2)}"/></td>
+            </tr>
+
+            <tr class="h s0">
+                <td class="td-label"><label>状态：</label></td>
+                <td class="td-input">
+                    <label><input type="radio" name="post[status]" value="2" {if $row.status eq 1 || $row.status eq 2}checked{/if}> 允许通过</label>
+                    <label><input type="radio" name="post[status]" value="3" {if $row.status eq 3}checked{/if}> 拒绝通过</label>
+                </td>
+            </tr>
+            <tr class="h s0">
+                <td class="td-label"><label>理由：</label></td>
+                <td class="td-input">
+                    <textarea name="post[remark]" {if $row.status neq 1}disabled{/if}>{$row.remark}</textarea>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <input type="hidden" name="username" value="{$row.username}" />
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

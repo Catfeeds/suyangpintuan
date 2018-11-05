@@ -1,0 +1,34 @@
+<div class="mui-card">
+	<div class="mui-card-header mui-card-media">
+		<a href="/goods/team/{$m.id}"><img src="{zz mod=fileurl source=$m.goods_thumb}"/></a>
+		<div class="ribbon">
+			<span>{discount($m.goods_price,$m.goods_team_price)}折</span>
+			<span>{$m.goods_team_num}人团</span>
+		</div>
+		<div class="buying-info">
+			<p> 已有<span>{$m.goods_sell+$m.goods_sales_num}人</span>参团</p>
+		</div>
+	</div>
+	<div class="mui-card-content">
+		<div class="mui-card-content-inner">
+			<p>{$m.goods_name}</p>
+		</div>
+	</div>
+	<div class="group-inf clearfix">
+		<span class="group-inf-tit">还差{$m.team_num-$m.team_num_yes}人成团</span>
+		<span class="group-inf-time">剩余<em id="leftTimeJx{$m.id}">00:00:00</em>结束</span>
+		<script>onload_leftTime_jx({$m.id},{$m.end_time|default:0},"","");</script>
+	</div>
+	<div class="mui-card-footer">
+		<div class="mui-card-link">
+			<span class="rmb">¥</span>
+			<span class="price-int">{$m.goods_team_price}</span>
+			<span class="price-ori">¥{$m.goods_price}</span>
+		</div>
+
+		<div class="mui-card-link">
+			<button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/goods/team/{$m.id}')">去跟团></button>
+		</div>
+	</div>
+</div>				
+				

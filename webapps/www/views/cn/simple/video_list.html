@@ -1,0 +1,18 @@
+{$headTit=$data.cat.catname}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+<div class="main">
+    <dl class="list see">
+        {foreach from=$data.list item=m}
+        {include file="lbi/video_list.html"}
+        {/foreach}
+    </dl>
+    <script type="text/javascript">
+        var ExtendOptions = {
+            itemSelector : 'dd'
+        };
+    </script>
+    {include file="public_scroll.html"}
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

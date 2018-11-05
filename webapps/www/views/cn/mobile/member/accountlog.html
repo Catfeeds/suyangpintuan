@@ -1,0 +1,25 @@
+{$headTit="提现记录"}
+{include file="public_header.html"}
+<ul class="tixianmain list">
+    {foreach from=$list item=m}
+    {include file="member/lbi/accountlog_list.html"}
+    {foreachelse}   
+    <div class="zfzt">
+        暂无对应记录！
+    </div>
+    {/foreach}        
+</ul>
+{if count($list)>0}
+ {assign var=event value='click'}
+    <script type="text/javascript">
+    var ExtendOptions = {        
+        path: function(index) {
+            return "/member/accountlog/"+index+"?load";
+        }
+    };
+    </script>
+    {include file="public_scroll.html"}
+{/if}
+<div class="ft"></div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

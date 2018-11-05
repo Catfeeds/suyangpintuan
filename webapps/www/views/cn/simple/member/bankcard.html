@@ -1,0 +1,117 @@
+{$headTit="绑定银行卡"}
+{include file="public_header.html"}
+<div class="dzbianji">
+<form action="" method="post" id="bankcard_form" target="iframeNews">
+        <ul>
+            <li>
+                <i>
+                    <em>
+                        <input type="text" name="name" value="{$member.realname}"  disabled="disabled"/>
+                    </em>
+                </i>
+            </li>            
+            <li>
+                <i>
+                    <em>
+                        <input type="text" placeholder="银行名称" name="bankname" value="{$row.bankname}"/>
+                    </em>
+                </i>
+            </li>            
+            <li>
+                <i>
+                    <em>
+                        <input type="text" placeholder="银行卡号" name="bankcard" value="{$row.bankcard}"/>
+                    </em>
+                </i>
+            </li>
+            <li>
+                <i>
+                    <em>
+                        <input type="text" placeholder="银行开户地" name="bankaddress" value="{$row.bankaddress}"/>
+                    </em>
+                </i>
+            </li>
+			{if $site_config.sms_open eq 1 && 'sms_bankcard'|statusTpl}
+            <li >
+                <i>
+                    <em>
+                        <input  type="text" placeholder="手机号码" id="mobile" name="mobile" value="{$member.mobile}" >
+                    </em>
+                </i>
+            </li>
+            <li>
+                <i>
+                    <em>
+                        <input id="scode"  type="text" name="scode" value="" placeholder="此处填写右图答案" style="width:70%">
+                        <img class="refresh_scode" src="/welcome/scode" data-src="/welcome/scode" width="100px">
+                    </em>
+                </i>
+            </li>
+            <li>
+                <i>
+                    <em>
+                        <input type="text" placeholder="短信验证码" name="sms_code" value=""/>
+			<input type="button" value="获取短信验证码" onclick="getSmsVerify('sms_bankcard')" id="btnSms" />
+                    </em>
+                </i>
+            </li>
+			{/if}
+        </ul>
+        <div class="dzbianji-mr {if $row.is_default==1}on{/if}">
+            <span>设为默认</span>
+            <label>
+                <em></em>
+                <input id="Checkbox1" name="is_default" {if $row.is_default}checked{/if} type="checkbox" value="1"/>
+            </label>
+        </div>
+    </div>
+    <ul class="dzbianji-tj">
+       <li><input type="submit" value="保存"  name="Submit"/></li>
+       <li>
+           <input type="button" value="取消" onclick="location.href='{$smarty.get.back}'"/>
+           <input type="hidden" value="{$back_url}" name="back_url"/>           
+       </li>
+    </ul>
+    <input type="hidden" name="back" value="{$smarty.get.back}" />
+    <input type="hidden" name="id" value="{$row.id}"/>
+    </form>    
+	
+	<link href="/style/style/enter.css" rel="stylesheet" />
+	<div class="main pd_10">
+		<ul class="car_add">
+			{foreach from=$bankcard item=m}
+			<li>
+				<dl class="car_add_1">
+					<dt>						
+						<span>开户行所在地：{$m.bankaddress}</span>
+						<p>持卡人：{$m.name}</p>
+					</dt>
+				</dl>
+				<div class="car_add_2">
+					<span>
+						<a href="/member/bankcard/{$m.id}">编辑</a>　|　
+						<a href="javascript:;" onclick="zz_confirm('确认删除该收货地址吗?','/member/bankcard_del/{$m.id}')">删除</a>
+					</span>					
+				</div>
+			</li>			
+			{/foreach}
+		</ul>   
+	</div>
+	 <script>
+        $(document).ready(function () {
+            $(".dzbianji-mr").find("input:checkbox[name='is_default']").each(function () {
+                $(this).click(function () {
+                    $(this).parent().parent().parent().children().removeClass("on");
+                    $(this).parent().parent().toggleClass("on", this.checked);
+                });
+            });
+            
+        });
+        $(document).on('click', '.refresh_scode', function() {
+            var $this = $(this)
+            $this.attr('src', $this.data('src') + '?' + (+new Date()));
+        })
+    </script>
+    <div class="ft"></div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,44 @@
+{include file="public_header.html"}
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<div class="rzlc-box">
+    <div class="content-box clearfix">
+        <div class="pull-left rzlc-t1">
+            <span>欢迎入驻</span><br />拼团网站
+        </div>
+        <div class="pull-right">
+            <ul class="rzlc-li">
+                <li>1.填写店铺信息</li>
+                <li class="active">2.填写企业/个人信息</li>
+                <li>3.资质审核</li>
+                <li>4.支付保障金费用</li>
+                <li>5.完成入驻</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="news-box">
+    <div class="content-box rz-box">
+        <div class="clearfix lc-dbox" id="lc-zctable">
+            {if $data.b_info.type==1}
+                {include file="apply_personal.html"}
+            {elseif $data.b_info.type==2}
+                {include file="apply_company.html"}
+            {/if}
+        </div>
+    </div>
+</div>
+<script src="/default/js/uploadPreview.js" type="text/javascript" charset="utf-8"></script>
+<script src="/style/js/layer/layer.js" type="text/javascript"></script>
+<script src="/style/js/layer/extend/layer.ext.js" type="text/javascript"></script>
+<script src="/style/js/xmsz_common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#myform").Validform({
+            tiptype: function(msg, o, cttl) {
+                validTip(msg, o, cttl);
+            },
+            showAllError: false
+        });
+    });    
+</script>
+{include file="public_footer.html"}

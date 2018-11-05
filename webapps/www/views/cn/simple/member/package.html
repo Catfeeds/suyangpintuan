@@ -1,0 +1,20 @@
+{$headTit="我的套餐"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<ul class="sale1 f12 list">
+    {foreach from=$data.list item=m}
+    {include file="member/lbi/package_list.html"}
+    {foreachelse}
+    <li class="norecord">您还没有套餐订购记录！</li>
+    {/foreach}
+</ul>
+<script type="text/javascript">
+    var ExtendOptions = {
+        path: function(index) {
+            return "/member/package/"+index+"?status={$data.status}&load";
+        }
+    };
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,22 @@
+{$headTit=""} 
+{$slider=1}
+{include file="public_header.html"}
+<div class="refreshContainer mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div class="ad-ban">                   
+                    {$ad = getAd($typeid)}
+                    <img src="{zz mod=fileurl source=$ad}"/>                   
+		</div>
+		<div class="hot-list">				
+		</div>
+	</div>
+</div>
+<script>
+var typeid = '{$typeid}';
+{literal}var D = {load: 1,lottery:1,typeid:typeid,order:'lottery'};{/literal}//load:1必填
+var ajax_url = "/goods/index/0/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

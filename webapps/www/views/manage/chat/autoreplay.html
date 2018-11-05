@@ -1,0 +1,109 @@
+{include file='../public_btn.html'}
+<style>
+.f-unit select {
+    margin-bottom: 1px;
+}
+</style>
+<div class="html-box">
+    <form class="cond-form clear" action="#!chat/autoreplay" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <span class="input-group">
+                <span class="input-group-addon-left">ID</span>
+            <input class="form-i" type="text" name="filters[id]" value="{if isset($filters['id'])}{$filters['id']}{/if}" placeholder="id需是整数">
+            </span>
+            <span class="input-group">
+                <span class="input-group-addon-left">回复内容</span>
+            <input class="form-i" type="text" name="filters[content][1]" value="{if isset($filters['content'][1])}{$filters['content'][1]}{/if}" placeholder="关键字匹配后回复的信息">
+            <input type="hidden" name="filters[content][0]" value="cs">
+            </span>
+            </span>
+            <span class="input-group">
+                <span class="input-group-addon-left">关键字</span>
+            <input class="form-i" type="text" name="filters[keyword][1]" value="{if isset($filters['keyword'][1])}{$filters['keyword'][1]}{/if}" placeholder="触发自动回复的关键字">
+            <input type="hidden" name="filters[keyword][0]" value="cs">
+            </span>
+            </span>
+            <span class="input-group">
+                <select class="form-i border-left-none" name="filters[type]">
+                    <option value="">匹配不限</option>
+                    <option value="1" {if isset($filters['type']) && $filters['type'] eq 1}selected="selected"{/if}>关键字精确匹配</option>
+                    <option value="0" {if isset($filters['type']) && $filters['type'] eq 0 && is_numeric($filters['type'])}selected="selected"{/if}>关键字模糊匹配</option>
+                </select>
+                <select class="form-i border-left-none" name="filters[status]">
+                    <option value="">状态不限</option>
+                    <option value="1" {if isset($filters['status']) && $filters['status'] eq 1}selected="selected"{/if}>已启用</option>
+                    <option value="0" {if isset($filters['status']) && $filters['status'] eq 0 && is_numeric($filters['status'])}selected="selected"{/if}>已禁用</option>
+                </select>
+            </span>
+            <span class="input-group">
+                <input type="hidden" name="filters[create_time][0][0]" value="ge"/>
+                <input class="form-i w120 sitem" name="filters[create_time][0][1]" value="{if isset($filters['create_time'][0][1])}{$filters['create_time'][0][1]}{/if}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="创建时间起" />
+                <input type="hidden" name="filters[create_time][0][2]" value="timestamp"/>
+                <input type="hidden" name="filters[create_time][1][0]" value="le"/>
+                <input class="form-i w120 sitem" name="filters[create_time][1][1]" value="{if isset($filters['create_time'][1][1])}{$filters['create_time'][1][1]}{/if}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="创建时间止" style="margin-left:-1px;"/>
+                <input type="hidden" name="filters[create_time][1][2]" value="timestamp"/>
+            </span>
+        </div>
+        <div class="f-unit">
+            <span class="l">
+                {for $i=0 to 2}
+                    <span class="input-group">
+                        <span class="input-group-addon-left">排序{$i+1}</span>
+            <select name="orders[{$i}][key]">
+                {foreach from=$fields item=item key=key}
+                <option value="{$key}" {if !empty($orders[$i][ 'key']) and $orders[$i][ 'key'] eq $key}selected="selected" {/if}>{$item}</option>
+                {/foreach}
+            </select>
+            <select class="border-left-none" name="orders[{$i}][desc]">
+                <option value="0">升序</option>
+                <option value="1" {if !empty($orders[$i][ 'desc'])}selected="selected" {/if}>降序</option>
+            </select>
+            </span>
+            {/for}
+            </span>
+            <button type="submit" style="margin-left: 10px;" class="uiBtn BtnBlue l">搜索</button>
+            <a style="margin-left: 10px;" class="uiBtn" href="#!chat/autoreplay">重置</a>
+ 
+        </div>
+    </form>
+    <table class="list">
+        <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th class="w100">关键字</th>
+                <th class="w30">模糊匹配</th>
+                <th class="w300">回复</th>
+                <th class="w80">创建时间</th>
+                <th class="w80">状态</th>
+                <th class="w200">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {if $data.list} {foreach from=$data.list item=m}
+            <tr>
+                <td align='center'>{$m.id}</td>
+                <td>{$m.keyword}</td>
+                <td align='center'>
+                    {if $m.type==1}
+                    <a href="javascript:;" class="c-green" onclick="main.chang_status('{$m.id}','chat_autoreplay','type')" title="点击切换到模糊">精确匹配</a> {else}
+                    <a href="javascript:;" class="c-red" onclick="main.chang_status('{$m.id}','chat_autoreplay','type')" title="点击可切换到精确">模糊匹配</a> {/if}
+                </td>
+                <td>{$m.content}</td>
+                <td>{date('Y-m-d H:i:s',$m.create_time)}</td>
+                <td align='center'>
+                    {if $m.status==1}
+                    <a href="javascript:;" class="c-green" onclick="main.chang_status('{$m.id}','chat_autoreplay','status')" title="点击可禁用">已启用</a> {else}
+                    <a href="javascript:;" class="c-red" onclick="main.chang_status('{$m.id}','chat_autoreplay','status')" title="点击可启用">已禁用</a> {/if}
+                </td>
+                <td class="opera" align='center' nowrap>
+                    <a class="uiBtn" href="#!chat/autoreplay_edit?id={$m.id}&com=xshow|自动回复编辑"> 编辑</a>
+                    <a class="uiBtn" href="javascript:;" onclick="main.confirm_del('chat/autoreplay_del/{$m.id}')">删除</a>
+                </td>
+            </tr>
+            {/foreach} {/if}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+</div>

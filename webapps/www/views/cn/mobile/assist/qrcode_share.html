@@ -1,0 +1,24 @@
+<div class="help-fx2-1 mui-clearfix mui-text-center pic"><img src="{$data.row.img_cover}" id="goods_thumb" ></div>
+<dl class="help-fx2-2">
+    <dt>
+        <span>长按二维码领取</span>
+    <p><img src="{$data.qrurl}"></p>
+    </dt>
+    <dd>
+        <div class="help-fx3 mui-clearfix">
+            <em><img src="{photo($data.row.mid)}"></em>
+            <p>{$data.row.username|truncate:10}</p>
+        </div>
+        <div class=" help-fx3-1">我免费领取了“{$data.row.name|truncate:10}“</div>
+        <div class="help-fx3-2 mui-clearfix">快来和我一起免费领取吧</div>
+        <div class="help-fx3-3 mui-clearfix">
+            <strong>￥0</strong>
+            <p>市场价 ￥{$data.row.price}</p>
+        </div>
+    </dd>
+</dl>
+<script>
+    {if C('cloudsave')==1}
+    $("#goods_thumb").attr("src","/goods/get_pic/?picurl={$data.row.img_cover}");
+    {/if}
+</script>

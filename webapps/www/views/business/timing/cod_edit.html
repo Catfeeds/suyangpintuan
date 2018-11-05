@@ -1,0 +1,106 @@
+{include file='../public_btn.html'}
+
+<div class="html-box">
+
+    <form target="iframeNewsTarget" method="post" action="/business/timing/editCod">
+
+
+
+    <table class="table-list">
+
+    <tbody>
+
+
+
+        <tr>
+
+            <td class="td-label"><label>开奖号：<span class="c-red">*</span></label></td>
+
+            <td class="td-input">
+
+                <input type="text" class="form-i w200" name="post[cod]" value="" />
+
+            </td>
+
+        </tr>
+
+
+
+        <tr>
+
+            <td class="td-label"><label>下期开奖日：</label></td>
+
+            <td class="td-input">
+
+                <input class="form-i Wdate" name="post[nexttime]" id="nexttime" value="" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd', minDate:'%y-%M-%d' })" readonly />
+
+                <div class="form-tip">默认为次日</div>
+
+            </td>
+
+        </tr>
+
+
+
+        <tr class="tr-btn">
+
+            <td class="td-label"></td>
+
+            <td class="td-input">
+
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+
+            </td>
+
+        </tr>
+
+
+
+        <tr>
+
+            <td class="td-input" colspan="2">
+
+                <div class="form-tip">
+
+                    开奖网址：<br>
+
+                    <a href="http://cj.gw.com.cn/news/index/000001.shtml" target="_blank">http://cj.gw.com.cn/news/index/000001.shtml</a> 大智慧财经<br>
+
+                    <a href="http://finance.ifeng.com/app/hq/stock/sh000001/" target="_blank">http://finance.ifeng.com/app/hq/stock/sh000001/</a> 凤凰网财经<br>
+
+                    <a href="http://www.10jqka.com.cn/" target="_blank">http://www.10jqka.com.cn/</a> 同花顺网站<br>
+
+                    注意事项：<br>
+
+                    - 开奖号：以上三个网址的上证指数，出现率最高的设置为开奖号<br>
+
+                    - 处理竞拍信息：当天14点前所有未开奖的出价信息<br>
+
+                    - 最佳发布时间：每天15点30分待指数稳定后<br>
+
+                    - 每天只能发布一期，发布后不可更改，请仔细确认后发布<br>
+
+                    - 双休日没有指数时，可以设置下期开奖日
+
+                </div>
+
+            </td>
+
+        </tr>
+
+
+
+    </tbody>
+
+    </table>
+
+
+
+    </form>
+
+</div>
+
+
+

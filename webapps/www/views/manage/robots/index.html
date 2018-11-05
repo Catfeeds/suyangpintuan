@@ -1,0 +1,98 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <span class="form-tip">本程序将从虚拟数据随机提取会员夺宝</span>
+    <form target="_blank" method="post" action="/manage/robots/done" >
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>当前虚拟数据总数：</label></td>
+                <td class="td-input">{$robots_num}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>随机人次最大数：</label></td>
+                <td class="td-input"><input class="form-i w140" name="buy_num" value="1" type="text"> <span class="form-tip">设置为1以上，全站商品总价格以下的正数。</span></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>随机间隔购买时间间隔最大数：</label></td>
+                <td class="td-input"><input class="form-i w140" name="buy_time" value="1" type="text"> <span>秒</span> <span class="form-tip">设置为1秒以上</span></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>指定购买的夺宝商品：</label></td>
+                <td class="td-input" id="choose_goods">
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                 <table width="100%">
+                     <thead>
+                     <tr>
+                         <th width="5%">ID</th>
+                         <th width="55%">商品标题</th>
+                         <th width="15%">已参与/总需</th>
+                         <th  width="10%">单价(元)</th>
+                         <th width="15%">期数/最大期数</th>
+                     </tr>
+                     </thead>
+                     <tbody id="goodsbody">
+
+                     </tbody>
+                     <tfoot>
+                     <tr>
+                         <td colspan="20" align="center">
+                             <button class="uiBtn BtnBlue" type="button" onclick="prev();">上一页</button>
+                             <button class="uiBtn BtnBlue" type="button" onclick="next();">下一页</button></td>
+                     </tr>
+                     </tfoot>
+                 </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">&nbsp;</td>
+                <td><button class="uiBtn BtnGreen" name="Submit" type="submit">执行</button></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" id="current_page" value="1">
+        <input type="hidden" id="page_total" value="1">
+        <input type="hidden" name="ids" id="ids" value="0,">
+    </form>
+</div>
+<script type="">
+load_db(1);
+
+function prev(){
+    var current_page = G('current_page').value*1;
+    var page_total = G('page_total').value*1;
+    if(current_page==1) return false;
+    load_db(current_page-1);
+}
+function next(){
+    var current_page = G('current_page').value*1;
+    var page_total = G('page_total').value*1;
+    if(current_page==page_total) return false;
+    load_db(current_page+1);
+}
+function load_db(page){
+    var D={
+        ids:G('ids').value
+    };
+    var url = "robots/load_db/"+page;
+    $post( { url:url,method:'get',data:D,dataType:'json',callback:function(x){
+        G('goodsbody').innerHTML= x.html;
+        G('current_page').value= x.current_page;
+        G('page_total').value= x.page_total;
+    } } );
+}
+function choose(obj,id){
+    if(obj.checked){
+        G('choose_goods').innerHTML += '<p id="choose'+id+'">'+G('tit'+id).innerHTML+'</p>';
+        G('ids').value+= id+",";
+    }else{
+        G('choose'+id).innerHTML = "";
+        G('choose'+id).id = "";
+        var str = G('ids').value;
+        G('ids').value = str.replace(','+id+',',',');
+    }
+}
+</script>

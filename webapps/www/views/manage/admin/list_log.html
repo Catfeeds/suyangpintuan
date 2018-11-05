@@ -1,0 +1,65 @@
+<h3 class="info-tag">
+    <form class="cond-form r" method="post" action="/manage/admin/del_log" target="iframeNewsTarget" onsubmit="if(!confirm('确认清除吗？')) return false;" style="padding: 0;">
+        <select name="log_date">
+            <option value="0">-请选择清除的日期-</option>
+            <option value="7">一周之前</option>
+            <option value="30">一个月之前</option>
+            <option value="90">三个月之前</option>
+            <option value="180">半年之前</option>
+            <option value="365">一年之前</option>
+        </select>
+        <button type="submit" class="uiBtn BtnOrange" style="padding:1px 10px;">清除日志</button>
+    </form>
+
+    {foreach from=$btnMenu item=m key=key}
+    <a class="uiBtn{if $btnNo==key} BtnBlue{/if}" href="{$m.url}"{if $m.str} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!admin/log" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $k eq 'username'}selected{/if}>操作者</option>
+                <option value="log_info" {if $k eq 'log_info'}selected{/if}>操作记录</option>
+                <option value="ip_address" {if $k eq 'ip_address'}selected{/if}>IP地址</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$q}" type="text">
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+    <table class="list">
+        <thead>
+            <tr>
+                <th align="left" class="w80">编号</th>
+                <th align="left" class="w120">操作者</th>
+                <th align="left" class="w160">操作日期</th>
+                <th align="left" class="w140">IP地址</th>
+                <th align="left">操作记录</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$data.list item=m}
+            <tr>
+                <td align="left" nowrap>{$m.log_id}</td>
+                <td align="left" nowrap>{$m.username}</td>
+                <td align="left">{$m.log_time|date_format:'Y-m-d H:i:s'}</td>
+                <td align="left" nowrap>{$m.ip_address}</td>
+                <td class='c-gray'>
+                    {$m.log_info}
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+    </form>
+
+</div>
+

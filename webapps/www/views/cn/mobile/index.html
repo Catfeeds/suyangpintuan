@@ -1,0 +1,241 @@
+{$nav = 1}{$slider = 1}{$active = 1}{$notice = 1}
+{include file="public_header.html"}
+<script src="/default/js/jquery.SuperSlide.2.1.1.js" type="text/javascript" charset="utf-8"></script>
+<header id="header" class="mui-bar mui-bar-nav">
+	<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+		<div class="mui-scroll">
+			<a class="mui-control-item mui-active" href="{url()}">
+				首页
+			</a>
+			{foreach from=$data.cat_list item=m key=k}
+			{if $m.ismenu==1}
+			<a class="mui-control-item " href="goods/index/{$m.id}">
+				{$m.catname}
+			</a>
+			{/if}
+			{/foreach}
+		</div>
+	</div>
+</header>
+<div class="refreshContainer mui-scroll-wrapper" id="pull1">
+	<div class="mui-scroll">
+		{if $data.ad_list[1]}
+		<div id="slider" class="mui-slider" >
+			<div class="mui-slider-group mui-slider-loop">
+				<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+				{$ad_fir=$data.ad_list[1].images[0]}
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="{$ad_fir.title|default:'javascript:;'}">
+						<img src="{zz mod=fileurl source=$ad_fir.path}">
+					</a>
+				</div>
+				{foreach from=$data.ad_list[1].images item=m key=k}
+				<div class="mui-slider-item">
+					<a href="{$m.title|default:'javascript:;'}">
+						<img src="{zz mod=fileurl source=$m.path}">
+					</a>
+				</div>
+				{/foreach}
+				<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+				{$ad_end=end($data.ad_list[1].images)}
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="{$ad_end.title|default:'javascript:;'}">
+						<img src="{zz mod=fileurl source=$ad_end.path}">
+					</a>
+				</div>
+			</div>
+			<div class="mui-slider-indicator">
+				{foreach from=$data.ad_list[1].images item=m key=k}
+				<div class="mui-indicator {if $k==0}mui-active{/if}"></div>
+				{/foreach}
+			</div>
+		</div>
+		{/if}
+		{$index_ad = getAd(17)}
+		{if $index_ad}
+		{zz mod=fileurl source=$index_ad var=ad17 type=3}
+		<div class="head-banner clearfix white-bg">
+			<a href="{$ad17.0.title|default:'javascript:;'}"><img src="{$ad17.0.path}"></a>
+		</div>
+		{/if}
+		<ul class="mui-table-view mui-grid-view mui-grid-9">
+			{foreach from=$data.nav_top item=m}
+			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="{$m.linkurl}">
+				<span class="mui-icon"><img src="{zz mod=fileurl source=$m.img}"/></span>
+				<div class="mui-media-body">{$m.title}</div></a>
+			</li>
+			{/foreach}
+		</ul>
+		{if $data.square && C('is_square')}
+		<div class="head-1 clearfix white-bg">
+			<dl class="clearfix">
+				<dt><img src="/style/img/index-1.png"></dt>
+				<dd>
+					<div class="head-top clearfix">
+						<div class="bd">
+							<ul>
+								{foreach from=$data.square item=m}
+								<li>
+									<a href="/goods/team/{$m.common_id}" class="head-2">
+										<span>热议</span>
+										<p>{$m.square_desc}</p>
+									</a>
+								</li>
+								<li>
+									<a href="/goods/show/{$m.goods_id}" class="head-2">
+										<span>产品</span>
+										<p>{$m.goods_name}</p>
+									</a>
+								</li>
+								{/foreach}
+							</ul>
+						</div>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		{/if}
+		{if C('index_spread')}
+		<div class="clearfix height1"></div>
+		<div class="index-cp clearfix white-bg">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="index-cp-table">
+				<tr>
+					<th rowspan="2" width="42%">
+						<div class="index-cp-left">
+							{if $data.kill.id>0}
+							<big class="index-cp-big color">{$data.kill.tp_name}</big>
+							<p class="index-cp-p">{$data.kill.tp_desc}</p>
+							<div class="fx-box2 clearfix">
+								<div class="group-tit clearfix">
+			           					<span id="leftTimeJx9527">
+			           						<label>00</label>
+			           						<b>:</b>
+			           						<label>00</label>
+			           						<b>:</b>
+			           						<label>00</label>
+			           					</span>
+								</div>
+							</div>
+							<script src="/style/js/lefttime.js" type="text/javascript"></script>
+							<script>onload_leftTime_jx(9527,"{$data.kill_etime}","label","","b");</script>
+							<div class="index-cp-img">
+								<a href="{$data.kill.url}"><img src="{$data.kill.thumbs}"></a>
+								<em>{(int)$data.kill.team_price}元<br />限量购</em>
+							</div>
+							{else}
+							<a href="{$data.kill.url}"><img src="{$data.kill.thumbs}"></a>
+							{/if}
+						</div>
+					</th>
+					<td width="29%">
+						<div class="index-cp-left">
+							{if $data.spread2.id>0}
+							<big class="index-cp-big color1">{$data.spread2.tp_name}</big>
+							<p class="index-cp-p">{$data.spread2.tp_desc}</p>
+							<div class="index-cp-img">
+								<a href="{$data.spread2.url}"><img src="{$data.spread2.thumbs}"></a>
+							</div>
+							{else}
+							<a href="{$data.spread2.url}"><img src="{$data.spread2.thumbs}"></a>
+							{/if}
+						</div>
+					</td>
+					<td>
+						<div class="index-cp-left">
+							{if $data.spread3.id>0}
+							<big class="index-cp-big color2">{$data.spread3.tp_name}</big>
+							<p class="index-cp-p">{$data.spread3.tp_desc}</p>
+							<div class="index-cp-img">
+								<a href="{$data.spread3.url}"><img src="{$data.spread3.thumbs}"></a>
+							</div>
+							{else}
+							<a href="{$data.spread3.url}"><img src="{$data.spread3.thumbs}"></a>
+							{/if}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="index-cp-left">
+							{if $data.spread4.id>0}
+							<big class="index-cp-big color3">{$data.spread4.tp_name}</big>
+							<p class="index-cp-p">{$data.spread4.tp_desc}</p>
+							<div class="index-cp-img">
+								<a href="{$data.spread4.url}"><img src="{$data.spread4.thumbs}"></a>
+							</div>
+							{else}
+							<a href="{$data.spread4.url}"><img src="{$data.spread4.thumbs}"></a>
+							{/if}
+						</div>
+					</td>
+					<td>
+						<div class="index-cp-left">
+							{if $data.spread5.id>0}
+							<big class="index-cp-big color4">{$data.spread5.tp_name}</big>
+							<p class="index-cp-p">{$data.spread5.tp_desc}</p>
+							<div class="index-cp-img">
+								<a href="{$data.spread5.url}"><img src="{$data.spread5.thumbs}"></a>
+							</div>
+							{else}
+							<a href="{$data.spread5.url}"><img src="{$data.spread5.thumbs}"></a>
+							{/if}
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		{/if}
+		{if $data.list_best}
+		<div class="sy-hot">
+			<div class="hot-title">
+				<span>热门活动<i>热门好货必须拼了</i></span>
+			</div>
+			<div id="hot-gd" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<div class="mui-scroll">
+					{foreach from=$data.list_best item=m}
+					<a class="mui-control-item" href="/goods/show/{$m.id}">
+						<img src="{$m.img_cover}"/>
+						<p>{$m.name}</p>
+						<div class="mui-card-footer">
+							<div class="mui-card-link">
+								<span class="rmb">¥</span>
+								<span class="price-int">{$m.team_price}</span>
+								<span class="price-ori">¥{$m.price}</span>
+							</div>
+						</div>
+					</a>
+					{/foreach}
+					<a class="mui-control-item hot-agd" href="/goods/index/?is_best=1" style="display: none;">
+						查看<br />全部
+					</a>
+				</div>
+			</div>
+		</div>
+		{/if}
+		<div class="hot-list">
+			{foreach from=$data.list_hot item=m key=k}
+			{include file="goods/lbi/goods_list.html"}
+			{/foreach}
+		</div>
+		{if C('is_contact')}
+		{include file="public_contact.html"}
+		{/if}
+	</div>
+</div>
+</div>
+<script>
+    {literal}var D = {load: 1,is_hot:1,index:1,typeid:0};{/literal}
+    //load:1必填
+	{if C('index_goods')}
+    var ajax_url = "/topic/getTopicGoods/2/";//请求的地址
+	{else}
+    var ajax_url = "/goods/index/0/";//请求的地址
+	{/if}
+    var ajax_class = ".hot-list";//加载的元素
+    var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+
+    {literal} jQuery(".head-top").slide({mainCell:".bd ul",autoPlay:true,effect:"top",vis:2,autoPage:true,});	{/literal}
+</script>
+{include file="public_scroll.html"}
+{$share_logo = C('share_logo.png','images')}
+{include file="public_footer.html"}

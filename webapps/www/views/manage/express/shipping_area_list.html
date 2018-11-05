@@ -1,0 +1,37 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+        <table class="list">
+            <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th class="w180" align="left">配送区域名称</th>
+                <th align="left">费用规则</th>
+                <th align="left">所辖地区</th>
+                <th align="center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$list item=m}
+            <tr>
+                <td align="center">{$m.id}</td>
+                <td align="left">{$m.name}</td>
+                <td align="left" class="c-gray">
+                    <p>初始重量：{$m.config.cs_weight}KG</p>
+                    <p>初始费用：{$m.config.cs_price}</p>
+                    <p>每KG续费：{$m.config.xf_weight}</p>
+                </td>
+                <td align="left">{$m.linkage_name}</td>
+                <td align="center">
+                    <a href='#!express/editExpressShipping/{$m.id}?express_id={$smarty.get.id}&com=xshow|编辑快递公司' class='iconfont icon-a' title='编辑'>&#xe603;</a>
+                    <a href='javascript:;' onclick="main.confirm_del('express/delExpressShipping','{$m.id}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        <div class="foot-btn">
+            <div class="pager r">{$page}</div>
+        </div>
+    </form>
+</div>

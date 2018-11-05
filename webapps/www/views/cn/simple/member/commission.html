@@ -1,0 +1,41 @@
+{$headTit="我的收益"}
+
+{include file="public_header.html"}
+
+<link href="/style/style/enter.css" rel="stylesheet" />
+
+<style type="text/css">
+
+    body{ background: #fff; min-height: 100%; }
+
+    .head_fx{ height: 91px; }
+
+</style>
+
+<div class="main pd_10 f14 top_b beijing2">
+
+    <div class="income">
+
+        <i class="icon iconfont">&#xe61b;</i>
+
+        <p>我的收益</p>
+
+        <strong>{$member.commission}</strong>
+
+    </div>
+
+    <a href="/member/commission_list" class="car_add1 center_bor"><span>收益明细</span></a>
+
+    <a href="/member/myivt" class="car_add1 center_bor my"><span>邀请好友</span></a>
+
+    <a href="/member/withdraw_commission" class="car_add1 center_bor my"><span>提现</span></a>
+
+    <a href="/member/withdraw_list" class="car_add1 center_bor my"><span>提现记录</span></a>
+
+    <a href="/member/recharge_commission" class="car_add1 center_bor my"><span>充值到余额</span></a>
+
+</div>
+
+{include file="public_footer_nav.html"}
+
+{include file="public_footer.html"}

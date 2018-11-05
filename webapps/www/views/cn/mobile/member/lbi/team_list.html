@@ -1,0 +1,24 @@
+<div class="prize-box">
+	<h2>{if $m.status_common==1}组团中{elseif $m.status_common==10}组团成功{elseif $m.status_common==2}组团失败{/if}</h2>	
+	<dl class="clearfix">
+		<dt>
+			<a href="/goods/show/{$m.goods.0.good_id}"><img src="{$m.goods.0.img_cover}"/></a>
+		</dt>
+		<dd>
+			<a href="/goods/show/{$m.goods.0.good_id}">{$m.goods.0.goods_name}</a>
+			<p class="tuan-jg">{if $m.goods.0.team_num}{$m.goods.0.team_num}{else}{$m.goods.0.goods_team_num}{/if}人团 <span class="rmb">￥{$m.goods.0.sell_price}</span></p>
+		</dd>
+	</dl>
+	<div class="prize-btn">
+		{if $m.status_common eq $smarty.const.TEAM_ING && ($m.square_desc == '' || $m.square_time == '')}
+		<button type="button" class="mui-btn mui-btn-danger" onclick="showIssue({$m.id})">发布</button>
+		{else}
+		<button type="button" class="mui-btn" onclick="tourl('/member/order?order_sn={$m.order_sn}')">订单详情</button>
+        {/if}
+		{if $m.status_common eq $smarty.const.TEAM_ING}
+		<button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/goods/team/{$m.common_id}')">邀请好友拼团</button>
+		{else}
+		<button type="button" class="mui-btn" onclick="tourl('/goods/team/{$m.common_id}')">拼团详情</button>
+		{/if}
+	</div>
+</div>

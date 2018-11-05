@@ -1,0 +1,90 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <input type="hidden" name="post[id]" value="{if !empty($row.id)}{$row.id}{/if}" />
+    <table class="table-list">
+        <tbody>
+            <tr>
+                <td class="td-label">
+                    <label>中奖描述:</label>
+                </td>
+                <td class="td-input">
+                    {$row.remark}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>中奖时间: </label>
+                </td>
+                <td class="td-input">
+                    {date('Y-m-d H:i:s', $row.create_time)}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>奖品信息: </label>
+                </td>
+                <td class="td-input">
+                    <div class="clear">
+                        <img class="good-img l" src="{if isset($row.good.img_src)}{$row.good.img_src}{/if}" width="60" height="60" style="margin-right: 10px;display:inline-block;">
+                        <span class="l">
+                        <p class="good-name">{if isset($row.good.name)}{$row.good.name}{/if}</p>
+                        <p><label>当前库存: </label><span class="c-red good-stock">{if isset($row.good.stock)}{$row.good.stock}{/if}</span></p>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>用户留言: </label>
+                </td>
+                <td class="td-input">
+                    {if empty($row.message_from)}暂无留言{else}{$row.message_from}{/if}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>收货地址: </label>
+                </td>
+                <td class="td-input">
+                    {if !empty($address)}
+                    <p><span>姓名: </span>{$address.name}</p>
+                    <p><span>电话: </span>{$address.mobile}</p>
+                    <p><span>地址: </span>{$address.area} {$address.address}</p>
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>商家留言: </label>
+                </td>
+                <td class="td-input">
+                    <p>{if isset($row.message_to)}{$row.message_to}{/if}</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>快递名称: <i class="c-red">*</i></label>
+                </td>
+                <td class="td-input">
+                    <p>{if isset($row.express_name)}{$row.express_name}{/if}</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>快递单号: <i class="c-red">*</i></label>
+                </td>
+                <td class="td-input">
+                    <p>{if isset($row.express_sn)}{$row.express_sn}{/if}</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label>已经发货: </label>
+                </td>
+                <td class="td-input">
+                    {if $row.status eq 1}是{else}否{/if}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

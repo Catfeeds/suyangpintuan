@@ -1,0 +1,26 @@
+{$headTit="物流详情"} {include file="public_header.html"}
+<h2 class="wl-title">物流详情</h2>
+<div class="page-box">
+        <dl class="wl-hz clearfix">
+                <dt><img src="/style/img/kd.png"/></dt>
+                <dd>
+                        <p>物流公司:{$row['express']}</p>
+                        <p>快递单号:{$row['express_num']}</p>
+                        <p>官方电话:<a href="tel://{C('contact_mobile')}">{C('contact_mobile')}</a></p>
+                </dd>
+        </dl>
+
+        <div class="area-box wl-gz">
+                <h2>物流跟踪</h2>
+                <div class="wl-txt">
+                        <p>物流的信息列表</p>
+                        <p>物流的信息列表</p>
+                        <p>物流的信息列表</p>
+                        <p>物流的信息列表</p>
+                        <p>物流的信息列表</p>
+                        <p>物流的信息列表</p>
+                </div>
+        </div>		
+        {include file="public_rand.html"}		
+</div>
+{include file="public_footer.html"}

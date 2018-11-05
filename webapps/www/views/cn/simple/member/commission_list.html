@@ -1,0 +1,40 @@
+{$headTit=L('unit_comm')}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">我的{L('unit_comm')}</h1>
+</header>
+
+{if $data.list}
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">
+    <div class="mui-scroll">
+        <div class="mui-content">
+            <div class="my-money">
+                <span>{L('unit_comm')}总额（元）</span>
+                <h2>{$member.commission_total|default:'0.00'}</h2>
+            </div>
+        </div>
+        <div class="hot-list">
+        {foreach from=$data.list item=m}
+        {include file="member/lbi/commission_list.html"}
+        {/foreach}
+        </div>
+    </div>
+</div>
+{else}
+{$empty_tip = "没有记录!"}
+{include file="public_empty.html"}
+{/if}
+<div class="my-bottom">
+</div>
+<nav class="mui-bar mui-bar-tab mui-bar-ct">
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1 ct-btn3" onclick="tourl('/member/withdraw_commission')">申请提现</button>
+</nav>
+<script>
+    {literal}var D = {load: 1};//load:1必填{/literal}
+    var ajax_url = "/member/comms_list/";//请求的地址
+    var ajax_class = ".hot-list";//加载的元素
+    var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

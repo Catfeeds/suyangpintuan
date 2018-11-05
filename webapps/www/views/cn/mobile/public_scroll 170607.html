@@ -1,0 +1,34 @@
+{literal}
+<script>
+    mui.init({
+        pullRefresh: {
+            container: '.refreshContainer',
+            up: {
+                contentrefresh: '正在加载...',
+                contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+                callback: pullupRefresh
+            }
+        }
+    });    
+    var count = 1;
+    if(ajax_type==1){
+        count = 0;
+        pullupRefresh();
+    }
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh() {
+        count++;
+        mui.get(ajax_url + count, D, function(data) {
+            if (data) {
+                mui('.refreshContainer').pullRefresh().endPullupToRefresh(false);
+                $(ajax_class).append(data);
+            } else {
+                mui('.refreshContainer').pullRefresh().endPullupToRefresh(true);
+                $("#tsupport").hide();
+            }
+        });
+    }  
+</script>
+{/literal}

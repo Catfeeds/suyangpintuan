@@ -1,0 +1,55 @@
+{include file="public_header.html"}
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<div class="rzlc-box">
+    <div class="content-box clearfix">
+        <div class="pull-left rzlc-t1">
+            <span>欢迎入驻</span><br />拼团网站
+        </div>
+        <div class="pull-right">
+            <ul class="rzlc-li">
+                <li >1.填写店铺信息</li>
+                <li>2.填写企业/个人信息</li>
+                <li>3.资质审核</li>
+                <li class="active">4.支付保障金费用</li>
+                <li>5.完成入驻</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="news-box">
+    <div class="content-box rz-box">
+        <div class="clearfix lc-dbox" id="lc-zctable">
+            <div class="gr-rz">
+                <h2>支付认证费用</h2>
+                <div class="lc-zctable">
+                    <table>
+                        <tr>
+                            <th>平台商家认证费用：</th>
+                            <td><span class="rmb">{$data.b_info.fee}元</span></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                平台商家保证金：
+                            </th>
+                            <td>
+                                <span class="rmb">{$data.b_info.deposit}元</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                合计：
+                            </th>
+                            <td>
+                                <span class="rmb">{price_format($data.b_info.fee+$data.b_info.deposit)}元</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="lc-zctable">
+                    {$payment_info.pay_button}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public_footer.html"}

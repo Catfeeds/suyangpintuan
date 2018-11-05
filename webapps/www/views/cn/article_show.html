@@ -1,0 +1,38 @@
+{include file="public_header.html"}
+{$ad = getAd(53)}
+<div class="ban-box" style="background: url({zz mod=fileurl source=$data.ban_thumb}) no-repeat center center; height: 250px;">
+	<div class="content-box clearfix">
+		<div class="pull-left help-l">
+			<p>掌握最新资讯，了解更多行业动态</p>
+			<h2>{$data.cat.catname}</h2>
+		</div>
+		<div class="pull-right help-r">
+			<p>客服热线：{C("business_tel")}</p>
+			<p>工作时间：8:30—20:30</p>
+		</div>
+	</div>
+</div>
+<div class="news-box">
+	<div class="content-box news-xq">
+		<div class="news-tt">
+			<h1>{$data.row.title}</h1>
+			<p><span> {$data.row.hits} 次 </span>{$data.row.createtime|date_format:'Y-m-d'}</p>
+			<div class="fx-abs">
+				<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a></div>
+				<script>var bdtext = '{$data.row.title}';
+				{literal}window._bd_share_config={"common":{"bdSnsKey":{},"bdText":bdtext,"bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":[],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":[]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>{/literal}
+			</div>
+		</div>
+		<div class="newx-txt1">
+			<p>{$data.row.content}</p>
+		</div>
+		{zz mod=pn var=pn catid=$data.cat.id id=$data.row.id}
+		{if $pn.prev || $pn.next}
+		<ul class="news-fy clearfix">
+			<li>上一篇：{if $pn.next}<a href="{$pn.next.url}">{$pn.next.title|truncate:"16":"...":true}</a>{else}没有了{/if}</li>
+			<li>下一篇：{if $pn.prev}<a href="{$pn.prev.url}">{$pn.prev.title|truncate:"16":"...":true}</a>{else}没有了{/if}</li>
+		</ul>
+		{/if}
+	</div>
+</div>
+{include file="public_footer.html"}

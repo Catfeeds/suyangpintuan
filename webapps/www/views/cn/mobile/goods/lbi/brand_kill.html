@@ -1,0 +1,28 @@
+{include file="public_topic.html"}
+<div class="mui-card ">
+	<div class="mui-card-header mui-card-media">
+		<a href="/goods/show/{$m.id}"><img src="{$m.img_src}"/></a>
+                <div class="ribbon">
+                    <span>{discount($m.price,$m.team_price)}折</span>
+                    <span>{$m.team_num}人团</span>
+                </div>
+	</div>
+	<div class="mui-card-content">
+		<div class="mui-card-content-inner">
+			<p>{$m.name}</p>
+		</div>
+	</div>
+	<div class="mui-card-footer">
+		<div class="mui-card-link">
+			<span class="rmb">￥</span>
+			<span class="price-int">{$m.team_price}</span>
+			<span class="price-ori">￥{$m.price}</span>
+		</div>
+		<div class="mui-card-link">
+			{if $m.sales_num+$m.sell>0}已拼：{formatNum($m.sales_num+$m.sell)}{/if}<button type="button" class="mui-btn mui-btn-danger buy_team"  onclick="location.href='/goods/show/{$m.id}'">立即抢购</button>
+			<!--<dl class="barbox clearfix">
+				<dt> 已售：{formatNum($m.sales_num+$m.sell)}</dt>
+			</dl>-->
+		</div>
+	</div>
+</div>

@@ -1,0 +1,48 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/message" onsubmit="return xForm.submit(this)">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="title" {if $smarty.get.k eq 'title'}selected{/if}>公告标题</option>
+                <option value="content" {if $smarty.get.k eq 'content'}selected{/if}>公告内容</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$smarty.get.q}" type="text">
+            <label class="ui-label">发送者（管理员 <input type="checkbox" name="mid_type" value="1" {if $smarty.get.mid_type eq 1}checked{/if} />）：</label>
+            <input id="username" class="form-i w160 sitem" name="username" value="{$smarty.get.username}" type="text">
+            <label class="ui-label">接收者（管理员 <input type="checkbox" name="tomid_type" value="1" {if $smarty.get.tomid_type eq 1}checked{/if} />）：</label>
+            <input id="tousername" class="form-i w160 sitem" name="tousername" value="{$smarty.get.tousername}" type="text">
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+
+    <table class="list" style="width:100%">
+        <thead>
+        <tr>
+            <th class="w40">ID</th>
+            <th class="title">公告标题</th>
+            <th class="w80">发送者</th>
+            <th class="w80">接收者</th>
+            <th class="w300">发送时间</th>
+            <th class="w80">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td>{$m.id}</td>
+            <td class="title">{$m.title}</td>
+            <td>{$m.username}</td>
+            <td>{$m.tousername}</td>
+            <td>{date('Y-m-d H:i',$m.add_time)}</td>
+            <td>
+                <a href='#!member/message_edit/{$m.id}&com=xshow|编辑公告' class='iconfont icon-a' title='编辑'>&#xe603;</a>
+                <a href='javascript:;' onclick="main.confirm_del('member/del_msg','{$m.id}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {$page}
+
+</div>

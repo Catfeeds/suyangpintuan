@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>duobao虚拟数据</title>
+<script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
+<style type="text/css">
+body,ul,div,p,h1,h2{ padding: 0px; margin: 0px; }
+.red{ color:#ff6600}
+</style>
+</head>
+<body>
+<div style="width: 800px; margin: 10px auto;">
+    <h2>duobao虚拟数据正在执行,关闭页面虚拟数据将停止工作.</h2>
+    <ul style="padding:10px;">
+        <li>参与duobao虚拟数据总数:{$data.robots_num}</li>
+        <li>随机人次最大值:{$data.buy_num}</li>
+        <li>随机时间间隔最大值:{$data.buy_time}</li>
+        <li>指定购买的duobao商品总数:{$data.join_goods|count}</li>
+    </ul>
+    <h2 style="font-size:16px;">执行日志 共执行<span class="num">0</span>次,参与duobao<span class="join">0</span>人次</h2>
+    <div id="join_log" style="height: 500px; overflow-y:scroll;">
+
+    </div>
+    <div style="text-align: center">
+        <button class="btn stop" style="background:#69A74E; padding: 10px; border: none; border-radius:3px; color: #fff; font-weight: bold;">停止执行</button>
+    </div>
+</div>
+<script type="text/javascript">
+var buytime = '{$data.buy_time}';
+var ids = '{$data.ids}';
+var num = '{$data.buy_num}';
+var t
+$(function(){
+   $(".btn").click(function(){
+       if($(this).hasClass('stop')){
+           clearTimeout(t);
+           $(this).removeClass('stop');
+           $(this).html('继续执行');
+       }else{
+           doyunbuy();
+           $(this).addClass('stop');
+           $(this).html('停止执行');
+       }
+   });
+});
+doyunbuy();
+function doyunbuy(){
+    $.post('/manage/robots/done', {
+                num: num,
+                ids: ids
+            },
+            function (data){
+                var dotime = 1000*rd(0.1,buytime);
+                if(!data.error){
+                    $("#join_log").prepend("<p>虚拟数据<span class='red'> "+data.username+"</span>参与yungou<a class='red' target='_blank' href='/yunbuy/detail/"+data.buy_id+"'>"+data.goods_name+"</a>duobao<span class='red'>"+data.num+"</span>人次 "+data.time+"</p>");
+                    $(".num").html($(".num").html()*1+1);
+                    $(".join").html($(".join").html()*1+data.num);
+                }else{
+                    $("#join_log").prepend("<p>"+data.error+" "+data.time+"</p>");
+                }
+                t = setTimeout('doyunbuy()',dotime);
+            },
+            "json"
+    );
+}
+function rd(n,m){
+    var c = m-n+1;
+    return Math.floor(Math.random() * c + n);
+}
+</script>
+</body>
+</html>

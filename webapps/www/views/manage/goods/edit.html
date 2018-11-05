@@ -1,0 +1,792 @@
+{include file='../public_btn.html'}
+{literal}<style type="text/css">
+    .stocks table{width:100%}
+    .spec-item{width:140px; display:inline-block}
+    .spec-item *{display:inline-block; vertical-align:middle}
+    .spec-item span{width:100px}
+</style>{/literal}
+<div class="html-box">
+    <form target="iframeNewsTarget" enctype="multipart/form-data" method="post" action="/manage/goods/edit" id="goods-form" name="goods-form">
+        <input name="post[id]" type="hidden" value="{if !isset($smarty.request.type)}{$row.id}{/if}" />
+        <input name="post[sid]" type="hidden" value="{$row.sid}" />
+        <input name="post[typeid]" type="hidden" value="{$row.typeid}" />
+        <input type="hidden" id="product_cid"  value="0" />
+        <input type="hidden" id="x_cate" value="{$row.cate}">
+        <input type="hidden" id="x_subcate" value="{$row.subcate}">
+        <div class="iTab e1-com-iTab clear">
+            <a href="javascript:;" class="tab-btn on">基础信息</a>
+            <a href="javascript:;" class="tab-btn">商品详情</a>
+            {*<a href="javascript:;" class="tab-btn">商品属性</a>*}
+            <a href="javascript:;" class="tab-btn">其他信息</a>
+            {if C('comss')}<a href="javascript:;" class="tab-btn">佣金设置</a>{/if}
+        </div>   
+        <br/>
+        <div class="tab-mod">
+            <table class="table-list">{*基础信息*}
+                <tbody>
+                    <tr class="table-h3">
+                        <td colspan="2">类型选择（其他类型的团可以转为普通拼团，普通拼团不可转为其他类型的团）</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>商品类型：<span class="c-red">*</span></label></td>
+                        <td class="td-input">
+                            {foreach from=$actTypes item=act}
+                            <input class="form-i typeid" {if $row.id && !isset($smarty.request.type) && $act.id>1}disabled=""{/if} type="radio" name="post[typeid]" value="{$act.id}" {if ($row.id && $row.typeid==$act.id) or (!isset($row.id) && $act.id==1)}checked{/if} />{$act.title}
+                            {/foreach}
+                            <a data-title="商品类型说明" data-target="#modal-goodscat" data-toggle="modal" title="商品类型说明" class="c-green e2-main-modal" href="javascript:;">点我看说明</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>是否充值卡：</label></td>
+                        <td class="td-input">
+                            <label><input type="radio" class="form-i virtual" name="post[is_virtual]" value="1" {if $row.is_virtual==1}checked="checked"{/if}/>是</label>
+                            <label><input type="radio" class="form-i virtual" name="post[is_virtual]" value="0" {if $row.is_virtual==0}checked="checked"{/if}/>否</label>
+                        </td>
+                    </tr>
+                    <div id="modal-goodscat" class="hidden">
+                        {foreach from=$actTypes item=act}
+                        {$act.title}:{$act.desc}<br>
+                        {/foreach}
+                    </div>
+                    {*秒杀团,免费试用,抽奖 start*}
+                    <tr class="goods_typeid {if $row.typeid<3 || $row.typeid>=7}hidden{/if}">
+                        <td class="td-label"><label>时间段：<span class="c-red">*</span></label></td>
+                        <td class="td-input">
+                            <input type="text" {if  $row.id && !isset($smarty.request.type) && $row.end_time<$smarty.const.RUN_TIME}disabled="disabled"{/if} name="post[start_time]" class="w120" value="{$row.start_time|date_format:'Y-m-d H:i'}" {literal}onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:00'});"{/literal}/>~<input type="text" {if  $row.id && !isset($smarty.request.type) && $row.end_time<$smarty.const.RUN_TIME}disabled="disabled"{/if} name="post[end_time]" class="w120" value="{$row.end_time|date_format:'Y-m-d H:i'}" {literal}onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:00'});"{/literal} />
+                        </td>
+                    </tr>
+                    <tr class="luck_num {if $row.typeid<=3 || $row.typeid>=7}hidden{/if}">
+                        <td class="td-label"><label>中奖人数：<span class="c-red">*</span></label></td>
+                        <td class="td-input">
+                            <input type="text" name="post[luck_num]" class="w120" value="{$row.luck_num}" />
+                        </td>
+                    </tr>
+                    <tr class="luck_num {if $row.typeid<=3 || $row.typeid>=7}hidden{/if}">
+                        <td class="td-label"><label>未中奖优惠券：<span class="c-red">*</span></label></td>
+                        <td class="td-input">
+                            <select name="post[coupon_id]"><option value="">请选择</option>
+                                {foreach from=$coupon_list item=m}
+                                <option value="{$m.id}" {if $row.coupon_id==$m.id}selected{/if}>
+                                    {$m.title}
+                                    【{if !empty($m.need_amount)}满{$m.need_amount}减{/if}{$m.amount}元】
+                                    【剩余{$m.stock}张】
+                                    {if !empty($m.target)}【限品类】{/if}
+                                    {if !empty($m.uniqued)}【限一次】 {/if}
+                                    {if !empty($m.exchange)}【积分换】 {/if}
+                                    {if !empty($m.share)}【分享券】 {/if}
+                                    {if !empty($m.paid)}【购物送】 {/if}
+                                </option>
+                                {/foreach}
+                            </select>
+                        </td>
+                    </tr>
+                    {*秒杀团,免费试用,抽奖 end*}
+                    {*推广团 start*}
+                    <tr class="goods_share {if $row.typeid!=$smarty.const.CART_SHARE}hidden{/if}">
+                        <td class="td-label"><label>推广佣金：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[attach][share_comss]" value="{$row.share_comss}" placeholder="0" /> 元
+                        </td>
+                    </tr>
+                    {*推广团 end*}
+                    {*阶梯团和自选团 start*}
+                    <tr class="goods_step {if $row.typeid!=$smarty.const.CART_STEP }hidden{/if}">
+                        <td class="td-label"><label>定金：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[deposit]" value="{$row.deposit}" placeholder="0" />元
+                            <span class="form-tip">定金必须小于阶梯价格最低价</span>
+                        </td>
+                    </tr>
+                    <tr class="goods_step {if $row.typeid!=$smarty.const.CART_STEP }hidden{/if}">
+                        <td class="td-label"><label>团员限制：</label></td>
+                        <td class="td-input">
+                            <label><input name="post[team_limit]" value="1" {if $row.team_limit==1}checked="checked"{/if} type="radio">有</label>
+                            <label><input name="post[team_limit]" value="0" {if !isset($row) || $row.team_limit==0}checked="checked"{/if} type="radio">无</label>
+                            <span class="form-tip">人数最高那阶的人数，默认不限</span>
+                        </td>
+                    </tr>
+                    <tr class="goods_option {if $row.typeid!=$smarty.const.CART_STEP && $row.typeid!=$smarty.const.CART_OPTION }hidden{/if}">
+                        <td class="td-label"><label>阶梯价格：</label></td>
+                        <td class="td-input">
+                            <table style="width:60%" class="list itemTable">
+                                <tbody id="itemTable">
+                                <tr>
+                                    <th>人数(>=)</th>
+                                    <th>价格</th>
+                                    <th>操作</th>
+                                </tr>
+                                {if count($row.step)>1}
+                                {foreach from=$row.step.team_num item=m key=k}
+                                <tr>
+                                    <td><input name="step[team_num][{$k}]" class="form-i LH22 w140" value="{$m}" /></td>
+                                    <td><input name="step[team_price][{$k}]" class="form-i LH22 w140" value="{$row.step.team_price[$k]}" /></td>
+                                    <td><a href="javascript:;" class="uiBtn BtnOrange e2-goods-rmOptionItem-{$k}"><i class="iconfont">&#xe606;</i></a></td>
+                                </tr>
+                                {/foreach}
+                                {else}
+                                <tr>
+                                    <td><input name="step[team_num][1]" class="form-i LH22 w140" /></td>
+                                    <td><input name="step[team_price][1]" class="form-i LH22 w140"  /></td>
+                                    <td>-</td>
+                                </tr>
+                                {/if}
+                                </tbody>
+                            </table>
+                            <a href="javascript:;" class="uiBtn BtnBlue e2-goods-additem">添加</a>
+                        </td>
+                    </tr>
+                    {*阶梯团和自选团 end*}
+                    <tr>
+                        <td class="td-label"><label>成团时间：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[team_day]" value="{$row.team_day|default:1}" placeholder="1" />天
+                            <input type="text" class="form-i w140" name="post[team_hour]" value="{$row.team_hour}" placeholder="0" />小时
+                        </td>
+                    </tr>
+                    <tr class="table-h3">
+                        <td colspan="2">基本信息</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>商品名称：<span class="c-red">*</span></label></td>
+                        <td class="td-input">
+                            <input class="form-i w360" type="text" name="post[name]" value="{$row.name}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>推荐理由：</label></td>
+                        <td class="td-input">                            
+                            <textarea name="post[desc]">{$row.desc}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>商品分类：<span class="c-red">*</span></label></td>
+                        <td class="td-input">
+                            <input type="hidden" id="cid" value="{$row.cid}">
+                            {select_cat($row.cid,'cid','goods_cat')}
+                            {*<select name="post[cid]"  id="cid"  class="e2-goods-changecid">
+                                <option value="0">请选择</option>
+                                {$select_categorys}
+                            </select>*}
+                        </td>
+                    </tr>
+                    <tr  class="goods_city ">
+                        <td class="td-label"><label>所在地：</label></td>
+                        <td class="td-input">
+                            {showlinkage($row.areaid)}
+                            <a data-title="同城商品" data-target="#modal-city" data-toggle="modal" title="同城商品说明" class="c-green e2-main-modal" href="javascript:;">点我看说明</a>
+                            <div id="modal-city" class="hidden">
+                                注：只有选择所在地和同城分类才会在前台同城里面显示产品，同城首页的商品是通过活动报名显示的<br/>
+                                1.【商城】=>【同城分类】添加同城分类<br/>
+                                2.【模块】=>【地区】开启地区，并且上传对应的广告图和选择地区分类
+                            </div>
+                        </td>
+                    </tr>
+                    <tr  class="goods_city">
+                        <td class="td-label"><label>同城分类：</label></td>
+                        <td class="td-input">
+                            <div id="select_linkage_cat">
+                                {$select_areacat}
+                            </div>
+                            {*<select name="post[aid]"  id="aid"><option value="">请选择</option>{$select_areacat}</select>*}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>商品品牌：</label></td>
+                        <td class="td-input">
+                            {select_cat($row.bid,'bid','brand')}
+                            {*<select name="post[bid]"><option value="">请选择</option>{$select_brands}</select>*}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>海淘分类：</label></td>
+                        <td class="td-input">
+                            {select_cat($row.nation_id,'nation_id','nation')}
+                            <span class="form-tip">只有选择海淘分类才算海淘产品</span>
+                            {*<select name="post[nation_id]"><option value="">请选择</option>{$select_nation}</select>*}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>国家馆：</label></td>
+                        <td class="td-input">
+                            <select name="post[country_id]"><option value="">请选择</option>{$select_country}</select>
+                        </td>
+                    </tr>
+                    <tr class="price {if $row.typeid==13}hidden{/if}" >
+                        <td class="td-label"><label>原价：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[price]" id="real_price" value="{$row.price}" placeholder="0.00" />
+                        </td>
+                    </tr> 
+                    <tr class="exchange_price {if $row.typeid!=13}hidden{/if}" >
+                        <td class="td-label"><label>积分：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[price_exchange]" id="real_price" value="{$row.price}" placeholder="0.00" />
+                        </td>
+                    </tr> 
+                     <tr>
+                        <td class="td-label"><label> 成本价：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[cost_price]" value="{$row.cost_price}" placeholder="0.00" />
+                        </td>
+                    </tr> 
+                    <tr class="team_price {if $row.typeid==13}hidden{/if}">
+                        <td class="td-label"><label>团购价：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            <input type="text" id="team_price" class="form-i w140" name="post[team_price]" value="{$row.team_price}" placeholder="0.00" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>总库存：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[stock]" id="goods_stock" value="{$row.stock|default:10000}" placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>已售：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[sell]" id="sell" value="{$row.sell}" placeholder="" />
+                        </td>
+                    </tr>
+                    <tr class="join_number {if $row.typeid==13}hidden{/if}">
+                        <td class="td-label"><label>参团人数：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[team_num]" value="{$row.team_num}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>包邮：</label></td>
+                        <td class="td-input">
+                            <label><input type="radio" class="form-i " name="post[is_free_shipping]" value="1" {if $row.is_free_shipping==1}checked="checked"{/if}/>是</label>
+                            <label><input type="radio" class="form-i " name="post[is_free_shipping]" value="0" {if $row.is_free_shipping==0}checked="checked"{/if}/>否</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>快递方式：</label></td>
+                        <td class="td-input">
+                            {foreach from=$row.express_list item=m}
+                            <label><input type="checkbox" class="form-i " name="post[express][]" value="{$m.id}" {if find_in_set($row.express,$m.id)}checked="checked"{/if}/>{$m.name}</label>
+                            {/foreach}
+                            <a class="uiBtn BtnBlue all-select">全选</a>
+                            <a class="uiBtn BtnBlue invert-select">反选</a>
+                            <span class="form-tip">没选默认包邮 </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>自提点：</label></td>
+                        <td class="td-input">
+                            {foreach from=$row.take_address_list item=m}
+                            <label><input type="checkbox" class="form-i " name="post[take_address][]" value="{$m.id}" {if find_in_set($row.take_address,$m.id)}checked="checked"{/if}/>{$m.area}{$m.address}</label>
+                            {foreachelse}
+                            <span class="form-tip">请先添加自提点 </span>
+                            {/foreach}
+                            <a class="uiBtn BtnBlue all-select">全选</a>
+                            <a class="uiBtn BtnBlue invert-select">反选</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>配送区域：</label></td>
+                        <td class="td-input ">
+                            {foreach from=$row.linkage_list item=m key=k}
+                            {if $k>0 && $k%12==0}<br>{/if}
+                            <label><input type="checkbox" class="form-i " name="post[linkage_id][]" value="{$m.id}" {if find_in_set($row.linkage_id,$m.id)}checked="checked"{/if}/>{$m.area}{$m.name}</label>
+                            {/foreach}
+                            <a class="uiBtn BtnBlue all-select">全选</a>
+                            <a class="uiBtn BtnBlue invert-select">反选</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>重量/单位：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w60" name="post[weight]" value="{$row.weight}" placeholder="0.00" />
+                            <span class="c-gray">
+                                <select name="post[weight_unit]" style="vertical-align: middle">
+                                    {if $row.weight_unit && $row.weight_unit neq 'kg' && $row.weight_unit neq 'g'}
+                                    <option value="{$row.weight_unit}">{$row.weight_unit}</option>
+                                    {/if}
+                                    <option value="kg"{if $row.weight_unit eq 'kg'} selected{/if}>kg</option>
+                                    <option value="g"{if $row.weight_unit eq 'g'} selected{/if}>g</option>
+                                </select> /每
+                            </span>
+                            <input type="text" class="form-i w30" name="post[unit]" value="{$row.unit}" placeholder="{$common.unit}" />
+                            <span class="form-tip"></span>
+                        </td>
+                    </tr>
+                    {if C('sales_show')}
+                    <tr>
+                        <td class="td-label"><label>团购销量：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[sales_num]" value="{$row.sales_num}" />
+                        </td>
+                    </tr>
+                    {/if}
+                    <tr>
+                        <td class="td-label"><label>团购限购数量：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[limit_buy_bumber]" value="{$row.limit_buy_bumber}" placeholder="0" />如果是团购请设置，为0表示不限购，如果是团长免单或团长优惠请确认是否要限制购买次数
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td class="td-label"><label>团购限制次数：</label></td>
+                        <td class="td-input">
+                            <input type="radio" class="form-i " name="post[limit_buy_one]" value="1" {if $row.limit_buy_one==1}checked="checked"{/if}/>是
+                            <input type="radio" class="form-i " name="post[limit_buy_one]" value="0" {if $row.limit_buy_one==0}checked="checked"{/if}/>否
+                            <span>一个会员只能购买一次 </span>
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td class="td-label"><label>团长优惠：</label></td>
+                        <td class="td-input">
+                            <select name="post[discount_type]" id="discount_type">
+                                <option value='0' {if $row.discount_type==0}selected="selected"{/if}>无优惠</option>
+                                <option value='1' {if $row.discount_type==1}selected="selected"{/if}>团长免单</option>
+                                <option value='2' {if $row.discount_type==2}selected="selected"{/if}>团长优惠</option>
+                            </select>
+                            <span id="discount_amount" {if $row.discount_type<2}style="display:none;"{/if}>优惠金额<input type="text" class="form-i w80"  name="post[discount_amount]" value="{$row.discount_amount}"></span>
+                        </td>
+                    </tr>                     
+                    <tr>
+                        <td class="td-label"><label>缩略图：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            {$row.html_thumb}
+                            <span class="form-tip">规格：750*350 像素</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>展示图集：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            {$row.html_thumbs}
+                            <span class="form-tip">规格：800*800 像素 </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>分享图片：</label></td>
+                        <td class="td-input">
+                            {$row.html_share}
+                            <span class="form-tip">规格：600*600 像素, <em class="c-red">上传该图会添加水印{if C('watermark_open')!=1},去<a href="#!setting/index/attach">【开启】</a>{/if}</em></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>商品编码：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[attach][goods_no]" value="{$row.goods_no|default:''}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>商品标签：</label><span class="c-red">*</span></td>
+                        <td class="td-input">
+                            {foreach from=$row.goods_tag item=m}
+                            <label><input type="checkbox" class="form-i " name="post[attach][goods_tip][]" value="{$m.id}" {if find_in_set($row.goods_tip,$m.id)}checked="checked"{/if}/>{$m.name}</label>
+                            {foreachelse}
+                            <span class="form-tip">请先添加标签 </span>
+                            {/foreach}
+                            <div class="form-tip">需选择3个,例全场包邮、7天无理由退货、48小时发货,<a href="#!goods_tag/edit?com=xshow|添加商品标签">添加标签</a></div>
+                        </td>
+                    </tr>
+                    <tr id="spec_tr">
+                    <td class="td-label"><label>商品规格：</label></td>
+                    <td class="td-input" colspan="2">
+                        <div >
+                            <input type="hidden" id="spec_val" value="0">
+                        属性一：<select name="post[attach][spec1]" id="spec1" onchange="goods.changespecid()">
+                            <option value="0">请选择</option>
+                            {foreach from=$spec_select item=m}
+                            <option value="{$m.id}" {if $row.spec1==$m.id}selected{/if}>{$m.name}</option>
+                            {/foreach}
+                        </select>
+                        属性二：<select name="post[attach][spec2]" id="spec2" onchange="goods.changespecid()">
+                            <option value="0">请选择</option>
+                            {foreach from=$spec_select item=m}
+                            <option value="{$m.id}" {if $row.spec2==$m.id}selected{/if}>{$m.name}</option>
+                            {/foreach}
+                        </select>
+                        <span class="form-tip">邻居团，推广团，阶梯团的拼团价格不受属性价格影响</span>
+                        </div>
+                        <br>
+                        <div class="goods-spec" id="sp-box">
+                            {if $row.id}
+                            {foreach from=$spec_list item=m}
+                            <div class="f-unit spec-unit" sp_id="{$m.id}" sp_name="{$m.name}">
+                                <label class="ui-label w60">{$m.name}</label>
+                                <div class="rule-box">
+                                    {foreach from=$m.values item=n}
+                                    <label class="spec-item">
+                                        {if isset($row.sp_val[$m.id][$n.id])}
+                                        <input class="spec-ckbox e1-goods-setSpecVal-{$n.id}" value="{$row.sp_val[$m.id][$n.id]}" type="checkbox" name="sp_val[{$m.id}][{$n.id}]" spitem_id="{$n.id}" checked>
+                                        <span><input value="{$row.sp_val[$m.id][$n.id]}" class="spec-val form-i BtnSm w100" onblur="goods.chSepcValue(this)"></span>
+                                        {else}
+                                        <input class="spec-ckbox e1-goods-setSpecVal-{$n.id}" value="{$n.value}" type="checkbox" name="sp_val[{$m.id}][{$n.id}]" spitem_id="{$n.id}">
+                                        <span>{$n.value}</span>
+                                        {/if}
+                                    </label>
+                                    {/foreach}
+                                    {*<div class="add" id="add{$m.id}">
+                                    <a class="specAdd e1-goods-specAdd" href="javascript:void(0);"><i class="icon-plus"></i>添加规格值</a>
+                                    <div style="display:none;" class="specAdd2">
+                                        <input type="hidden" name="spec" value="{$m.id}">    
+                                        <input type="text" maxlength="50" placeholder="规格值名称" name="value" class="text w120">
+                                        <a class="e1-goods-specSub-{$m.id}"  href="javascript:void(0);">确认</a>
+                                        <a class="e1-goods-specDel"  href="javascript:void(0);">取消</a>
+                                    </div>
+                                    </div>*}
+                                </div>
+                            </div>
+                            {/foreach}
+                            {/if}
+                        </div>
+                    </td>
+                </tr>
+                    <tr >
+                        <td class="td-label"><label>&nbsp;</label></td>
+                        <td class="td-input" colspan="2">
+                            <div id="stock-box"></div>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+        </div>
+        <div class="tab-mod" style="display:none;">{*商品详情*}
+            <table class="table-list">
+                <tbody>  
+                    <tr>
+                        <td class="td-input" colspan="2">
+                            {$row.html_content}
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </div>
+        {*<div class="tab-mod" style="display:none;">
+            <table class="table-list">
+                <tbody>                    
+                    <!--商品属性 start-->                   
+                    <tr>
+                        <td class="td-label"><label>商品类型：</label></td>
+                        <td class="td-input">
+                            <select  name="goods_type" onchange="getAttrList({$row.id})" >
+                            <option value="">请选择</option>
+                            {foreach from=$cat_list item=m}
+                            <option value="{$m.cat_id}" {if $row.goods_type==$m.cat_id}selected="selected"{/if}>{$m.cat_name}</option>
+                            {/foreach}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>               
+                        <td id="tbody-goodsAttr" colspan="2" style="padding:0">{$goods_attr_html}</td>                
+                    </tr>
+                    <!--商品属性 end-->
+                </tbody>
+                </table>
+        </div>*}
+        <div class="tab-mod " style="display:none;">{*其他信息*}
+            <table class="table-list">
+                <tbody>
+                    <tr>
+                        <td class="td-label"><label>加入推荐：</label></td>
+                        <td class="td-input">
+                            <label><input type="checkbox" name="post[is_best]" value="1" {if $row.is_best eq 1}checked{/if}/>热门</label>
+                            <label><input type="checkbox" name="post[is_new]" value="1" {if $row.is_new eq 1}checked{/if}/>新品</label>
+                            <label><input type="checkbox" name="post[is_hot]" value="1" {if $row.is_hot eq 1}checked{/if}/>热销</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>是否上架：</label></td>
+                        <td class="td-input">
+                            <label><input type="radio" name="post[is_sale]" value="1" {if $row.is_sale==1 || !isset($row)}checked{/if}/>是</label>
+                            <label><input type="radio" name="post[is_sale]" value="0" {if $row.is_sale=='0'}checked{/if}/>否</label>
+                        </td>
+                    </tr>
+                    {*<tr>
+                        <td class="td-label"><label>基础销量：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[attach][basic_sales]" value="{$row.basic_sales|default:0}" placeholder="0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>基础点赞数：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w140" name="post[attach][basic_praise]" value="{$row.basic_praise|default:0}" placeholder="0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>抵用积分：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w200" name="post[attach][score_payer]" value="{$row.score_payer|default:'0'}" placeholder="0" />
+                            <span class="form-tip">最高抵用积分。</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-label"><label>消费送积分：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w200" name="post[attach][score]" value="{$row.score|default:'0'}" placeholder="0" />
+                        </td>
+                    </tr>*}            
+                    <tr class="table-h3">
+                        <td colspan="2">SEO设置</td>
+                    </tr>
+
+                    <tr class="s h0">
+                        <td class="td-label"><label>SEO关键词：</label></td>
+                        <td class="td-input">
+                            <input type="text" class="form-i w200" name="post[attach][keywords]" value="{$row.keywords}" />
+                        </td>
+                    </tr>
+                    <tr class="s h0">
+                        <td class="td-label"><label>SEO描述：</label></td>
+                        <td class="td-input">
+                            <textarea name="post[attach][description]">{$row.description}</textarea>
+                        </td>
+                    </tr>
+
+                </tbody>
+                </table>
+        </div>
+        {if C('comss')}
+        <div class="tab-mod " style="display:none;">{*佣金设置*}
+            <table class="table-list">
+                <tbody>
+                <tr class="table-h3">
+                    <td colspan="2">佣金设置</td>
+                </tr>
+                <tr>
+                    <td class="td-label"><label>佣金比例：</label></td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w140" name="post[comm_scale]" value="{$row.comm_scale}" placeholder="0" /> %
+                    </td>
+                </tr>
+                {*{section name=loop loop=$comss_level}
+                <tr>
+                    <td class="td-label"><label>{$smarty.section.loop.index+1}级佣金：</label></td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w140" name="post[attach][superior_brokerage][{$smarty.section.loop.index+1}][money]" value="{$row.superior_brokerage.{$smarty.section.loop.index+1}.money|default:$SuperiorBroker.{$smarty.section.loop.index}.0}" placeholder="0" /> 元
+                        或 <input type="text" class="form-i w140" name="post[attach][superior_brokerage][{$smarty.section.loop.index+1}][ratio]" value="{$row.superior_brokerage.{$smarty.section.loop.index+1}.ratio|default:$SuperiorBroker.{$smarty.section.loop.index}.1}" placeholder="0" /> %
+                    </td>
+                </tr>
+                {/section}*}
+                </tbody>
+            </table>
+        </div>
+        {/if}
+        <br/>
+        <table class="table-list">
+		{if $row.sid>0}
+        <tr class="table-h3">
+            <td colspan="2">商家信息</td>
+        </tr>
+		<tr>
+			<td class="td-label"><label>商家名称：</label></td>
+			<td class="td-input">
+				<label>{$row.business.name}</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="td-label"><label>商家手机：</label></td>
+			<td class="td-input">
+				<label>{$row.business.mobile}</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="td-label"><label>审核：</label></td>
+			<td class="td-input">
+				<label><input type="radio" name="post[is_check]" value="0" {if $row.is_check==0}checked{/if}/>待审核</label>
+				<label><input type="radio" name="post[is_check]" value="1" {if $row.is_check==1}checked{/if}/>通过</label>
+				<label><input type="radio" name="post[is_check]" value="2" {if $row.is_check==2}checked{/if}/>不通过</label>
+			</td>
+		</tr>
+                <tr>
+			<td class="td-label"><label>审核备注：</label></td>
+			<td class="td-input">
+                            <textarea name="post[admin_note]">{$row.admin_note}</textarea>
+			</td>
+		</tr>
+		{/if}
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">/*
+    $.loadJs('/admin/js/manage/goods.js',function(){
+        goods.changSpec("{$row.id}");
+    });*/
+</script>
+{literal}
+<script type="text/javascript">
+    $.loadJs('/style/js/jquery-1.11.2.min.js',function(){
+        jQuery.noConflict();
+        jQuery("#discount_type").change(function() {
+            var type = $(this).val();
+            if(type==2){            
+                $("#discount_amount").css('display','block');
+            }else{
+                $("#discount_amount").hide();            
+            }        
+        });
+        jQuery(".all-select").click(function () {
+            jQuery(this).parent('td').find('input[type=checkbox]').prop('checked',true);
+        });
+        jQuery(".invert-select").click(function () {
+            var items = jQuery(this).parent('td').find('input[type=checkbox]');
+            items.each(function () {
+                jQuery(this).prop("checked", !jQuery(this).is(':checked'));
+            });
+        });
+        jQuery(".typeid").click(function() {
+            var typeid = $(this).val();
+            if(typeid>=3 && typeid<7){            
+                $(".goods_typeid").removeClass('hidden');
+            }else{
+                $(".goods_typeid").addClass('hidden');
+            }        
+            if(typeid>=4 && typeid<7){            
+                $(".luck_num").removeClass('hidden');
+            }else{
+                $(".luck_num").addClass('hidden');
+            }
+            if(typeid==8){
+                $(".goods_share").removeClass('hidden');
+            }else{
+                $(".goods_share").addClass('hidden');
+            }
+
+            if(typeid==10){
+                $(".goods_option").removeClass('hidden');
+                $(".goods_step").removeClass('hidden');
+            }else if(typeid==9){
+                $(".goods_option").removeClass('hidden');
+                $(".goods_step").addClass('hidden');
+            }else{
+                $(".goods_option").addClass('hidden');
+                $(".goods_step").addClass('hidden');
+            }
+			if(typeid==13){
+            	$(".team_price").addClass('hidden');
+            	$(".price").addClass('hidden');
+            	$(".exchange_price").removeClass('hidden');
+            	$(".join_number").addClass('hidden');
+            	$(".join_number_exchange").addClass('show');
+            }else{
+            	$(".team_price").removeClass('hidden');
+            	$(".price").removeClass('hidden');
+            	$(".exchange_price").addClass('hidden');
+            	$(".join_number").removeClass('hidden');
+            	$(".join_number_exchange").addClass('hidden');
+            }
+        });
+    });
+    $.loadJs('/admin/js/manage/product.js', function() {
+        $.loadJs('/admin/js/manage/goods.js#', function(){
+            //$.loadJs('/admin/js/upload.js', function() {
+                //goods.spData = '';
+                {/literal}
+                {if isset($goodsItem) && $goodsItem}
+                goods.stuffSpecs({$goodsItem});
+                {else}
+                goods.changespecid();
+                //goods.changeselectcid();
+                {/if}
+                {literal}      
+                
+                //gallery.initUploader();
+            //});
+        });
+    });
+    
+    function getAttrList(goodsId)
+    {
+        var selGoodsType = document.forms['goods-form'].elements['goods_type'];
+
+        if (selGoodsType != undefined)
+        {
+            var goodsType = selGoodsType.options[selGoodsType.selectedIndex].value;
+
+            $post({
+                url:'goods/get_attr_html',
+                data:{goods_id:goodsId,goods_type:goodsType},
+                callback:function(x){
+                     document.getElementById('tbody-goodsAttr').innerHTML = x;
+                }
+            });            
+        }
+    }
+
+    function addSpec(obj)
+    {
+        var src   = obj.parentNode.parentNode;
+        var idx   = rowindex(src);
+        var tbl   = document.getElementById('attrTable');
+        var row   = tbl.insertRow(idx + 1);
+        var cell1 = row.insertCell(-1);
+        var cell2 = row.insertCell(-1);
+        var regx  = /<a([^>]+)<\/a>/i;
+
+        cell1.className = 'label';
+        cell1.innerHTML = src.childNodes[0].innerHTML.replace(/(.*)(addSpec)(.*)(\[)(\+)/i, "$1removeSpec$3$4-");
+        cell2.innerHTML = src.childNodes[1].innerHTML.replace(/readOnly([^\s|>]*)/i, '');
+    }
+
+    function removeSpec(obj)
+    {
+        var row = rowindex(obj.parentNode.parentNode);
+        var tbl = document.getElementById('attrTable');
+
+        tbl.deleteRow(row);
+    } 
+    var Browser = new Object();
+    Browser.isMozilla = (typeof document.implementation != 'undefined') && (typeof document.implementation.createDocument != 'undefined') && (typeof HTMLDocument != 'undefined');
+    Browser.isIE = window.ActiveXObject ? true : false;
+    Browser.isFirefox = (navigator.userAgent.toLowerCase().indexOf("firefox") != - 1);
+    Browser.isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") != - 1);
+    Browser.isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != - 1);
+    function rowindex(tr){
+        if (Browser.isIE)
+        {
+          return tr.rowIndex;
+        }
+        else
+        {
+          table = tr.parentNode.parentNode;
+          for (i = 0; i < table.rows.length; i ++ )
+          {
+            if (table.rows[i] == tr)
+            {
+              return i;
+            }
+          }
+        }
+    }
+    
+    $('a[nctype="specAdd"]').click(function(){
+        var _parent = $(this).parents('li:first');
+        _parent.find('div[nctype="specAdd1"]').hide();
+        _parent.find('div[nctype="specAdd2"]').show();
+        _parent.find('input').focus();
+    });
+    // 取消
+    $('a[nctype="specAddCancel"]').click(function(){
+        var _parent = $(this).parents('li:first');
+        _parent.find('div[nctype="specAdd1"]').show();
+        _parent.find('div[nctype="specAdd2"]').hide();
+        _parent.find('input').val('');
+    });
+    // 提交
+    $('a[nctype="specAddSubmit"]').click(function(){
+        var _parent = $(this).parents('li:first');
+        eval('var data_str = ' + _parent.attr('data-param'));
+        var _input = _parent.find('input');
+        _parent.find('div[nctype="specAdd1"]').show();
+        _parent.find('div[nctype="specAdd2"]').hide();
+        $.getJSON(data_str.url, {store_id : data_str.store_id,gc_id : data_str.gc_id , sp_id : data_str.sp_id , name : _input.val()}, function(data){
+            if (data.done) {
+                _parent.before('<li><span nctype="input_checkbox"><input type="checkbox" name="sp_val[' + data_str.sp_id + '][' + data.value_id + ']" nc_type="' + data.value_id + '" value="' +_input.val()+ '" /></span><span nctype="pv_name">' + _input.val() + '</span></li>');
+                _input.val('');
+            }
+        });
+    });
+
+</script>
+{/literal}

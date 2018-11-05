@@ -1,0 +1,41 @@
+{include file="public_header.html"}
+    <style>
+        body {
+            background-color: #fff !important;
+        }
+    </style>
+<div class="tgming">
+	<img src="/style/images/tgming-tz.png" />
+	<div class="tgming-tx">
+		<em style="background-image: url('{photo($mid)}');"></em>
+		<p>
+			{$detail.username|nickname:$member.nickname:1}
+			<br />
+			微信号：{$detail.wx}
+		</p>
+	</div>
+	<div class="tgming-tz2">
+		<img src="/style/images/tgming-tz2.png" />
+	</div>
+
+	<div class="tgming-yongjin">
+		累计{L('unit_comm')}：
+		<strong>￥{$detail.commission}</strong>
+	</div>
+	<p class="tgming-jmkh">{L('unit_distribution')}加盟，开创人人微商时代，3秒开店，零门槛创业不再是梦</p>
+</div>
+<div class="fxpyq">
+	<img src="/style/images/fxpyq.png" />
+	<a href="javascript:;" onclick="$('.fxpyq').hide();" class="fxpyq-a"> 我知道了</a>
+</div>
+<div class="tgming-a">
+	<ul>
+		<li>
+			<a href="{home($mid)}">进入微店</a>
+		</li>
+		<li>
+			<a href="javascript:;" onclick="$('.fxpyq').show();">分享名片</a>
+		</li>
+	</ul>
+</div>
+{include file="public_footer.html"}

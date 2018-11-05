@@ -1,0 +1,23 @@
+{$nav = 0}{$slider = 1}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+    <h1 class="mui-title">{$data.cat.catname}</h1>
+</header>
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">
+    <div class="mui-scroll">
+        <ul class="problem clearfix">
+            {foreach $data.list as $v}
+            <li><a href="{$v.url}">{$v.title}？</a></li>
+            {/foreach}
+        </ul>
+    </div>
+</div>
+{include file="public_footer.html"}
+<script>
+    {literal}var D = {load: ''};{/literal}//load:1必填	
+    var ajax_url = "/content/index/{$data.cat.id}/";//请求的地址	
+    var ajax_class = ".problem";//加载的元素
+    var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}

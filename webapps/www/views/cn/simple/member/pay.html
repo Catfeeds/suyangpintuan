@@ -1,0 +1,21 @@
+{$headTit="充值付款"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<form action="/flow/done" target="iframeNews" id="orderForm" method="post">
+    <input type="hidden" name="token" value="{createToken()}" />
+    <div class="main pd_10">
+        <div class="car4 beijing2 car_bor">
+            <div class="car4_top">
+                <i class="icon iconfont">&#xe61a;</i>
+                <big>充值信息</big>
+            </div>
+            <div class="car4_4">
+                <p>充值金额：<font>{$order.surplus_amount|price_format}</font></p>
+                <p>{$payment_info.pay_button}</p>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="clear heightfoot1"></div>
+{include file="public_footer.html"}

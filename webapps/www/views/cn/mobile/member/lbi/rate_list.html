@@ -1,0 +1,28 @@
+<li class="clearfix">
+    <div class="square-l">
+        <img src="{photo($m.mid)}"/>
+        <p>{nickname($m.username,$m.username)}</p>
+    </div>
+    <div class="square-r">
+        <p>{$m.c_time|date_format:'%m-%d'} {$m.item_goods_spec}</p>
+        <div class="square-kh">
+            {$m.content}
+        </div>
+        <a href="/goods/show/{$m.good_id}" class="square-abtn1">
+            <dl class="fx-cpbox clearfix">
+                <dt>
+                    <img src="{$m.img_cover}"/>
+                </dt>
+                <dd>
+                    <h3>{$m.name}</h3>
+                    <div class="mui-card-link">
+                        价格：
+                        <span class="rmb">¥</span>
+                        <span class="price-int">{formatPrice($m.team_price)}</span>
+                        <span class="price-ori">¥{formatPrice($m.price)}</span>
+                    </div>
+                </dd>
+            </dl>
+        </a>
+    </div>
+</li>

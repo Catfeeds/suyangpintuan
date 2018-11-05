@@ -1,0 +1,28 @@
+<li>
+	<section onclick="$(this).offsetParent().toggleClass('on');">
+		<p>
+		<table>
+			<tr>
+				<td>
+					<span>{if $m.type eq 1}充值{else}提现{/if}</span>
+					<em> {date('Y-m-d H:i',$m.add_time)}</em>
+				</td>
+			</tr>
+		</table>
+		</p>
+		<i class="dfk">{if $m.status==1}待付款{else if $m.status==2}已完成{else}已取消{/if}</i>
+	</section>
+	<dl>
+		<dd>提现方式：{$m.pay_name}  </dd>
+		<dd>提现类型：现金提现</dd>
+		<dd>提现金额：￥{$m.amount|price_format}   </dd>
+		<dd>手续费  ：￥{$m.fee|price_format}</dd>
+		<div class="cl"></div>
+		{if $m.status eq 1}
+		<dt>
+		<i>预计到账时间：{date('Y-m-d',$m.add_time)}</i>
+		<a href="javascript:zz_confirm('您确认取消该申请？','{url('/member/account_cancel/')}{$m.id}');" class="color02">取消</a>
+		</dt>
+		{/if}
+	</dl>
+</li>

@@ -1,0 +1,48 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/business/take_address/edit">
+        <input type="hidden" name="post[id]" value="{$info.id}" />
+        <table class="table-list">
+            <tbody>
+                <tr>
+                    <td class="td-label"><label>联系电话：<span class="c-red">*</span></label></td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[mobile]" value="{$info.mobile}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label"><label>提货地址：<span class="c-red">*</span></label></td>
+                    <td class="td-input">
+                        {linkage($info.zone,'zone')}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label"><label>详细地址：<span class="c-red">*</span></label></td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[address]" value="{$info.address}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label"><label>邮编：</label></td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[zip]" value="{$info.zip}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label"><label>状态：</label></td>
+                    <td class="td-input">
+                        <input type="radio"  class="tab-btn" name="post[status]" value="0" {if empty($info) || $info.status=='0'}checked="checked"{/if}>正常
+                        <input type="radio"  class="tab-btn" name="post[status]" value="1" {if $info.status==1}checked="checked"{/if}>禁用
+                    </td>
+                </tr>
+                <tr class="tr-btn">
+                    <td class="td-label"></td>
+                    <td class="td-input">
+                        <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                        <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+<h3 class="info-tag">聊天虚拟数据<span></span></h3>
+
+{literal}
+<style type="text/css">
+</style>
+{/literal}
+<div class="html-box">
+    <!--添加新闻-->
+    <form class="newsBox" target="createChatForm"  method="post" action="/manage/wxreply/submitchat" style="width:650px">
+        <div class="f-unit">
+            <label class="ui-label w60">图灵KEY</label>
+            <input class="form-i w360" type="text" value="{$tlkey.content}" name="tlkey"></input>
+        </div>
+        <div class="f-unit">
+            <label class="ui-label w60">图灵API</label>
+            <input class="form-i w360" type="text" value="{$tlapi.content}" name="tlapi"></input>
+        </div>
+        <div class="f-unit">
+            <label class="ui-label w60">&nbsp;</label>
+            <button type="submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+        </div>
+    </form>
+    <iframe name="createChatForm" style="display:; border:0; width:500px; height:200px"></iframe>
+
+</div>
+<script type="text/javascript">
+    $.loadJs('/admin/js/manage/wxreply.js',function(){
+    });
+</script>
+

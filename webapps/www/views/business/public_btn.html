@@ -1,0 +1,15 @@
+{if $btnMenu}
+<h3 class="info-tag">
+    <span class="r">
+		{if isset($btnRig)}
+        {foreach from=$btnRig item=m key=k}
+        <a class="uiBtn{if $btnNo==$k} BtnGray{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+        {/foreach}
+		{/if}
+    </span>
+
+    {foreach from=$btnMenu item=m key=k}
+    <a class="uiBtn{if $btnNo==$k} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+{/if}

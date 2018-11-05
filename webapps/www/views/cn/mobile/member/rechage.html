@@ -1,0 +1,28 @@
+{$headTit="充值"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<div class="main pd_10 f14">
+    <form action="" method="post" id="myform">
+    <div class="center_cz">支付方式</div>
+    <div class="center_cz1 beijing2 car_bor">
+        <ul class="car4_2">
+            {foreach from=$list item=m name=pay}
+            <li>
+                <input type="radio" name="pay_id" value="{$m.pay_id}" {if $smarty.foreach.pay.iteration eq 1}checked{/if} />
+                <label>{$m.pay_name}</label>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+    <div class="center_cz">充值金额</div>
+    <div class="center_cz1 beijing2 car_bor">
+        <input type="radio" class="radio" name="amount" value="0" style="display: none;" />
+        <div class="center_cz2"><input type="text" name="other" value="50" /><label>元</label></div>
+    </div>
+
+    <input type="hidden" name="Submit" value="1" />
+    <a href="javascript:;" onclick="$('#myform').submit();" class="car_add1">下一步</a>
+    </form>
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

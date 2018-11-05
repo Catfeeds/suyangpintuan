@@ -1,0 +1,391 @@
+<table class="table-list">
+<tbody>
+    {if $type=='catid'}
+
+    {elseif $type=='title'}
+    <tr>
+        <td class="td-label">是否使用标题图片</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[thumb]" value="1"{if $setup.thumb==1} checked{/if} /> 是</label>&nbsp;
+            <label><input type="radio" name="setup[thumb]" value="0"{if !$setup.thumb} checked{/if} /> 否</label>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">标题图片按钮文本</td>
+        <td class="td-input">
+            <input type="text" class="form-i" size="15" name="setup[btntext]" value="{$setup.btntext}" />
+            <span class="form-tip">默认：上传缩略图</span>
+        </td>
+    </tr>
+    <tr style="display: none;">
+        <td class="td-label">是否使用标题样式</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[style]" value="1"{if $setup.style==1} checked{/if} /> 是</label>&nbsp;
+            <label><input type="radio" name="setup[style]" value="0"{if !$setup.style} checked{/if} /> 否</label>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">文本框长度</td>
+        <td class="td-input"><input type="text" class="form-i" size="5" name="setup[size]" value="{$setup.size}" /></td>
+    </tr>
+
+    {elseif $type=='typeid'}
+
+    {elseif $type=='text'}
+    <tr>
+        <td class="td-label"><label>文本框长度：</label></td>
+        <td class="td-input">
+            <input type="text" class="form-i w200" name="setup[size]" value="{$setup.size}" />
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-label"><label>默认值：</label></td>
+        <td class="td-input">
+            <input type="text" class="form-i w200" name="setup[default]" value="{$setup.default}" />
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-label"><label>是否为密码框：</label></td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[ispassword]" value="1"{if $setup.ispassword==1} checked{/if} /> 是 </label>
+            <label><input type="radio" name="setup[ispassword]" value="0"{if !$setup.ispassword} checked{/if} /> 否 </label>
+        </td>
+    </tr>
+
+    {elseif $type=='textarea'}
+    <tr {if $nofield}style="display:none"{/if}>
+        <td class="td-label">字段类型</td>
+        <td class="td-input">
+            <select name="setup[fieldtype]">
+                <option value="text"{if $setup.fieldtype=='text'} selected{/if}>TEXT</option>
+                <option value="mediumtext"{if $setup.fieldtype=='mediumtext'} selected{/if}>MEDIUMTEXT</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">文本域宽度</td>
+        <td class="td-input"><input type="text" class="form-i" size="5" name="setup[width]" value="{$setup.width}" /> <span class="form-tip">px</span></td>
+    </tr>
+    <tr>
+        <td class="td-label">文本域高度</td>
+        <td class="td-input"><input type="text" class="form-i" size="5" name="setup[height]" value="{$setup.height}" /> <span class="form-tip">px</span></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><textarea name="setup[default]" rows="3" cols="40">{$setup.default}</textarea></td>
+    </tr>
+
+    {elseif $type=='editor'}
+    <tr>
+        <td class="td-label">编辑器类型：</td>
+        <td class="td-input">
+            <select name="setup[edittype]">
+                <option value="kindeditor"{if $setup.edittype=='kindeditor'} selected{/if}>kindeditor</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-label">编辑器样式：</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[toolbar]" value="basic"{if $setup.toolbar=='basic'} checked{/if}> 简洁型</label>
+            <label><input type="radio" name="setup[toolbar]" value="full"{if $setup.toolbar=='full'} checked{/if}> 标准型</label>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值：</td>
+        <td class="td-input"><textarea name="setup[default]" rows="3" cols="40" id="default">{$setup.default}</textarea></td>
+    </tr>
+    <tr>
+        <td class="td-label">编辑器默认高度：</td>
+        <td class="td-input"><input type="text" name="setup[height]" value="{$setup.height}" size="4" class="form-i" ></td>
+    </tr>
+
+    {elseif $type=='select'}
+    <tr>
+        <td class="td-label" style="vertical-align: middle">选项列表:<br>例: <font color="red">选项名称|值</font></td>
+        <td class="td-input"><textarea name="setup[options]" rows="5" cols="40">{$setup.options}</textarea></td>
+    </tr>
+    <tr>
+        <td class="td-label">选项类型</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[multiple]" value="1"{if $setup.multiple==1} checked{/if}> 多选列表框</label>
+            <label><input type="radio" name="setup[multiple]" value="0"{if !$setup.multiple} checked{/if}> 下拉框</label>
+        </td>
+    </tr>
+    <tr {if $nofield}style="display:none"{/if}>
+        <td class="td-label">字段类型</td>
+        <td class="td-input">
+            <select name="setup[fieldtype]" onchange="javascript:numbertype(this.value);" class="l">
+                <option value="varchar"{if $setup.fieldtype=='varchar'} selected{/if}>字符 VARCHAR</option>
+                <option value="tinyint"{if $setup.fieldtype=='tinyint'} selected{/if}>整数 TINYINT(3)</option>
+                <option value="smallint"{if $setup.fieldtype=='smallint'} selected{/if}>整数 SMALLINT(5)</option>
+                <option value="mediumint"{if $setup.fieldtype=='mediumint'} selected{/if}>整数 MEDIUMINT(8)</option>
+                <option value="int"{if $setup.fieldtype=='int'} selected{/if}>整数 INT(10)</option>
+            </select>
+            <span class="form-tip l" id="numbertype" style="display: none;"><input type="checkbox" id="" name="setup[numbertype]" value="1" checked /> 不包括负数</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">可见选项的数目</td>
+        <td class="td-input"><input type="text" class="form-i" size="5" name="setup[size]" value="{$setup.size}" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" class="form-i" size="5"  name="setup[default]" value="{$setup.default}" /></td>
+    </tr>
+
+    {elseif $type=='radio'}
+    <tr>
+        <td class="td-label" style="vertical-align: middle">选项列表:<br>例: <font color="red">选项名称|值</font></td>
+        <td class="td-input"><textarea name="setup[options]" rows="5" cols="40">{$setup.options}</textarea></td>
+    </tr>
+    <tr {if $nofield}style="display:none"{/if}>
+        <td class="td-label">字段类型</td>
+        <td class="td-input">
+            <select name="setup[fieldtype]" onchange="javascript:numbertype(this.value);" class="l">
+                <option value="varchar"{if $setup.fieldtype=='varchar'} selected{/if}>字符 VARCHAR</option>
+                <option value="tinyint"{if $setup.fieldtype=='tinyint'} selected{/if}>整数 TINYINT(3)</option>
+                <option value="smallint"{if $setup.fieldtype=='smallint'} selected{/if}>整数 SMALLINT(5)</option>
+                <option value="mediumint"{if $setup.fieldtype=='mediumint'} selected{/if}>整数 MEDIUMINT(8)</option>
+                <option value="int"{if $setup.fieldtype=='int'} selected{/if}>整数 INT(10)</option>
+            </select>
+            <span class="form-tip l" id="numbertype" style="display: none;"><input type="checkbox" id="" name="setup[numbertype]" value="1" checked /> 不包括负数</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">宽度</td>
+        <td class="td-input"><input type="text" class="form-i" size="10"  name="setup[labelwidth]" value="{$setup.labelwidth}" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" class="form-i" size="5"  name="setup[default]" value="{$setup.default}" /></td>
+    </tr>
+
+    {elseif $type=='checkbox'}
+    <tr>
+        <td class="td-label" style="vertical-align: middle">选项列表:<br>例: <font color="red">选项名称|值</font></td>
+        <td class="td-input"><textarea name="setup[options]" rows="5" cols="40">{$setup.options}</textarea></td>
+    </tr>
+    <tr {if $nofield}style="display:none"{/if}>
+        <td class="td-label">字段类型</td>
+        <td class="td-input">
+            <select name="setup[fieldtype]" onchange="javascript:numbertype(this.value);" class="l">
+                <option value="varchar"{if $setup.fieldtype=='varchar'} selected{/if}>字符 VARCHAR</option>
+                <option value="tinyint"{if $setup.fieldtype=='tinyint'} selected{/if}>整数 TINYINT(3)</option>
+                <option value="smallint"{if $setup.fieldtype=='smallint'} selected{/if}>整数 SMALLINT(5)</option>
+                <option value="mediumint"{if $setup.fieldtype=='mediumint'} selected{/if}>整数 MEDIUMINT(8)</option>
+                <option value="int"{if $setup.fieldtype=='int'} selected{/if}>整数 INT(10)</option>
+            </select>
+            <span class="form-tip l" id="numbertype" style="display: none;"><input type="checkbox" id="" name="setup[numbertype]" value="1" checked /> 不包括负数</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">宽度</td>
+        <td class="td-input"> <input type="text" class="form-i" size="10"  name="setup[labelwidth]" value="{$setup.labelwidth}" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" class="form-i" size="5"  name="setup[default]" value="{$setup.default}" /></td>
+    </tr>
+
+    {elseif $type=='image'}
+    <tr>
+        <td class="td-label">文本框长度</td>
+        <td class="td-input"><input type="text" name="setup[size]" value="{$setup.size}" size="10" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" name="setup[default]" value="{$setup.default}" size="40" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件大小</td>
+        <td class="td-input"><input type="text" name="setup[upload_maxsize]" value="{$setup.upload_maxsize}" size="5" class="form-i" />MB </td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件类型</td>
+        <td class="td-input"><input type="text" name="setup[upload_allowext]" value="{if $setup.upload_allowext}{$setup.upload_allowext}{else}*.gif;*.jpg;*.jpeg;*.png{/if}" size="40" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">是否添加水印</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[watermark]" value="1"{if $setup.watermark==1} checked{/if}> 是</label>
+            <label><input type="radio" name="setup[watermark]" value="0"{if !$setup.watermark} checked{/if}> 否</label>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">是否从已上传中选择</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[more]" value="1"{if $setup.more==1} checked{/if}> 是</label>
+            <label><input type="radio" name="setup[more]" value="0"{if !$setup.more} checked{/if}> 否</label>
+        </td>
+    </tr>
+
+    {elseif $type=='images'}
+    <tr>
+        <td class="td-label">最多允许上传几张图片</td>
+        <td class="td-input"><input type="text" name="setup[upload_maxnum]" value="{$setup.upload_maxnum}" size="5" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件大小</td>
+        <td class="td-input"><input type="text" name="setup[upload_maxsize]" value="{$setup.upload_maxsize}" size="5" class="form-i" />MB </td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件类型</td>
+        <td class="td-input"><input type="text" name="setup[upload_allowext]" value="{if $setup.upload_allowext}{$setup.upload_allowext}{else}*.gif;*.jpg;*.jpeg;*.png{/if}" size="40" class="form-i" /></td>
+    </tr>
+    <tr style="display: none">
+        <td class="td-label">是否添加水印</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[watermark]" value="1"{if $setup.watermark==1} checked{/if}> 是</label>
+            <label><input type="radio" name="setup[watermark]" value="0"{if !$setup.watermark} checked{/if}> 否</label>
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td class="td-label">是否从已上传中选择</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[more]" value="1"{if $setup.more==1} checked{/if}> 是</label>
+            <label><input type="radio" name="setup[more]" value="0"{if !$setup.more} checked{/if}> 否</label>
+        </td>
+    </tr>
+
+    {elseif $type=='file'}
+    <tr>
+        <td class="td-label">文本框长度</td>
+        <td class="td-input"><input type="text" name="setup[size]" value="{$setup.size}" size="10" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" name="setup[default]" value="{$setup.default}" size="40" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件大小</td>
+        <td class="td-input"><input type="text" name="setup[upload_maxsize]" value="{$setup.upload_maxsize}" size="5" class="form-i" />MB </td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件类型</td>
+        <td class="td-input"><input type="text" name="setup[upload_allowext]" value="{if $setup.upload_allowext}{$setup.upload_allowext}{else}*.zip;*.pdf;*.7gz;*.doc;*.docx;*.xls;*.ppt;*.xlsx{/if}" size="40" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">是否从已上传中选择</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[more]" value="1"{if $setup.more==1} checked{/if}> 是</label>
+            <label><input type="radio" name="setup[more]" value="0"{if !$setup.more} checked{/if}> 否</label>
+        </td>
+    </tr>
+
+    {elseif $type=='files'}
+    <tr>
+        <td class="td-label">最多允许上传几个文件</td>
+        <td class="td-input"><input type="text" name="setup[upload_maxnum]" value="{$setup.upload_maxnum}" size="5" class="form-i" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件大小</td>
+        <td class="td-input"><input type="text" name="setup[upload_maxsize]" value="{$setup.upload_maxsize}" size="5" class="form-i" />MB </td>
+    </tr>
+    <tr>
+        <td class="td-label">允许上传的文件类型</td>
+        <td class="td-input"><input type="text" name="setup[upload_allowext]" value="{if $setup.upload_allowext}{$setup.upload_allowext}{else}*.zip;*.pdf;*.7gz;*.doc;*.docx;*.xls;*.ppt;*.xlsx{/if}" size="40" class="form-i" /></td>
+    </tr>
+    <tr style="display: none">
+        <td class="td-label">是否从已上传中选择</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[more]" value="1"{if $setup.more==1} checked{/if}> 是</label>
+            <label><input type="radio" name="setup[more]" value="0"{if !$setup.more} checked{/if}> 否</label>
+        </td>
+    </tr>
+
+    {elseif $type=='number'}
+    <tr>
+        <td class="td-label">文本框长度</td>
+        <td class="td-input"><input type="text" class="form-i" size="5" name="setup[size]" value="{$setup.size}" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">是否包括负数：</td>
+        <td class="td-input"><input type="checkbox" name="setup[numbertype]" value="1"{if $setup.numbertype} checked{/if} />不包括负数</td>
+    </tr>
+    <tr>
+        <td class="td-label">小数位数：</td>
+        <td class="td-input">
+            <select name="setup[decimaldigits]">
+                <option value="0"{if $setup.decimaldigits==0} selected{/if}>0</option>
+                <option value="1"{if $setup.decimaldigits==1} selected{/if}>1</option>
+                <option value="2"{if $setup.decimaldigits==2} selected{/if}>2</option>
+                <option value="3"{if $setup.decimaldigits==3} selected{/if}>3</option>
+                <option value="4"{if $setup.decimaldigits==4} selected{/if}>4</option>
+                <option value="5"{if $setup.decimaldigits==5} selected{/if}>5</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" name="setup[default]" value="{$setup.default}" size="40" class="form-i" /></td>
+    </tr>
+
+    {elseif $type=='datetime'}
+
+    {elseif $type=='posid'}
+
+    {elseif $type=='groupid'}
+    <tr>
+        <td class="td-label">选项类型</td>
+        <td class="td-input">
+            <label><input type="radio" name="setup[inputtype]" value="checkbox"{if $setup.inputtype=='checkbox'} checked{/if}> 复选框</label>
+            <label><input type="radio" name="setup[inputtype]" value="select"{if $setup.inputtype=='select'} checked{/if}> 下拉列表框</label>
+            <label><input type="radio" name="setup[inputtype]" value="radio"{if $setup.inputtype=='radio'} checked{/if}> 单选框</label>
+        </td>
+    </tr>
+    <tr {if $nofield}style="display:none"{/if}>
+        <td class="td-label">字段类型</td>
+        <td class="td-input">
+            <select name="setup[fieldtype]" onchange="javascript:numbertype(this.value);" class="l">
+                <option value="varchar"{if $setup.fieldtype=='varchar'} selected{/if}>字符 VARCHAR</option>
+                <option value="tinyint"{if $setup.fieldtype=='tinyint'} selected{/if}>整数 TINYINT(3)</option>
+            </select>
+            <span class="form-tip l" id="numbertype" style="display: none;"><input type="checkbox" id="" name="setup[numbertype]" value="1" checked /> 不包括负数</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-label">复选框或单选框时宽度</td>
+        <td class="td-input"><input type="text" class="form-i" size="10"  name="setup[labelwidth]" value="{$setup.labelwidth}" /></td>
+    </tr>
+    <tr>
+        <td class="td-label">默认值</td>
+        <td class="td-input"><input type="text" class="form-i" size="5"  name="setup[default]" value="{$setup.default}" /></td>
+    </tr>
+
+    {elseif $type=='linkage'}
+    <tr>
+        <td class="td-label">关联菜单</td>
+        <td class="td-input">
+            {$select_linkage}
+        </td>
+    </tr>
+
+    {elseif $type=='template'}
+
+    {elseif $type=='verify'}
+    <tr>
+        <td class="td-label">文本框长度</td>
+        <td class="td-input"><input type="text" class="form-i" size="5" name="setup[size]" value="{$setup.size}" /></td>
+    </tr>
+
+    {/if}
+
+</tbody>
+</table>
+
+<script>
+    function numbertype(fieldtype){
+        if(fieldtype=='varchar'){
+            $('#numbertype').hide();
+        }else{
+            $('#numbertype').show();
+        }
+    }
+    {if !empty($setup.fieldtype) && $setup.fieldtype!='varchar'}
+        $('#numbertype').show();
+    {/if}
+</script>

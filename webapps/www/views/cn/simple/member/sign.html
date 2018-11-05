@@ -1,0 +1,122 @@
+{$headTit="签到赚{L('unit_score')}"} 
+{include file="public_header.html"}
+<link rel="stylesheet" type="text/css" href="/style/images/mem.css"/>
+<div class="qiandao">
+    <img src="/style/images/qiandao.png" />
+    <a href="javascript:;" class="qiandao-hdgz">活动规则</a> {if empty($score['signed'])} <a class="qiandao-ljqd" href="javascript:;" target="_blank" role="button">立即签到</a> {else}
+    <a class="qiandao-ljqd signed" href="javascript:;" target="_blank" role="button">已签到</a> {/if}
+</div> 
+<div class="qiandao-jf">
+    <ul>
+        <li>
+            <i>剩余总{L('unit_score')} <em id="left-total">{if empty($score['total_left'])}0{else}{$score['total_left']}{/if}</em></i>
+        </li>
+        <li>
+            <i>签到总{L('unit_score')} <em id="sign-total">{if empty($score['score_1'])}0{else}{$score['score_1']}{/if}</em></i>
+        </li>
+        <li>
+            <i>消费总{L('unit_score')} <em id="sign-shopping">{if empty($score['score_5'])}0{else}{$score['score_5']}{/if}</em></i>
+        </li>
+    </ul>
+    {if !empty($score.continue_sign)}
+    <h3>您已经连续签到 <b id="sign-continue">{$score.continue_sign}</b> 天</h3>{/if} {if !empty($rule['extend'])}
+    <p>连续签到有额外奖励, 详情见<a class="qiandao-hdgz" style="color:ff2e45;" href="javascript:;">活动规则</a></p>{/if}
+</div>
+<div class="qiandao-list">
+    <p class="qiandao-list-p">签到记录</p>
+    <ul class="qiandao-list-ul">
+        {if !empty($logs)} {section name=loop loop=min(count($logs),10)} {assign var="i" value=$smarty.section.loop.index}
+        <li>
+            <span> 获得  <em>{$logs[$i].amount}</em>  {L('unit_score')}</span>
+            {date('Y-m-d H:i:s', $logs[$i].c_time)}
+            <label>签到成功</label>
+        </li>
+        {/section} {else}
+        <li class="qiandao-nolist" style="text-align: center;">
+            暂无签到记录
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="qiandao-ceng" onclick="$(this).hide();">
+    <section>
+        <i class="icon iconfenxiao">&#xe61b;</i>
+        <h3>签到成功</h3>
+        <p>
+            <span id="sign-score-tip"></span>
+            <br /> 明天记得再来哦！
+        </p>
+        <a href="javascript:;">OK</a>
+    </section>
+</div>
+<div class="qiandao-rule" onclick="$(this).hide();">
+    <section>
+        <i class="icon iconfenxiao">&#xe61b;</i>
+        <ul>
+            <li>{if !empty($rule['amount'])}每日签到奖励 {$rule['amount']} {L('unit_score')}{/if}</li>
+            {if !empty($rule['extend'])} {foreach from=$rule['extend'] item=m key=k}
+            <li>连续签到 {$k} 天, 奖励 {$m} {L('unit_score')}</li>
+            {/foreach} {/if}
+        </ul>
+    </section>
+</div>
+<div class="ft"></div>
+<script type="text/javascript">
+(function() {
+    $(document).on('click', '.qiandao-ljqd', function() {
+
+        var $this = $(this);
+        if ($this.hasClass('signed')) {
+            return false;
+        }
+        var signContinue = $('#sign-continue').html() || 0;
+        signContinue = isNaN(signContinue) ? 0 : signContinue;
+
+        $.ajax({
+            url: '/sign/action',
+            type: 'post',
+            cache: false,
+            dataType: 'json',
+            data: {
+                'continue': signContinue
+            },
+            beforeSend: function() {},
+            success: function(res) {
+
+                if (res.error == 0) {
+
+                    $this.addClass('signed');
+                    $this.html('已签到');
+
+                    var data = res.data,
+                        score = parseInt(data.score),
+                        $leftTotal = $('#left-total'),
+                        $signTotal = $('#sign-total');
+
+                    $leftTotal.html(parseInt($leftTotal.html()) + score);
+                    $signTotal.html(parseInt($signTotal.html()) + score);
+
+                    $('#sign-continue').html(data.continue);
+                    $('#sign-score-tip').html((data.continue ? '您已经连续签到' + data.continue+'天' : '今天已签到') + '<br>奖励 <b >' + score + '</b> 个{L("unit_score")}');
+                    $('.qiandao-list-ul:first').prepend('<li><span>获得<em> ' + score + '</em> {L("unit_score")}</span><i class="icon iconfenxiao">&#xe621;</i>' + data.date + '<label> 签到成功 </label></li>');
+                    $('.qiandao-nolist').hide();
+                    $('.qiandao-ceng').show();
+
+                } else {
+                    alert(res.msg);
+                }
+
+            },
+            error: function() {
+                alert('对不起 系统繁忙请稍后重试');
+            },
+            complete: function() {}
+        });
+    }).on('click', '.qiandao-hdgz', function(res) {
+        $('.qiandao-rule').show();
+    });
+
+})();
+</script>
+
+{include file="public_footer_nav.html"} {include file="public_footer.html"}

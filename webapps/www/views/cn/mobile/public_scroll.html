@@ -1,0 +1,56 @@
+{literal}
+<script>
+    mui.init({
+        pullRefresh: {
+            container: '.refreshContainer',
+            up: {
+                contentrefresh: '正在加载...',
+                contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+                callback: pullupRefresh
+            }
+        }
+    });
+    var count = 1;
+    if(ajax_type==1){
+        count = 0;
+        pullupRefresh();
+
+    }
+
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh() {
+        count++;
+        mui.get(ajax_url + count, D, function(data) {
+            if (data) {
+                mui('.refreshContainer').pullRefresh().endPullupToRefresh(false);
+                $(ajax_class).append(data);
+			    $('.fl-list2 .list-img em').width($('.fl-list2 .list-img').width())
+				$('.fl-list2 .list-img em').height($('.fl-list2 .list-img').width())
+				mui('.hot-gd.mui-scroll-wrapper').scroll({
+                    deceleration: 0.01, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+                    indicators: false,
+                });
+            } else {
+                mui('.refreshContainer').pullRefresh().endPullupToRefresh(true);
+                $("#tsupport").hide();
+
+            }
+        });
+
+    }
+</script>
+<script>
+	$('.fl-list2 .list-img em').width($('.fl-list2 .list-img').width())
+	$('.fl-list2 .list-img em').height($('.fl-list2 .list-img').width())
+</script>
+<script>
+    $(document).ready(function(){
+        mui('.hot-gd.mui-scroll-wrapper').scroll({
+            deceleration: 0.01, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+            indicators: false,
+        });
+    });
+</script>
+{/literal}

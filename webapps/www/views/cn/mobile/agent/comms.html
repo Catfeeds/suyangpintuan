@@ -1,0 +1,70 @@
+{include file="public_header.html"}
+<div class="fxyjin">
+	<a href="/agent/comms_list?type=today">
+		<p>
+			<i class="icon iconfenxiao">&#xe64a;</i>今日{L('unit_comm')}
+		</p>
+		<p>
+			<i class="icon iconfenxiao fr">&#xe611;</i>
+			{$data.today}
+		</p>
+		<p>
+			订单交易完成后，获得的{L('unit_comm')}数目。
+		</p>
+	</a>
+</div>
+<dl class="fxyjin-dl">
+	<dt>
+		<a href="/agent/comms_list">
+			<i class="icon iconfenxiao">&#xe611;</i>
+			<em>总{L('unit_comm')}</em>
+			<label>{$member.commission}</label>
+		</a>
+	</dt>
+        <!--<dd><a href=""><i class="icon iconfenxiao ">&#xe611;</i><em>销售{L('unit_comm')}</em> <label>2400.00</label></a></dd>
+	<dd><a href=""><i class="icon iconfenxiao ">&#xe611;</i><em>分销{L('unit_comm')}</em> <label>240.00</label></a></dd>-->
+	<dd><a href="/agent/comms_list?type=week"><i class="icon iconfenxiao ">&#xe611;</i><em>近一周{L('unit_comm')}</em>  <label>{$data.week}</label> </a></dd>
+	<dd><a href="/agent/comms_list?type=month"><i class="icon iconfenxiao ">&#xe611;</i><em>近一个月{L('unit_comm')}</em> <label>{$data.month}</label> </a></dd>
+	{foreach from=$data.comms item=m key=k}	
+	{if C('is_rate') && $k=='0'}        
+        <dd><a href="/agent/comms_list?level={$k}"><i class="icon iconfenxiao ">&#xe611;</i><em>合伙人{L('unit_comm')}</em><label>{$m}</label> </a></dd>
+        {elseif C('is_area') && $k<0}        
+        <dd><a href="/agent/comms_list?level={$k}"><i class="icon iconfenxiao ">&#xe611;</i><em>{if $k=='-1'}省{L('unit_agent')}{elseif $k=='-2'}市{L('unit_agent')}{/if}{L('unit_comm')}</em><label>{$m}</label> </a></dd>
+        {elseif $k>0}
+        <dd><a href="/agent/comms_list?level={$k}"><i class="icon iconfenxiao ">&#xe611;</i><em>{$k}级{L('unit_distribution')}{L('unit_comm')}</em><label>{$m}</label> </a></dd>
+        {/if}
+	{/foreach}        
+</dl>
+<div class="fenxiao-dj">
+    {L('unit_distribution')}等级：{$data.agent.name}，{L('unit_comm')}比例：{$data.agent.scale}%
+    {if $data.agent.no_next==1}
+    （当前已是最高等级）
+    {else}
+    <br/>
+    下级{L('unit_comm')}比例：{$data.agent.next_scale}%    
+    <br/>
+    下级条件还需：
+    {if $data.agent.next_comss>0}{L('unit_comm')}{$data.agent.next_comss}{/if}
+    {if $data.agent.next_order>0}{$data.agent.next_join}订单总金额{$data.agent.next_order}{/if}
+    {if $data.agent.next_agent_order>0}{$data.agent.next_join}{L('unit_distribution')}商带来的订单总额{$data.agent.next_agent_order}{/if}
+    {if $data.agent.next_agent_total>0}{$data.agent.next_join}发展的{L('unit_distribution')}商数{$data.agent.next_agent_total}{/if}
+    {if $data.agent.next_agent_num>0}{$data.agent.next_join}直属下级{L('unit_distribution')}商数量{$data.agent.next_agent_num}{/if}
+    {/if}
+</div>
+<a  class="qiandao-hdgz">{L('unit_distribution')}制度</a>
+<div class="comm-rule" >
+    <section>
+        <i class="icon iconfenxiao" onclick="$('.comm-rule').hide();">&#xe61b;</i>
+        {zz mod=block mark=comm}        
+    </section>
+</div>
+<script type="text/javascript">
+(function() {
+    $(document).on('click', '.qiandao-hdgz', function(res) {
+        $('.comm-rule').show();
+    });
+})();
+</script>
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+{include file="public_footer.html"}

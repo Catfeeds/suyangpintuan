@@ -1,0 +1,1 @@
+<?phpglobal $_LANG;$_LANG['alipayapp'] = '支付宝';$_LANG['alipayapp_desc'] = 'APP支付';$_LANG['alipay_account'] = '支付宝帐户';$_LANG['alipay_partner'] = '合作者身份(app_id)';$_LANG['private_key'] = '支付宝密钥';$_LANG['public_key'] = '支付宝公钥';?>

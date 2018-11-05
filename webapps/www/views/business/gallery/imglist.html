@@ -1,0 +1,29 @@
+<div class="imgsCate">
+    <h5>图片分类</h5>
+    <ul id="g_tags">
+        {foreach from=$cates item=m}
+        <li><a href="javascript:;" rel="{$m.id}" class="e2-gallery-chTag-{$m.id}{if $tag_id==$m.id} on{/if}">{$m.name}</a></li>
+        {/foreach}
+    </ul>
+</div>
+
+<div class="imgsBox">
+    {if count($list)}
+    <ul>
+        {foreach from=$list item=m}
+        <li class="e0-gallery-imgToEditor-{$m.id}"><img src="{$m.imgurl_thumb}"></li>
+        {/foreach}
+    </ul>
+
+    <div class="clear"></div>
+
+    <div class="e1-gallery-selImgPage">
+        {$page}
+    </div>
+    {else}
+    <div style="line-height:24px; text-align:center; padding:8px">该分类下暂无图片</div>
+    {/if}
+</div>
+
+
+<div class="clear"></div>

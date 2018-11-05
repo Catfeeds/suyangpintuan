@@ -1,0 +1,32 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget"  method="post" action="/business/goods/excelGoods" enctype="multipart/form-data">
+        <input type="hidden" name="leadExcel" value="true">
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>类型</label></td>
+                <td class="td-input">
+                    <select name="type">
+                        <option value="">请选择</option>
+                        <option value="local">网站支持数据格式</option>
+                        <option value="taobao">淘宝助理数据格式</option>
+                    </select>               
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>excel(小于2M)</label></td>
+                <td class="td-input">
+                    <input type="file" name="inputExcel"  class="form-i w200" />                   
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>               
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

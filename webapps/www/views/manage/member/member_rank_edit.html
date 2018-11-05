@@ -1,0 +1,49 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/member_rank/edit" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$row.id|default:0}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>会员等级：</label><span class="c-red"> *</span></td>
+                <td class="td-input">
+                    <input type="text" name="post[rank_name]" value="{$row.rank_name|default:''}" class="form-i w200">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>经验值下限：</label></td>
+                <td class="td-input">
+                    <input type="text" name="post[min_points]" value="{$row.min_points|default:0}" class="form-i w200">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>经验值上限：</label></td>
+                <td class="td-input">
+                    <input type="text" name="post[max_points]" value="{$row.max_points|default:0}" class="form-i w200">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>允许分享次数：</label></td>
+                <td class="td-input">
+                    <input type="text" name="post[allow_time]" value="{$row.allow_time|default:0}" class="form-i w200">(为0取系统设置)
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <label>
+                        <input type="checkbox" name="post[special]" value="1" {if $row.special eq 1}checked{/if} /> 特殊会员组
+                    </label>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

@@ -1,0 +1,62 @@
+{include file='../public_btn.html'}
+<h3 class="info-tag">会员列表(共{$page_total}个会员)<span></span>
+</h3>
+
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!member/account_log/{$row.mid}" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <label class="ui-label w60">操作类型：</label>
+            <div class="l">
+                <select name="stage">
+                    <option value="">请选择</option>
+                    <option value="admin">管理员操作</option>
+                    <option value="buy">支付订单</option>
+                    <option value="recharge">账户充值</option>
+                </select>
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+
+    <table class="list" style="width:100%">
+        <tr>
+            <th class="oid w40">ID</th>
+            <th class="w80">可用余额</th>
+            <th class="w80">冻结金额</th>
+            <th class="w80">支付积分</th>
+            <th class="w160">操作类型</th>
+            <th class="w160">操作时间</th>
+            <th class="title">操作描述</th>
+        </tr>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td class="oid">{$m.id}</td>
+            <td><b style="color:#f80">{$m.user_money}</b></td>
+            <td><b style="color:#f80">{$m.frozen_money}</b></td>
+            <td>{$m.pay_points}</td>
+            <td>{$m.stage}</td>
+            <td>{date('Y-m-d H:i',$m.logtime)}</td>
+            <td class="title">{$m.desc}</td>
+        </tr>
+        {/foreach}
+    </table>
+    {$page}
+
+</div>
+
+<script src="/js/manage/member.js"></script>
+{literal}
+<script>
+    $.loadJs('/admin/js/manage/member.js',function(){
+    });
+    var menus = $('#page_container a'), i;
+    for(i = 0;i < menus.length;i++){
+        menus[i].onclick = function() {
+            var page = this.rel;
+            member.search(page);
+        }
+    }
+</script>
+{/literal}

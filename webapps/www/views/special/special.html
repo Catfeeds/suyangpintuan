@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="/style/css/mui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/style/css/main.css"/>
+    <script src="/style/js/mui.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/style/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="zt-box1">
+    {if isset($data.ban) && !empty($data.ban)}
+    <div class="zt-ban">
+        <img src="{$data.ban}"/>
+    </div>
+    {/if}
+    {if isset($data.tit) && !empty($data.tit)}
+    <div class="zt01-tit">
+        <img src="{$data.tit}"/>
+    </div>
+    {/if}
+    <ul class="clearfix zt01-list">
+        {foreach $data.list as $m}
+        <li>
+            <a href="/goods/show/{$m.id}">
+                <img src="{$m.img_cover}"/>
+                <h2>{$m.name}</h2>
+                <div class="zt01-txt">
+                    <div class="mui-card-footer pintuan-title ">
+                        <div class="mui-card-link">
+                            <span class="rmb">¥</span>
+                            <span class="price-int">{formatPrice($m.team_price)}</span>
+                            <span class="price-ori">¥{formatPrice($m.price)}</span>
+                        </div>
+                    </div>
+                    <button class="mui-btn mui-btn-danger">马上去拼</button>
+                </div>
+            </a>
+        </li>
+        {/foreach}
+    </ul>
+</div>
+</body>
+</html>

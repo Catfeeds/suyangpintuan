@@ -1,0 +1,7 @@
+<tr {if $m.status==0}class="dq-jd"{/if}>
+	<td>{$m.addtime|date_format:"Y-m-d H:i"}</td>
+	<td>￥{$m.commission}</td>
+	<td>
+		<span>{if $m.status==0}处理中{elseif $m.status==1}已到账{elseif $m.status==2}不通过{/if}</span>
+	</td>
+</tr>

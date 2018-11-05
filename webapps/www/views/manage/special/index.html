@@ -1,0 +1,29 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="w30">ID</th>
+            <th class="w320">专题名称</th>
+            <th class="w320">状态</th>
+            <th class="w320">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$data.list item=m}
+        <tr>
+            <td align='center'>{$m.id}</td>
+            <td align='center'>{$m.title}</td>
+            <td align='center'>{if $m.status==0}正常{else}禁用{/if}</td>
+            <td class='opera' align='center' nowrap>
+                <a href='#!special/edit/{$m.id}' class='uiBtn' title='编辑'>编辑</a>
+                <a href='javascript:;' onclick="main.confirm_del('special/del', '{$m.id}')" class='uiBtn' title='删除'>删除</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+</div>

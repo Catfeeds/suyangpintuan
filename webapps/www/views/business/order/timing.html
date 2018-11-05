@@ -1,0 +1,25 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!order/timing" method="get" onsubmit="return xForm.submit(this)">
+        {include file='../order/public_form.html'}
+    </form>
+
+    <table class="table-list">
+        <tbody>
+        <tr>
+            <td class="td-label" align="right">实际成本：</td>
+            <td class="td-input">
+                <b class="c-red">{$data.oldprice|default:0}</b>
+                <span class="form-tip">（订单表设置的成本价）</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="td-label" align="right">商品成本：</td>
+            <td class="td-input">
+                <b class="c-red">{$data.price|default:0}</b>
+                <span class="form-tip">（商品表设置的原价）</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

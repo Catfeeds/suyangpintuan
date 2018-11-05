@@ -1,0 +1,55 @@
+{include file="public_header.html"}
+<div class="fenxiao-dpsz">
+	<ul>
+		<li>
+			<a href="/agent/mshop_setting">店铺资料</a>
+		</li>
+		<li class="on">
+			<a href="/agent/mshop_edit">店铺素材</a>
+		</li>
+		<li>
+			<a href="/agent/mshop_share">分享设置</a>
+		</li>
+	</ul>
+</div>
+<form action="" method="post" target="iframeNews"  enctype="multipart/form-data">
+<div id="fenxiao-dpsz-txdz">
+	<!-- <div class="fenxiao-dpsz-sc">
+
+		<section>
+			<input type="file" id="up_img_WU_FILE_0" />
+			<img id="imgShow_WU_FILE_0" src="/style/images/tx.jpg" />
+		</section>
+
+		<h3>店铺头像</h3>
+		<p>
+			建议图片尺寸为120X120像素
+			<br />
+			的正方形图片
+		</p>
+	</div> -->
+
+	<div class="fenxiao-dpsz-dz">
+
+		<h3>店铺招牌</h3>
+		<p>
+			建议图片尺寸为640X320像素的长方形图片
+		</p>
+
+		<section>
+			<input type="file" id="up_img_WU_FILE_0" name="mshop"/>
+			<img id="imgShow_WU_FILE_0" src="{if $row.mshop_img}{$row.mshop_img}{else}/style/images/dianzhao.jpg{/if}" />
+		</section>
+	</div>
+</div>
+<ul class="fenxiao-dpsz-tj">
+	<li>
+		<input type="submit" name="Submit" value="保存">
+	</li>
+</ul>
+</form>
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+<!--图片上传预览-->
+<script src="/style/js/uploadPreview.js"></script>
+{include file="public_footer.html"}

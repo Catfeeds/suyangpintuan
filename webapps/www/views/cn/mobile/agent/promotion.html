@@ -1,0 +1,59 @@
+{include file="public_header.html"}
+<div class="tuoguang">
+	<img class="fxsp" src="/style/images/fxsp.png" />
+	<h3>
+		<img src="{photo($member.mid)}" />{$site_config.site_name}
+	</h3>
+	<p>		
+            {zz mod=block mark=promotion}
+	</p>
+</div>
+<div class="tuoguang-list">
+        <ul class="list">
+            {foreach from=$data.list item=m}
+            {include file="agent/lbi/list.html"}
+            {foreachelse}
+            <div class="zfzt">
+                没有相关产品哦！
+            </div>		
+            {/foreach}		
+		</ul>
+</div><div class="ft"></div>
+<div class="tupiantg-fxlj">
+	<a href="{home($member.mid)}">进入我的微店</a>
+	<a href="/agent">{L('unit_distribution')}中心</a>
+</div>
+{if $data.list}
+{assign var=event value='nclick'}
+<script type="text/javascript">       
+    var ExtendOptions = {
+        path: function(index) {            
+            return "/agent/promotion/"+index+"?load";
+        }
+    };   
+</script>
+{include file="public_scroll.html"}
+{/if}
+{include file="public_footer.html"}
+{literal}
+<script> 
+    function mshop(id){
+        $.ajax({		
+            type: "get",
+            url:"/agent/ajax_mshop/"+id,
+            dataType:'json',  
+            cache: false,	
+            success: function(data) {                
+                 if(data.error==0){
+                     if(data.type==1){
+                         $("#agent_"+id).removeClass("on");
+                     }else{
+                         $("#agent_"+id).addClass("on");
+                     }
+                     $("#agent_"+id).html(data.msg);                     
+                 }
+            }
+	});
+    }
+</script>
+{/literal}

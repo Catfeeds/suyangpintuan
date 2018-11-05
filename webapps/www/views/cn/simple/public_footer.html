@@ -1,0 +1,149 @@
+	{if $nav == 1}
+    <nav class="mui-bar mui-bar-tab">
+        <a class="mui-tab-item  {if $active == 1}mui-active{/if}" href="/">
+	        <span class="mui-icon">
+	        	<img src="/style/img/f-ico1.png" class="f-im1" />
+	        	<img src="/style/img/f-ico1-1.png" class="f-im2" />
+	        </span>
+            <span class="mui-tab-label">首页</span>
+        </a>
+        <a class="mui-tab-item {if $active == 3}mui-active{/if}"  href="/goods/square">
+	        <span class="mui-icon ">
+	        	<img src="/style/img/f-ico3.png" class="f-im1" />
+	        	<img src="/style/img/f-ico3-2.png" class="f-im2" />
+	        </span>
+            <span class="mui-tab-label">拼团广场</span>
+        </a>
+        <a class="mui-tab-item " href="/member/team">
+	        <span class="mui-icon">
+	        	<img src="/style/img/f-ico6.png" class="f-im1" />
+	        	<img src="/style/img/f-ico6-2.png" class="f-im2" />
+	        </span>
+            <span class="mui-tab-label">我的拼团</span>
+        </a>
+
+        <a class="mui-tab-item {if $active == 5}mui-active{/if}" href="/member/index">
+	        <span class="mui-icon">
+	        	<img src="/style/img/f-ico5.png" class="f-im1" />
+	        	<img src="/style/img/f-ico5-2.png" class="f-im2" />
+	        </span>
+            <span class="mui-tab-label">用户中心</span>
+        </a>
+    </nav>
+	{/if}
+        {if $notice==1}
+	<!--拼团提示弱窗-->
+	<a class="backtop hide" href="#">
+		<div class="tx">
+			<img src="/style/img/tx.jpg"/>
+		</div>
+                <p class="message">
+			1秒前，团长137887***成功开团,等你来拼
+		</p>
+	</a>
+        <script src="/upload/{$smarty.const.MERID}/tmp/order_json.js"></script>
+        <script>
+        window.setInterval(function(){ 
+            if(user.length>0){
+                var i = Math.floor(Math.random()*user.length);
+                $(".backtop").attr("href",user[i].url);
+                $(".backtop .tx img").attr("src",user[i].avatar);
+                $(".message").html(user[i].message);
+                $(".backtop").removeClass("hide");
+            }    
+        },4000);
+        window.setInterval(function(){
+            $(".backtop").addClass("hide");
+        },3000);
+        </script>
+        {/if}
+        <script src="/style/js/main.js" type="text/javascript" charset="utf-8"></script>
+</body>
+{if $smarty.const.IS_WECHAT}
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+wx.config({
+    debug: false,
+    appId: '{$signPackage.appId}',
+    timestamp: '{$signPackage.timestamp}',
+    nonceStr: '{$signPackage.nonceStr}',
+    signature: '{$signPackage.signature}',
+    jsApiList: [
+        //所有要调用的 API 都要加到这个列表中
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage'
+    ]
+});
+var title = $("title").eq(0).html();
+var desc = $("meta[name='description']").eq(0).attr('content');
+var pic = $('img').eq(0).attr('src');
+if(pic.indexOf('http://')<0){ pic = '{$smarty.const.RootUrl}'+pic; }
+wx.ready(function() {
+    //分享给好友
+    wx.onMenuShareAppMessage({
+        title: title,
+        desc: desc,
+        link: '{$share_url}',
+        imgUrl: pic
+    });
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+        title: title,
+        link: '{$share_url}',
+        imgUrl: pic
+    });
+    wx.error(function(res) {
+        //alert(res.errMsg);
+    });
+});
+</script>
+{* {if empty($smarty.session.wxoauth.subscribe)}
+<div class="subscribe-notice">
+    <div class="subscribe-notice-body">
+        <div class="subscribe-notice-text">
+            <p>欢迎进入 <span>{C('site_name')}</span> </p>
+            <p>关注公众号,享专属服务</p>
+        </div>
+        <button class="subscribe-notice-button toggle-modal" data-title="{C('site_name')}" data-target="#modal-subscribe-notice">立即关注</button>
+    </div>
+</div>
+<div class="modal modal-checkout" id="modal-subscribe-notice">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="modal-close close" href="javascript:;"></a>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{C('qr_code.jpg','images')}" with="320" height="320">
+                <h3>扫描或长按图中二维码,选识别二维码,关注公众号</h3>
+                <p>关注我们,收获更多我们的关注和服务</p>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+body {
+padding-top: 2rem;
+}
+.subscribe-notice {
+position: fixed;
+top: 0;
+width: 100%;
+height: 1.6rem;
+}
+.fenlei {
+top: 3.76rem;
+}
+
+</style>
+<script src="/style/js/common-modal.js" type="text/javascript"></script>
+{/if}  *}
+
+{/if}
+<iframe name="iframeNews" style="display:none;"></iframe>
+</html>

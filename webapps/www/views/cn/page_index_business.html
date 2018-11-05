@@ -1,0 +1,18 @@
+{include file="public_header.html"}
+<div class="ban-box" style="background: url({zz mod=fileurl source=$data.ban_thumb}) no-repeat center center; position: relative; height: 400px;">
+	{if !$smarty.session.b_id}<a href="javascript:;" class="login_reg"><img src="/default/img/btn.png"/></a>{/if}
+</div>
+<div class="box-02">
+	<div class="content-box clearfix">
+		{zz mod=block mark='index_apply'}
+		{if !$smarty.session.b_id}<a href="javascript:;" class="lc-abtn login_reg">立即申请</a>{/if}
+	</div>
+</div>
+<div class="box-01">
+	<div class="content-box">
+		{$data.page.content}
+		{if !$smarty.session.b_id}<a href="javascript:;" class="lc-abtn login_reg">立即申请</a>{/if}
+		<!--<a href="/content/show/33/48" class="xq-btn">查看入驻流程</a>-->
+	</div>
+</div>
+{include file="public_footer.html"}

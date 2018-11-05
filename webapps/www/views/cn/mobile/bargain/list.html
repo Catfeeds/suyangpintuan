@@ -1,0 +1,77 @@
+{$slider = 1}
+{include file="public_header.html"}
+<link rel="stylesheet" type="text/css" href="/style/css/bargain.css">
+<div class="bargain-1 mui-clearfix">
+    {$ad = getAd(21)}
+    {if $ad}
+    <img src="{zz mod=fileurl source=$ad}"/>
+    {/if}
+</div>
+<ul class="bargain1-ul mui-clearfix list">
+    {foreach from=$data.list item=m}
+    {include file="bargain/lbi/list.html"}
+    {/foreach}
+</ul>
+{assign var=event value='nclick'}
+<script type="text/javascript">
+    var ExtendOptions = {
+        path: function(index) {
+            return "/bargain/index/"+index+"?load";
+        }
+    };
+</script>
+{include file="bargain/scroll.html"}
+<div class="bar-bottom-height mui-clearfix"></div>
+<div class="mui-clearfix bar-bottom mui-text-center">
+    <a href="/bargain/index" class="hover">
+        <em><img src="/style/img/bar-list1-1.png"></em><i><img src="/style/img/bar-list1-2.png"></i>砍价商品
+    </a>
+    <a href="/bargain/log_list">
+        <em><img src="/style/img/bar-list2-1.png"></em><i><img src="/style/img/bar-list2-2.png"></i>我的砍价
+    </a>
+</div>
+<div class="bargain-screen"></div>
+{literal}
+<script>
+    var goods_id = 0;
+    $(document).on('tap', '.bargain1-ul li .bargain1-1 span .bargin-bg', function() {
+        $('.bargain-screen').fadeIn();
+        $(this).parents('li').find('.bargain2').fadeIn();
+        goods_id = $(this).attr("data-gid");
+        getSelecteds();
+    }).on('tap', '.bargain2-close', function() {
+        $('.bargain-screen').fadeOut();
+        $('.bargain2').fadeOut();
+        $('.bargain3').fadeOut();
+    }).on('tap', '.bargain2-dl dd p', function() {
+        $(this).addClass('hover').siblings().removeClass('hover');
+        getSelecteds();
+    })
+    function getSelecteds() {
+        var result = "";
+        $(".bargain_"+goods_id+" dd p[class='hover']").each(function () {
+            result += $(this).attr("data-val")+"-";
+        });
+        $.post("/goods/ajax_goodspec",{spec:result,goods_id:goods_id},function(data){
+            if(data.code=='success'){
+                $("#bargain_spec_"+goods_id).val(data.spec);
+                if(data.path){
+                    $(".cp-img-"+goods_id).attr('src',data.path);
+                }else{
+                    $(".cp-img-"+goods_id).attr('src',img_src);
+                }
+            }
+        },"json");
+    }
+    function bargain_apply(bargain_id,spec) {
+        mui.post("/bargain/bargain_apply",{bargain_id:bargain_id,spec:spec}, function(data) {
+            if (data.code==0 || data.code==10002) {
+                location.href='/bargain/show/'+data.id;
+            }else {
+                mui.alert(data.message);
+            }
+        },'json');
+    }
+</script>
+{/literal}
+{include file="public_footer.html"}

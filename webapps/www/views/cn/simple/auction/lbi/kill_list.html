@@ -1,0 +1,34 @@
+<li>
+	<div>
+		<i>
+			<a href="{$m.url}"><img src="{zz mod=fileurl source=$m.thumb}" /></a>
+		</i>
+		<h3>
+			<a href="{$m.url}">{$m.act_name}</a>
+		</h3>
+		<p class="p1">
+			秒杀价：
+			<em>￥{$m.act_price}</em>
+			<del>原价：￥{$m.price}</del>
+		</p>
+		{if  $m.status eq $smarty.const.UNDER_WAY && $m.act_stock neq $m.act_sell}                    
+		<p class="p2">剩余时间：<i id="leftTimeJx{$m.act_id}">00天00时00分00秒</i></p>
+		<script>onload_leftTime_jx({$m.act_id},{$m.diff_time},"going");</script>
+		{/if}                    
+		<section>
+			<p>                     
+				{if $m.status eq $smarty.const.PRE_START}
+				<span id="leftTimeJx{$m.act_id}">00天00时00分00秒</span>
+				<a class="auction_ms_{$m.act_id} jjks" href="javascript:;">即将开始</a>
+				<script>onload_leftTime_jx({$m.act_id},{$m.diff_time},"start");</script>
+				{elseif $m.status eq $smarty.const.UNDER_WAY && $m.act_stock neq $m.act_sell}
+				<span>每人限购{$m.max_num}{$m.unit|default:"件"}</span>
+				<a class="auction_ms_{$m.act_id}" href="{$m.url}">立即购买</a>
+				{else}
+				<span>每人限购{$m.max_num}{$m.unit|default:"件"}</span>
+				<a class="auction_ms_{$m.act_id} jjks" href="javascript:;">已结束</a>
+				{/if}
+			</p>
+		</section>
+	</div>
+</li>

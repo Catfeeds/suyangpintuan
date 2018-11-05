@@ -1,0 +1,7 @@
+RewriteEngine on
+RewriteRule ^(_mysql_adm.*|console.*) $1 [NC,L]
+RewriteRule ^(?:webscan_360_cn.html|zhanzhang.html|phpinfo.php|ts.php) $1 [NC,L]
+RewriteRule ^((?:admin|upload|style|default|js|images).*|favicon.ico|favicon.png) web/$1 [NC,L]
+
+RewriteRule ^((?:.*)/.*?)$ web/$1 [NC,L]
+RewriteRule ^.*$ web/index.php [NC,L]

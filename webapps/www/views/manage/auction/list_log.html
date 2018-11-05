@@ -1,0 +1,104 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <div class="f-unit clear">
+        <form class="cond-form" action="#!auction/log" onsubmit="return xForm.submit(this)">
+            <div class="clear">
+                <select name="k" id="k">
+                    <option value="act_id" {if $k eq 'act_id'}selected{/if}>竞拍商品ID</option>
+                    <option value="bid_user" {if $k eq 'bid_user'}selected{/if}>会员ID</option>
+                </select>
+                <input id="q" class="form-i w100 sitem" name="q" value="{$q}" type="text">
+                <label class="l">&nbsp;商品名称：</label>
+                <input id="title" class="form-i w160 sitem" name="title" value="{$title}" type="text">
+                <label class="l">&nbsp;用户名：</label>
+                <input id="username" class="form-i w100 sitem" name="username" value="{$username}" type="text">
+                <select name="status">
+                    <option value="99">-中奖状态-</option>
+                    <option value="{$smarty.const.OKWIN}" {if $status eq $smarty.const.OKWIN}selected{/if}>已中奖，未领取</option>
+                    <option value="{$smarty.const.FINWIN}" {if $status eq $smarty.const.FINWIN}selected{/if}>已中奖，已领取</option>
+                    <option value="{$smarty.const.DEFWIN}" {if $status eq $smarty.const.DEFWIN}selected{/if}>等待开奖</option>
+                    <option value="{$smarty.const.NOWIN}" {if $status eq $smarty.const.NOWIN}selected{/if}>未中奖</option>
+                    <option value="{$smarty.const.DISWIN}" {if $status eq $smarty.const.DISWIN}selected{/if}>已失效</option>
+                </select>
+                <label class="l">&nbsp;出价时间：</label>
+                <input class="form-i w80 sitem" name="start_time" value="{get(start_time)}" type="text" onclick="WdatePicker()">
+                <input style="margin-left:-1px" class="form-i w80 sitem" name="end_time" value="{get(end_time)}" type="text" onclick="WdatePicker()">
+                <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+            </div>
+            <div class="clear">
+                <select name="frozen" id="frozen">
+                    <option value="">-解冻状态-</option>
+                    <option value="1" {if $frozen eq '1'}selected{/if}>已解冻</option>
+                    <option value="99" {if $frozen eq '99'}selected{/if}>未解冻</option>
+                    <option value="98" {if $frozen eq '98'}selected{/if}>待解冻</option>
+                </select>
+                <select name="sortby" id="sortby">
+                    <option value="log_id" {if $sortby eq 'log_id'}selected{/if}>ID</option>
+                    <option value="goods_name" {if $sortby eq 'goods_name'}selected{/if}>商品名称</option>
+                </select>
+                <select name="sortorder" id="sortorder">
+                    <option value="DESC" {if $sortorder eq 'DESC'}selected{/if}>降序</option>
+                    <option value="ASC" {if $sortorder eq 'ASC'}selected{/if}>升序</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+    <table class="list">
+        <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th align="left">商品</th>
+                <th align="left" class="w120">买家 / 电话</th>
+                <th class="w160">出价/保证金</th>
+                <th class="w160">出价时间</th>
+                <th class="w120">中奖时间</th>
+                <th class="w60">随机码</th>
+                <th class="w80">状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$data.list item=m key=key}
+            <tr>
+                <td class='id' align='center'>{$m.log_id}</td>
+                <td>
+                    <a href="/auction/view/{$m.act_id}" target="_blank">{$m.title}</a>
+                    {if $m.cat_type eq 'tiyan'}<span class="mark">体验区</span>{/if}
+                </td>
+                <td align="left" nowrap>{$m.username} <span class="c-gray">/</span> {$m.mobile}</td>
+                <td align="center">{$m.bid_price}/{if $m.first eq 1 && $m.deposit gt 0}{if $m.frozen eq 1}{$m.deposit}{else}<b class="c-orange">{$m.deposit}</b>{/if}{else}0.00{/if}</td>
+                <td align="center">{$m.bid_time|microtime_format:'Y-m-d H:i:s.x'}</td>
+                <td align="center">{$m.cod_time|date_format:'Y-m-d H:i:s'}</td>
+                <td align="center">{$m.cod}</td>
+                <td align="center">
+                    {if $m.last_mid eq $m.bid_user}<span class="c-orange">领先</span><br>{/if}
+                    {if $m.status eq $smarty.const.NOWIN}<span class="c-disable">未中奖</span>
+                    {elseif $m.status eq $smarty.const.DISWIN || $m.disabled eq 1}
+                    <a href="javascript:;" onclick="main.chang_status('{$m.log_id}','auction_log','fdis','log_id')" title="点击设为永不失效" class="c-disable">已失效</a>
+                    {elseif $m.status eq $smarty.const.OKWIN}
+                    <a href="javascript:;" onclick="main.chang_status('{$m.log_id}','auction_log','fdis','log_id')" title="{if $m.fdis eq 1}点击设为开奖7天后失效{else}点击设为永不失效{/if}" class="c-red">已中奖</a>
+                    {elseif $m.status eq $smarty.const.FINWIN}<span class="c-green">已领奖</span>
+                    {else}等待开奖
+                    {/if}
+
+                    {if $m.is_show eq 1}
+                    <a href="javascript:;" onclick="main.chang_status('{$m.log_id}','auction_log','is_show','log_id')" class="c-green" title="点击设为隐藏">显示</a>
+                    {else}
+                    <a href="javascript:;" onclick="main.chang_status('{$m.log_id}','auction_log','is_show','log_id')" class="c-red" title="点击设为显示">隐藏</a>
+                    {/if}
+
+                    {if $m.fdis eq 1}
+                    <br><span class="c-gray">永不失效</span>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+    </form>
+</div>
+

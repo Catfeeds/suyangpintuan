@@ -1,0 +1,134 @@
+{include file="public_header.html"}
+<div class="tixian">
+	<ul>
+		<li>
+			<em>可用{L('unit_comm')}</em>
+			<b>￥{$member.commission}</b>
+		</li>
+		<li>
+			<a href="">
+				<i class="icon iconfenxiao">&#xe611;</i>
+				<em>冻结{L('unit_comm')}</em>
+				<b>￥{$member.deduct_commission}</b>
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="fenxph">
+	<ul>
+		<li>
+			<a href="/agent/withdraw_commission">充值到余额</a>
+		</li>
+		<li class="on">
+			<a href="/agent/withdraw">提现</a>
+		</li>
+
+	</ul>
+</div>
+<form action='' method="post" >
+<input type="hidden" name="Submit" value="1" >
+<input type="hidden" name="token" value="{createToken()}" />
+<div class="tixian-input">	
+	<ul class="tixian-input-ul">		
+		<li>
+			<section>
+				<div>
+					<span>
+						<i>*</i>提现金额
+					</span>
+					<input id="amount" name="amount" type="text" value="" placeholder="请输入提现金额">
+				</div>
+			</section>
+		</li>		
+                {if $feelist}
+		<li>
+			<section>
+				<div>
+					<span>
+						<i>*</i>到帐时间:
+					</span>	
+                                        <select name="gotime" id="gotime">
+                                            {foreach from=$feelist item=m key=key}
+                                            <option value="{$key}">{$key}</option>
+                                            {/foreach}
+                                        </select>
+                                        <em class="color01 fee">提现将收取
+                                            {foreach from=$feelist item=m name=fee key=key}
+                                            <b class="fee{$key}" {if $smarty.foreach.fee.index neq 0}style="display:none;"{/if}>{$m}</b>
+                                            {/foreach}
+                                            手续费
+                                        </em>                                            
+                                        <script type="text/javascript">
+                                        $('#gotime').bind('change',function(){
+                                            var v=$(this).val();
+                                            $('.fee b').hide();
+                                            $('.fee b.fee'+v).css('display','');
+                                        })
+                                        </script>                                            
+				</div>
+			</section>
+		</li>		
+                {/if}
+                <li>
+                    <section>
+                        <div>
+                            <i class="icon iconfenxiao fr">&#xe63d;</i>
+                            <span>
+                                提现银行
+                            </span>
+                            <label id="chose_zf" style="width:100%;display:block;">{$list[0]['bankname']} {$list[0]['bankcard']}</label>
+                        </div>
+                    </section>
+                </li>
+                <div class="zf_xl" style="display: none">
+                    <ul>
+                        <dd><a href="javascript:;" onclick="$('.zf_xl').hide();" class="close"></a> 提现银行</dd>
+                        {foreach from=$list item=m key=k}
+                        <li class="zf-list">
+                            <a href="javascript:" class="zf-list-ico" title="{$m.bankname} {$m.bankcard}">
+                                <label><i class="icon iconfenxiao">&#xe611;</i>{$m.bankname} {$m.bankcard}<input  name="id" value="{$m.id}"  type="radio" {if $k==0}checked="checked"{/if} /></label>
+                            </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+	</ul>
+</div>
+<div class="tixian-sub">
+	<button type="submit">申请提现</button> 
+</div>
+</form>
+<script>
+        $(function () {
+
+
+
+            $(".zf-list-ico").bind('click', function () {
+                $('#chose_zf').html($(this).attr('title'));
+                $('#chose_zfzh').html($(this).attr('title'));
+                $('.zf_xl').hide();
+                $("#chose_zf").parent('div').find('img').addClass('jt_xz');
+            });
+            $("#chose_zf").click(function () {
+                $('.zf_xl').show();
+                $("#chose_zf").parent('div').find('img').removeClass('jt_xz');
+            });
+
+
+        })
+
+
+        $(document).ready(function () {
+            $(".dzxuanzhe-ul").find("input:radio[name='shdz']").each(function () {
+                $(this).click(function () {
+                    $(this).parent().parent().parent().children().removeClass("on");
+                    $(this).parent().parent().toggleClass("on", this.checked);
+                });
+            });
+        });
+
+    </script>
+<!-- <p class="tixian-sub-gz">
+	<a href="">{L('unit_distribution')}提现规则</a>
+</p> -->
+{include file="public_footer.html"}

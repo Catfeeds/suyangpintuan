@@ -1,0 +1,21 @@
+<ul class="group-list">
+	{foreach from=$data.team_list item=m key=k}
+	<li>
+		<a href="/goods/team/{$m.id}" >
+			<div class="group-tx" >
+				<img src="{photo($m.mid)}"/>
+			</div>
+			<div class="pt-l" >
+				<p>{$m.username|nickname:$m.nickname:1|truncate:8}</p>
+				<p>等你来拼 (^_^)</p>
+			</div>
+			<div class="pt-r" >
+				<p class="red">{if $m.team_num==$m.team_num_yes}已有{$m.team_num_yes}人参团{else}还差{$m.team_num-$m.team_num_yes}人成团{/if}</p>
+				<p>剩余<em id="leftTimeJx{$m.id+20000}">00:00:00</em>结束</p>
+				<script>onload_leftTime_jx({$m.id+20000},{$m.end_time},"","");</script>
+			</div>
+			<div class="mui-btn mui-btn-danger" >去参团 ></div>
+		</a>
+	</li>
+	{/foreach}
+</ul>

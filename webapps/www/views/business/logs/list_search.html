@@ -1,0 +1,51 @@
+<h3 class="info-tag">
+    {foreach from=$btnMenu item=m key=key}
+    <a class="uiBtn{if $btnNo==$key} BtnBlue{/if}" href="{$m.url}"{if isset($m.str)} {$m.str}{/if}>{$m.name}</a>
+    {/foreach}
+</h3>
+
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!log/index" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="word" {if $k eq 'word'}selected{/if}>搜索词</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$q}" type="text">
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+    <table class="list">
+        <thead>
+            <tr>
+                <th align="left" class="w30">ID</th>
+                <th align="left" class="w120">搜索词</th>
+                <th align="left" class="w140">第一次搜索</th>
+                <th align="left" class="w140">最后一次搜索</th>
+                <th align="center" class="w40">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$data.list item=m}
+            <tr>
+                <td align="left" nowrap>{$m.id}</td>
+                <td align="left" nowrap>{$m.word}<span class="c-orange">({$m.qty})</span></td>
+                <td align="left" nowrap>{$m.start_time|date_format:'Y-m-d H:i:s'}</td>
+                <td align="left">{$m.last_time|date_format:'Y-m-d H:i:s'}</td>
+                <td class='opera' align='center' nowrap>
+                    <a href='javascript:;' onclick="main.confirm_del('log/del_search','{$m.id}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+    </form>
+
+</div>
+

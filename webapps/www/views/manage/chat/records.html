@@ -1,0 +1,215 @@
+{include file='../public_btn.html'}
+<link rel="stylesheet" href="/static/chat/css/admin.css">
+<div class="html-box">
+    <div class="records-main">
+        <div class="users">
+            <form class="filters" id="formUsers">
+                <span class="input-group">
+                    <span class="addon-left">用户名</span>
+                <input type="text" name="filters[name][1]" value="{if isset($filters['name'][1])}{$filters['name'][1]}{/if}" placeholder="输入要查找的用户名">
+                <label class="addon-right">
+                    <input type="hidden" name="filters[name][0]" value="cs">
+                    <input type="checkbox" name="filters[name][0]" value="eq" {if isset($filters[ 'name'][0]) && $filters[ 'name'][0] eq 'eq'}checked="checked" {/if}> 精确
+                </label>
+                </span>
+                <button type="button" class="uiBtn BtnBlue">搜索</button>
+                <button type="button" class="uiBtn BtnGray">重置</button>
+            </form>
+            <ul class="users-list" id="users-list">
+            </ul>
+            <ul id="users-list-pagination" class="pagination" data-url="/manage/chat/records_users/<<page>>?load&size=10" data-target="#users-list" style="display: none"></ul>
+        </div>
+        <div class="records">
+            <form class="filters" id="formRecords">
+                <span class="input-group">
+                <span class="addon-left">聊天内容</span>
+                <input type="text" name="filters[msg][1]" value="{if isset($filters['msg'][1])}{$filters['msg'][1]}{/if}" placeholder="可模糊搜索聊天记录">
+                <input type="hidden" name="filters[msg][0]" value="cs">
+                </span>
+                <span class="input-group">
+                    <input type="hidden" name="filters[time][0][0]" value="ge"/>
+                    <input class="w120 sitem" name="filters[time][0][1]" value="{if isset($filters['time'][0][1])}{$filters['time'][0][1]}{/if}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="发送时间起" />
+                    <input type="hidden" name="filters[time][0][2]" value="timestamp"/>
+                    <input type="hidden" name="filters[time][1][0]" value="le"/>
+                    <input class="w120 sitem" name="filters[time][1][1]" value="{if isset($filters['time'][1][1])}{$filters['time'][1][1]}{/if}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="发送时间止" style="margin-left:-1px;"/>
+                    <input type="hidden" name="filters[time][1][2]" value="timestamp"/>
+                </span>
+                <button type="button" class="uiBtn BtnBlue">搜索</button>
+                <button type="button" class="uiBtn BtnGray">重置</button>
+            </form>
+            <ul class="records-list" id="records-list">
+            </ul>
+            <ul id="records-list-pagination" class="pagination" data-url="/manage/chat/records/<<page>>?load&size=10" data-target="#records-list" style="display: none"></ul>
+        </div>
+    </div>
+</div>
+{literal}
+<script>
+$.loadJs('/style/js/jquery-1.11.2.min.js', function() {
+    jQuery.noConflict();
+    $.loadJs('/static/js/jqPaginator.min.js', function() {
+        var $ = jQuery;
+
+        $('.pagination').each(function() {
+            var $this = $(this),
+                $target = $($this.data('target')),
+                totalPages = $this.data('total-pages') || 1;
+            var $paginator = $this.jqPaginator({
+                totalPages: totalPages,
+                visiblePages: 7,
+                currentPage: 1,
+                first: '<li class="first"><a href="javascript:;">首页</a></li>',
+                prev: '<li class="prev"><a href="javascript:;">上页</a></li>',
+                next: '<li class="next"><a href="javascript:;">下页</a></li>',
+                last: '<li class="last"><a href="javascript:;">尾页</a></li>',
+                page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+                onPageChange: function(page, type) {
+                    if ($this.data('delay')) {
+                        $this.data('delay', false);
+                        return false;
+                    }
+                    if (!$('.loading:visible').length) {
+                        var url = $this.data('url').replace('<<page>>', page);
+                        $.ajax({
+                            url: encodeURI(url),
+                            type: 'get',
+                            dataType: 'json',
+                            cache: false,
+                            beforeSend: function() {
+                                $this.hide();
+                                $target.html('<div class="loading">加载中...</div>');
+                            },
+                            success: function(res) {
+                                if (res.data && res.data.totalPages) {
+                                    $paginator.jqPaginator('option', {
+                                        totalPages: +res.data.totalPages,
+                                        currentPage: page
+                                    });
+                                    // $this.show();
+                                    $target.html(res.data.html);
+
+                                    var render = $this.data('render');
+                                    if (window[render] && typeof window[render] === 'function') {
+                                        window[render](res);
+                                    }
+
+                                    var $scrollTo = $($this.data('scroll-to')),
+                                        $scrollBy = $($this.data('scroll-by')),
+                                        scrollByTop = $scrollBy.length ? $scrollBy.offset().top : 0;
+
+                                    if ($scrollTo.length) {
+                                        if ($(document).scrollTop() > scrollByTop) {
+                                            $('html,body').animate({
+                                                scrollTop: $scrollTo.offset().top
+                                            }, 250);
+                                        }
+                                    }
+
+                                    if (res.data.totalPages > 1) {
+                                        $this.show();
+                                    }
+
+                                } else {
+                                    $paginator.jqPaginator('option', {
+                                        totalPages: 1,
+                                        currentPage: 1
+                                    });
+                                    $target.html('<div class="norecord">暂无内容</div>');
+                                }
+                            },
+                            error: function() {
+                                layer.msg('系统繁忙，请稍后重试', {
+                                    icon: 0
+                                });
+                            },
+                            complete: function() {
+                                $target.find('.loading').remove();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        var setPaginatorPage = function(select, page) {
+            var $jqPaginator = $(select).data('jqPaginator');
+            if ($jqPaginator && typeof $jqPaginator.options.onPageChange === 'function') {
+                $jqPaginator.options.onPageChange(page, 'change');
+            }
+        };
+
+
+        $(document).on('click', '.users-list li', function() {
+            var $this = $(this),
+                $pagination = $('#records-list-pagination'),
+                baseUrl = $pagination.attr('data-url'),
+                url = baseUrl + '&group_id=' + $this.data('group_id');
+
+            $this.addClass('active').siblings().removeClass('active');
+
+            $pagination.data('url', url);
+
+            setPaginatorPage('#records-list-pagination', 1);
+
+        }).on('click', '.users .filters .BtnBlue', function() {
+
+            var $this = $(this),
+                $pagination = $('#users-list-pagination'),
+                baseUrl = $pagination.attr('data-url'),
+                url = baseUrl + '&' + decodeURI($('#formUsers').serialize());
+
+            $pagination.data('url', url);
+            setPaginatorPage('#users-list-pagination', 1);
+
+
+        }).on('click', '.users .filters .BtnGray', function() {
+            var $this = $(this),
+                $pagination = $('#users-list-pagination'),
+                baseUrl = $pagination.attr('data-url');
+
+            document.getElementById('formUsers').reset();
+
+            $pagination.data('url', baseUrl);
+            setPaginatorPage('#users-list-pagination', 1);
+
+        }).on('click', '.records .filters .BtnBlue', function() {
+
+            var $this = $(this),
+                $pagination = $('#records-list-pagination'),
+                baseUrl = $pagination.attr('data-url'),
+                url = baseUrl + '&' + decodeURI($('#formRecords').serialize());
+
+            $pagination.data('url', url);
+            setPaginatorPage('#records-list-pagination', 1);
+
+
+        }).on('click', '.records .filters .BtnGray', function() {
+            var $this = $(this),
+                $pagination = $('#records-list-pagination'),
+                baseUrl = $pagination.attr('data-url');
+
+            document.getElementById('formRecords').reset();
+
+            $pagination.data('url', baseUrl);
+            setPaginatorPage('#records-list-pagination', 1);
+
+
+        }).on('click', '.modal-record-position', function(){
+            var $this = $(this),
+                position = $this.data('position');
+            if (position){
+                // var html = '<iframe width="960" height="600" src="https://m.amap.com/share/index/lnglat='+position+'&coordinate=gaode&callnative=0"></iframe>';
+                var html = '<iframe width="960" height="600" src="https://uri.amap.com/marker?position='+position+'"></iframe>';
+                com.xshow('位置分享', html, {
+                    isText: false,
+                    hideBtn: true
+                });
+            }
+        });
+
+
+
+    });
+});
+</script>
+{/literal}

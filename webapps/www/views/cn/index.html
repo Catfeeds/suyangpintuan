@@ -1,0 +1,72 @@
+{include file="public_header.html"}
+{$ad = getAd(51)}
+{zz mod=fileurl source=$ad var=ad_list type=3}
+<div class="ban-box">
+	<div class="bd">
+		<ul>
+            {foreach from=$ad_list item=m}
+            <li style="background: url({$m.path}) no-repeat center center;"></li>
+            {/foreach}
+		</ul>
+	</div>	
+</div>	
+{literal}
+<script>
+jQuery(".ban-box").slide({mainCell:".bd ul",effect:"fold",autoPlay:true});	
+</script>
+{/literal}
+{zz mod=content catid=25 var=tar limit=8}
+{if $tar}
+<div class="box-01">
+    <div class="content-box">
+        <h2 class="title-01">精彩活动</h2>
+        <ul class="clearfix pin-hdbox">
+            {foreach from=$tar item=m}
+            <li class="col-01">
+                <img src="{zz mod=fileurl source=$m.thumb}"/>
+                <div class="hd-abs">
+                    <h3>扫我购买</h3>
+                    <img src="{zz mod=fileurl source=$m.ewm}"/>
+                </div>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+</div>
+{/if}
+<div class="box-02">
+    <div class="content-box clearfix">
+        {zz mod=block mark='index_apply'}
+        {if !$smarty.session.b_id}<a href="javascript:;" class="lc-abtn login_reg">立即申请</a>{/if}
+    </div>
+</div>
+{zz mod=content catid=24 var=hver limit=4}
+{if $hver}
+<div class="box-01">
+    <div class="content-box clearfix">
+        <div class="tit-02">
+            <h2>热点资讯</h2>
+        </div>
+        <div class="hot-new clearfix">
+
+            {foreach from=$hver item=m}
+            <dl class="clearfix pull-left">
+                <dt>
+                    <a href="{$m.url}"><img src="{zz mod=fileurl source=$m.thumb}"/></a>
+                </dt>
+                <dd>
+                    <a href="{$m.url}">{$m.title}</a>
+                    <p>{$m.content|strip_tags|truncate:40}</p>
+                    <div class="hot-xx clearfix">
+                        <span>{$m.hits} 次</span>
+                        <span>{$m.createtime|date_format:"Y-m-d"}</span>
+                    </div>
+                </dd>
+            </dl>
+            {/foreach}
+        </div>
+        <a href="/content/index/24" class="hd-abtn hd-abtn3">了解更多</a>
+    </div>
+</div>
+{/if}
+{include file="public_footer.html"}

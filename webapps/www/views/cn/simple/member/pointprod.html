@@ -1,0 +1,26 @@
+{$headTit="{L('unit_score')}商城"}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+{zz mod=content var=tagAdw module=ad id=4}
+{zz mod=fileurl var=tagAds source=$tagAdw.images width=640 height=0 num=2}
+<div class="banner top_b"><a href="{$tagAds.0.title|default:'javascript:;'}"><img src="{$tagAds.0.path}" /></a></div>
+<div class="main c_mb">
+    <div class="sale_top">{L('unit_score')}商品</div>
+    <ul class="index2 list">
+        {foreach from=$data.list item=m}
+        {include file="member/lbi/pointprod_list.html"}
+        {foreachelse}
+        <li class="norecord" style="text-align: left">没有{L('unit_score')}商品！</li>
+        {/foreach}
+    </ul>
+    <script type="text/javascript">
+        var ExtendOptions = {
+            path: function(index) {
+                return "/member/pointprod/{$data.status}/{$data.id}/"+index+"?load";
+            }
+        };
+    </script>
+    {include file="public_scroll.html"}
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

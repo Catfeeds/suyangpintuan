@@ -1,0 +1,35 @@
+<div class="prize-box">        
+        <h2>{$m.status_name}</h2>
+        {foreach from=$m.goods item=g key=k}
+        <dl class="clearfix">
+                <dt>
+                        <a href="/goods/show/{$g.good_id}"><img src="{zz mod=fileurl source=$g.thumb}"/></a>
+                </dt>
+                <dd>
+                        <a href="/goods/show/{$g.goods_id}">{$g.goods_name}</a>
+                        <p>实付：<span class="rmb">￥{$m.order_amount}</span>（免运费）</p>
+                </dd>
+        </dl>
+        {/foreach}
+        <div class="prize-btn">                
+                
+                {if $m.status_id eq $smarty.const.CS_AWAIT_PAY}               
+                <button type="button" class="mui-btn" onclick="zz_confirm('您确认要取消该订单？','/member/order_cencel/{$m.id}')">取消订单</button>
+                <button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/flow/pay/{$m.order_sn}')">去支付</button>                
+                {elseif $m.status_id eq $smarty.const.CS_AWAIT_SHIP}
+                <button type="button" class="mui-btn" onclick='tel://{C('contact_mobile')}'>联系卖家</button>
+                <button type="button" class="mui-btn" onclick="tourl('/member/order/?order_sn={$m.order_sn}')">订单详情</button>
+                {elseif $m.status_id eq $smarty.const.CS_AWAIT_GET}
+                <button type="button" class="mui-btn" onclick="tourl('/member/order_ship/{$m.order_sn}')">查看物流</button>
+                <button type="button" class="mui-btn mui-btn-danger" onclick="zz_confirm('您确认已经收到所有订单商品？','/member/finish_order/{$m.id}')">确认收货</button>                
+                {elseif   $m.status_order eq 10}
+                
+                <button type="button" class="mui-btn" onclick="tourl('/goods/luck/{$m.goods.0.good_id}')">查看中奖名单</button>
+                {*<button type="button" class="mui-btn" onclick="tourl('/goods/show/{$m.goods.0.good_id}')">再来一单</button>*}
+                {if C('goods_isComment') && !$m.is_rate}<button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/member/order_rate/{$m.order_sn}')">去评价</button>{/if}
+                
+                {elseif $m.status_id eq $smarty.const.CS_CENCEL}  
+                <button type="button" class="mui-btn" onclick="zz_confirm('您确认删除该订单？','/member/order_del/{$m.id}')">删除订单</button>
+                {/if}               
+        </div>
+</div>

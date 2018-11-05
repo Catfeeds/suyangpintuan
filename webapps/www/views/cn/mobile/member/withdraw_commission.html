@@ -1,0 +1,81 @@
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">提现</h1>
+</header>
+<div class="mui-content set-box ios-bug">
+<div class="mui-content ">
+    <div class="my-money">
+        <span>可提现总额（元）</span>
+        <h2>{$member.commission}</h2>
+    </div>
+    <div class="tx-ts">
+        24小时内到账，法定节假日3天到账，提现范围{C('comm_limit_min')}-{C('comm_limit_max')}元<br>
+        已授权微信的用户可选【微信(线上接口)】提现到当前微信号
+    </div>
+</div>
+<form action='' id="myForm" method="post" >
+<input type="hidden" name="Submit" value="1" >
+<input type="hidden" name="token" id="token" value="{createToken()}" />
+<input type="hidden" name="post[openid]" value="{$openid}" />
+<div class="tx-iniptu">
+    <div class="mui-input-row">
+        <label>提现方式</label>
+        <select name="post[type]" id="withdraw_type">
+            {if !empty($openid)}<option value="0">微信(线上接口)</option>{/if}
+            <option value="1">微信(线下转账)</option>
+            <option value="2">支付宝(线下转账)</option>
+        </select>
+    </div>
+    <div class="mui-input-row withdraw_line {if !empty($openid)}hide{/if}">
+        <label>真实姓名</label>
+        <input type="text" name="post[realname]"  value=""  placeholder="请输入您的真实姓名" datatype="*" nullmsg="请输入您的真实姓名" />
+    </div>
+    <div class="mui-input-row withdraw_line {if !empty($openid)}hide{/if}">
+        <label>收款账号</label>
+        <input type="text" name="post[account]"  value="" placeholder="请输入您的收款账号" datatype="*" nullmsg="请输入您的收款账号" />
+    </div>
+    <div class="mui-input-row">
+        <label>提现金额</label>
+        <input type="text" name="post[amount]" value="" placeholder="请输入您的提现金额"  datatype="*" nullmsg="请输入您的提现金额"/>
+    </div>
+</div>
+<div class="my-bnt-box2">
+    <button type="submit" class="mui-btn mui-btn-danger ct-btn1 ct-btn3">申请提现</button>
+    <a href="/member/withdraw_commission_log">我的提现记录</a>
+</div>
+</form>
+</div>
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<script>
+    $("#withdraw_type").on("change",function(){
+        if($(this).val()>0){
+            $(".withdraw_line").removeClass('hide');
+        }else{
+            $(".withdraw_line").addClass('hide');
+        }
+    });
+    $('#myForm').submit(function() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url:"/member/withdraw_commission",
+            dataType:'json',
+            data:$(this).serialize(),
+            success: function(res) {
+                if (0 === res.error) {
+                    layer.alert(res.msg,8,function(){
+                        parent.location.href="/member/withdraw_commission_log";
+                    });
+                } else {
+                    layer.alert(res.msg,8);
+                }
+                if (typeof(res.token)!='undefined') {
+                    $('#token').val(res.token);
+                }
+            }
+        });
+        return false;
+    });
+</script>
+{include file="public_footer.html"}

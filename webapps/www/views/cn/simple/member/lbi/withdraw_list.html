@@ -1,0 +1,26 @@
+<ul class="car_add">
+    <li>
+        <dl class="car_add_1">
+            <dt>
+                <span>{$m.bankcard}</span>
+                <p>{$m.bankname}</p>
+            </dt>
+            <dt>
+                <span>提现: <b style="color:red">{$m.amount}</b> 元</span>
+                <p>金额: <b style="color:#2da23a">{$m.commission}</b> 元. 手续费: <b style="color:#aaa">{$m.fee}</b> 元</p>
+            </dt>
+        </dl>
+        <div class="car_add_2">
+            <span>
+                {if $m.status eq 1}
+                <span style="color:#2da23a">待处理</span>
+                {elseif $m.status eq 2}
+                <span style="color:red">处理中</span>
+                {else}
+                <span>已处理</span>
+                {/if}
+            </span>
+            <p>{date('Y-m-d H:i:s',$m.addtime)}</p>
+        </div>
+    </li>
+</ul>

@@ -1,0 +1,142 @@
+{$nav = 1}{$slider = 1}{$active = 5}
+{include file="public_header.html"}
+<div class="vtop-bg">
+    <div class="vtop-ico clearfix">
+        <a href="/member/info" class="mui-pull-left">
+            <img src="/style/img/v-ico1.png"/>
+        </a>
+        <a href="/message/index" class="mui-pull-right v-xxtxt">
+            <span>{$data.msgUnreadCount}</span>
+            <img src="/style/img/v-ico2.png"/>
+        </a>
+    </div>
+    <div class="portrait-box">
+        <dl class="clearfix">
+            <dt>
+					<span>
+						<a href="/member/info"><img src="{photo($member.mid)}"/></a>
+					</span>
+            </dt>
+            <dd>
+                {$member.username|nickname:$member.nickname:1}
+            </dd>
+        </dl>
+    </div>
+
+    <div class="order">
+        <div class="order-t clearfix">
+            <h2>我的订单</h2>
+            <a href="/member/order">查看全部订单</a>
+        </div>
+        <ul class="order-l">
+            <li>
+                <a href="/member/order?status=100">
+                    <i><img src="/style/img/yh-ico1.png"/><span class="mui-badge mui-badge-danger">{$data.dfkCount}</span></i>
+                    <p>待付款</p>
+                </a>
+            </li>
+            <li>
+                <a href="/member/order?status=101">
+                    <i><img src="/style/img/yh-ico2.png"/></i>
+                    <p>待发货</p>
+                </a>
+            </li>
+            <li>
+                <a href="/member/order?status=102">
+                    <i><img src="/style/img/yh-ico3.png"/></i>
+                    <p>待收货</p>
+                </a>
+            </li>
+            <li>
+                <a href="/member/order?status=110&is_rate=0">
+                    <i><img src="/style/img/yh-ico4.png"/></i>
+                    <p>待评价</p>
+                </a>
+            </li>
+            <li>
+                <a href="/refund/index">
+                    <i><img src="/style/img/yh-ico5.png"/></i>
+                    <p>退款\货</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="vip-box2">
+    <div class="order-t clearfix">
+        <h2>我的{L('unit_comm')}</h2>
+        <a href="/member/comms_list">{L('unit_comm')}明细</a>
+    </div>
+    <div class="vip-yjbox">
+        <p>
+            {L('unit_comm')}总额（元）
+            <span>{$member.commission_total|default:'0.00'}</span>
+        </p>
+        <p>
+            可用{L('unit_comm')}（元）
+            <span>{$member.commission|default:'0.00'}</span>
+        </p>
+        <p>
+            <button class="mui-btn mui-btn-danger" onclick="tourl('/member/withdraw_commission')">提现</button>
+        </p>
+    </div>
+</div>
+<ul class="vip-box2 clearfix">
+    <li>
+        <a href="/member/team">
+            <img src="/style/img/v-01.png"/>
+            <p>我的团</p>
+        </a>
+    </li>
+    <li>
+        <a href="/member/order_lottery">
+            <img src="/style/img/v-02.png"/>
+            <p>我的抽奖</p>
+        </a>
+    </li>
+    <li>
+        <a href="/member/fav">
+            <img src="/style/img/v-03.png"/>
+            <p>我的收藏</p>
+        </a>
+    </li>
+    <li>
+        <a href="/coupon/index?type=1">
+            <img src="/style/img/v-04.png"/>
+            <p>优惠券</p>
+        </a>
+    </li>
+    <li>
+        <a href="/member/address">
+            <img src="/style/img/v-05.png"/>
+            <p>收货地址</p>
+        </a>
+    </li>
+    <li>
+        <a href="/message/index">
+            <img src="/style/img/v-06.png"/>
+            <p>我的消息</p>
+        </a>
+    </li>
+    <li>
+        <a href="/member/team_sort">
+            <img src="/style/img/v-07.png"/>
+            <p>拼团王</p>
+        </a>
+    </li>
+    <li>
+        <a href="/member/myivt_list">
+            <img src="/style/img/v-08.png"/>
+            <p>我的粉丝</p>
+        </a>
+    </li>
+</ul>
+<ul class="core-list clearfix vip-box3">
+    <li>
+        <a href="/content/index/22"><span><img src="/style/img/v-09.png"/></span>常见问题</a>
+    </li>
+    <li>
+        <a href="/content/index/23"><span><img src="/style/img/v-10.png"/></span>关于我们</a>
+    </li>
+</ul>
+{include file="public_footer.html"}

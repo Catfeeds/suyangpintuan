@@ -1,0 +1,30 @@
+<h3 class="info-tag">
+    <a class="uiBtn BtnGreen r e2-site-addSlider" href="#!news/add">新增轮播图</a>
+    轮播图管理 <span></span></h3>
+
+<div class="html-box">
+
+    <table class="xlist" style="width:100%">
+        <tr>
+            <th class="oid">ID</th>
+            <th>名称</th>
+            <th>规格</th>
+            <th>操作</th>
+        </tr>
+
+        {foreach from=$sliders item=m}
+        <tr>
+            <td class="oid">{$m.id}</td>
+            <td>{$m.name}</td>
+            <td>{$m.rule}</td>
+            <td class="opera">
+                <a href="#!company/info/sliderEdit/{$m.id}" class="uiBtn BtnGreen">管理</a>
+                <a href="javascript:;" class="uiBtn e2-site-rmSlide-{$m.id}">删除</a>
+            </td>
+
+        </tr>
+        {/foreach}
+    </table>
+
+</div>
+<script type="text/javascript" src="/admin/js/manage/site.js"></script>

@@ -1,0 +1,30 @@
+{$headTit="扫码领优惠券"} {include file="public_header.html"}
+<div class="qiandao">
+    <img src="/style/images/shaoma.png" />
+    <!--<a href="" class="qiandao-hdgz">活动规则</a>
+       <a class="qiandao-ljqd" href="javascript:;" target="_blank"  onclick="$('.qiandao-ceng').show();"  role="button">立即签到</a>-->
+    <img class="shaomaewm" src="{$qrcode}" />
+</div>
+<div class="shaomamain">
+    <h3>活动说明</h3>
+    <div class="shaomamain-nr">
+        <strong>活动时间：</strong>{if !empty($coupon.start_time)}{date('Y-m-d H:i',$coupon.start_time)}至{/if}{if !empty($coupon.end_time)}{date('Y-m-d H:i',$coupon.end_time)}{else}不限{/if}
+        <br />
+        <strong>活动规则：</strong>微信扫描码可获优惠券;每人限一次。
+        <br />
+        <strong>活动奖励：</strong>{$coupon.title} 面额: {if !empty($coupon.need_amount)}满{$coupon.need_amount}减{/if}{$coupon.amount}元
+        <br /> 此次活动最终解释权归 {C('site_name')} 所有。
+    </div>
+</div>
+{*
+<div class="qiandao-ceng" style="display:block;">
+    <section>
+        <i class="icon iconfenxiao" onclick="$('.qiandao-ceng').hide();">&#xe61b;</i>
+        <h3>领取成功</h3>
+        <p>
+            恭喜您已成功领取优惠券
+            <br /> 请到我的优惠券查看
+        </p>
+        <a href="">OK</a>
+    </section>
+</div> *} {include file="public_footer.html"}

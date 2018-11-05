@@ -1,0 +1,57 @@
+{$headTit=""} 
+{$slider=1}
+{include file="public_header.html"}
+{if $data.brand_list}
+<header id="header" class="mui-bar mui-bar-nav">
+    <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <div class="mui-scroll">
+                <a class="mui-control-item {if $data.id==0}mui-active{/if}" href="/goods/brand_kill">
+                    全部
+                </a>
+                {foreach from=$data.brand_list item=m}
+                    <a class="mui-control-item {if $data.row.id==$m.id}mui-active{/if}" href="/goods/brand_kill/{$m.id}">
+                            {$m.catname}
+                    </a>               
+                {/foreach}
+            </div>
+    </div>
+</header>
+{/if}
+<script src="/style/js/lefttime.js" type="text/javascript"></script>      
+<div class="refreshContainer mui-scroll-wrapper ms-list">
+	<div class="mui-scroll">
+		<div class="ad-ban">
+		{$ad = getAd(15)}
+		{zz mod=fileurl source=$ad var=ad_list type=3}
+		{if $ad_list}
+		{foreach from=$ad_list item=m}
+		<a href="{$m.title|default:'javascript:;'}"><img src="{$m.path}"/></a>
+		{/foreach}
+		{/if}
+        </div>		
+		<div class="hot-list">
+			{foreach from=$data.list item=m key=k}
+			{include file="goods/lbi/kill_list.html"}
+			{/foreach}
+		</div>
+	</div>
+</div>
+<script language="javascript">
+	function animate(){
+		$(".charts").each(function(i,item){
+			var a=parseInt($(item).attr("w"));
+			$(item).animate({
+				width: a+"%"
+			},1300);
+		});
+	}
+	animate();
+</script>
+<script>
+{literal}var D = {load: 1};{/literal}//load:1必填
+var ajax_url = "/goods/brand_kill/{$data.row.id|default:0}/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

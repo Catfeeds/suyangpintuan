@@ -1,0 +1,73 @@
+{$slider = 1}
+{include file="public_header.html"}
+	<div class="yhj-dbox">
+		<div class="dl-fhbtn  mui-action-back">
+			<img src="/style/img/vip/ico5.png">
+		</div>
+		<img src="/style/img/yhjt.png"/>
+	</div>
+	<div class="lj-list">
+		<div class="mui-segmented-control">
+			<a class="mui-control-item mui-active" href="#item1">平台优惠券</a>
+			<a class="mui-control-item" href="#item2">商家优惠券</a>
+		</div>
+		
+		<div>
+			<div id="item1" class="mui-control-content mui-active">
+				<ul class="pt-yhj hot-list">
+					{foreach from=$list1 item=m} {include file="coupon/lbi/receive_list.html"} {/foreach}
+				</ul>
+				
+			</div>
+			<div id="item2" class="mui-control-content ">
+				<ul class="pt-yhj hot-list">
+					{foreach from=$list2 item=m} {include file="coupon/lbi/receive_list.html"} {/foreach}
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="bq-box" style="display:none;">
+	   	<h2>联系商家: 4008300100</h2>
+	   	<a class="bq-logo" href="http://www.lnest.com/pin/">
+	   		<img src="/style/img/bq-logo.png"/>
+	   		<p>由港湾有巢提供技术支持</p>
+	   	</a>	   	
+	</div>
+<script>
+{literal}
+var D = {load: 1};{/literal}//load:1必填
+var ajax_url = "/coupon/receive_center/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}
+{literal}
+<script type="text/javascript">    
+    mui.init({
+        swipeBack:true, //启用右滑关闭功能
+    });
+    var gallery = mui('#slider');
+    gallery.slider({
+        interval:5000 //自动轮播周期，若为0则不自动播放，默认为0；
+    });
+</script>
+<script>
+$(".coupon_get").click(function(){
+	var $this = $(this),$parent = $(this).parent();
+    var id = $this.data('coupon');
+    $.post("/coupon/ajax_coupon_get/"+id, function(res) {
+        if (res.error === 0) {
+            $this.parent().parent().addClass("ylq-li");
+            $this.data("coupon",0);
+            $this.html("已领取");
+            mui.toast(res.msg);
+            //$parent.closest('.modal').hide();
+        } else {
+            mui.toast(res.msg);
+        }
+    }, 'json');
+});
+</script>
+{/literal}

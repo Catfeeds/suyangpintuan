@@ -1,0 +1,39 @@
+{$nav = 1}
+{$slider = 1}
+{include file="public_header.html"}
+{if $list}
+<header id="header" class="mui-bar mui-bar-nav">
+    <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <div class="mui-scroll">
+                {foreach from=$list item=m}
+                    <a class="mui-control-item {if $row.id==$m.id}mui-active{/if}" href="/goods/brand_goods/{$m.id}">
+                            {$m.catname}
+                    </a>               
+                {/foreach}
+            </div>
+    </div>
+</header>
+{/if}
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">
+    <div class="mui-scroll">     
+        {if $row.end_time>0}
+        <script src="/style/js/lefttime.js" type="text/javascript"></script>        
+        <div class="brand-time-box brand-time">
+            距抢购结束：<em id="leftTimeJx1"><span>00</span>:<span>00</span>:<span>00</span></em>
+        </div>
+        <script>onload_leftTime_jx(1,{$row.end_time|default:0},"span","zh");</script>        
+        {/if}
+        <div class="hot-list">                
+        </div>
+    </div>
+</div>
+<script>
+  var bid = '{$row.id}';
+  //load:1必填  
+  {literal}var D = {load: 1,bid:bid};{/literal}
+  var ajax_url = "/goods/index/0/";//请求的地址  
+  var ajax_class = ".hot-list";//加载的元素
+  var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,73 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form id="form-score-sign" target="iframeNewsTarget" method="post" action="/manage/score/index/{$row.id}">
+        <input type="hidden" name="post[rule_id]" value="{$row.id}" />
+        <table class="table-list">
+            <tbody>
+                <tr>
+                    <td class="td-label">
+                        <label>签到积分说明: </label>
+                    </td>
+                    <td>
+                        <h3>{$row.description}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>签到积分开关: </label>
+                    </td>
+                    <td class="td-input">
+                        <fieldset style="border:none;padding:0;margin:0">
+                            <label>
+                                <input type="radio" class="form-i" name="post[status]" value="1" {if $row.status}checked="checked" {/if}/>开启
+                            </label>
+                            <label>
+                                <input type="radio" class="form-i" name="post[status]" value="0" {if empty($row.status)}checked="checked" {/if}/>关闭
+                            </label>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>每日签到积分: </label>
+                    </td>
+                    <td class="td-input">
+                        <input type="input" class="form-i w40" name="post[amount]" value="{$row.config.amount}" />分
+                    </td>
+                </tr>
+                {assign var=i value=0} {foreach from=$row.config.extend key=k item=m}
+                <tr class="extend">
+                    <td>扩展规则:</td>
+                    <td>
+                        <label> 连续签到 </label>
+                        <input type="input" class="form-i w40" name="post[extend][{$i}][target]" value="{$k}" />天:
+                        <label> 奖励 </label>
+                        <input type="input" class="form-i w40" name="post[extend][{$i}][amount]" value="{$m}" />积分
+                        <button style="margin-left: 20px;" class="uiBtn e2-score-extendRemove">删除本条</button>
+                    </td>
+                </tr>
+                {$i=$i+1} {/foreach}
+                <tr class="tr-btn">
+                    <td class="td-label"></td>
+                    <td class="td-input">
+                        <button type="button" class="uiBtn BtnGreen e2-score-signSubmit">保存设置</button>
+                        <button type="button" class="uiBtn BtnOrange e2-score-signExtendAdd" style="margin-left: 20px;">扩展规则</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">规则说明:</td>
+                    <td class="td-input">
+                        <ol>
+                            <li>1. 最多可以添加10条扩展规则</li>
+                            <li>2. 连续签到天数须是正整数, 积分须是整数</li>
+                            <li>3. 连续天数相同的规则以最后添加的为准</li>
+                        </ol>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/score.js', function() {});
+</script>

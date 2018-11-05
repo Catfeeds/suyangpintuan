@@ -1,0 +1,78 @@
+<h3 class="info-tag">
+    列表(共{$page_total}个记录) 佣金统计:<span>￥{$total}</span>
+</h3>
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/withdraw_commission" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $smarty.get.k eq 'username'}selected{/if}>会员名</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="" type="text">
+            <label class="ui-label w60">操作时间：</label>
+            <div class="l">
+                <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|strip_tags}" type="text" autocomplete="off" onclick="WdatePicker()">
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|strip_tags}" type="text"  autocomplete="off" onclick="WdatePicker()">
+            </div>
+            <label class="ui-label w60">状态：</label>
+            <div class="l">
+                <select name="status">
+                    <option value="">请选择</option>
+                    <option value="0" {if $smarty.get.status eq '0'}selected{/if}>待审核</option>
+                    <option value="1" {if $smarty.get.status eq '1'}selected{/if}>通过</option>
+                    <option value="2" {if $smarty.get.status eq '2'}selected{/if}>不通过</option>
+                </select>
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+    <table class="list" style="width:100%">
+        <thead>
+        <tr>
+            <!--<th><input type="checkbox" class="checkall"></th>-->
+            <th>ID</th>
+            <th>会员名称</th>
+            <th>提现方式</th>
+            <th>真实姓名</th>
+            <th>收款账号</th>
+            <th>提现金额(元)</th>
+            <!--<th>手续费(元)</th>
+            <th>到账金额(元)</th>-->
+            <th>操作时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <!--<td><input type="checkbox" name="id" value="{$m.id}"></td>-->
+            <td>{$m.id}</td>
+            <td>{$m.username}</td>
+            <td>{if $m.type==0}微信(线上接口){elseif $m.type==1}微信(线下转账){elseif $m.type==2}支付宝(线下转账){/if}</td>
+            <td>{$m.realname}</td>
+            <td>{$m.account}</td>
+            <td><b style="color:#f80">{$m.commission}</b></td>
+            <!--<td><b style="color:#f80">{$m.fee}</b></td>
+            <td><b style="color:#f80">{$m.amount}</b></td>-->
+            <td>{date('Y-m-d H:i',$m.addtime)}</td>
+            <td>{if $m.status eq 0}待审核{else if $m.status eq 1}通过{else}不通过{/if}</td>
+            <td><a class="uiBtn" href="#!member/withdraw_commission_edit/{$m.id}?com=xshow|佣金提现">查看</a></td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+</div>
+<script>
+    $('.checkall').click(function(){
+        var checkboxs=document.getElementsByName("id");
+        for (var i=0;i<checkboxs.length;i++) {
+            var e=checkboxs[i];
+            e.checked=!e.checked;
+        }
+    });
+</script>
+<script src="/js/manage/member.js"></script>

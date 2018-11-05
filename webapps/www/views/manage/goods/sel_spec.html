@@ -1,0 +1,14 @@
+<div class="sel-spec">
+    <div class="info-tag">请选择要添加商品的规格</div>
+    <div class="spec-list" id="goods-spec-list">
+        {if count($list)}
+        {foreach from=$list item=m}
+            <label><input type="checkbox" value="{$m.id}"><span>{$m.name}</span></label>
+        {/foreach}
+        {else}
+        <div style="line-height:32px; height:32px; text-align:center">
+            请先创建规格 <a href="#!goods/spec/add" class="uiBtn BtnGreen">创建商品规格</a>
+        </div>
+        {/if}
+    </div>
+</div>

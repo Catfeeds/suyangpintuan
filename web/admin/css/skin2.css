@@ -1,0 +1,88 @@
+/*Skin:1*/
+.menu{float:left; height:30px; padding:20px 20px}
+.menu a{display:block; float:left; padding:0 12px; height:30px; line-height:30px; color:#666; font-size:14px; margin-right:10px; font-weight:bold; position:relative; border-radius:3px}
+.menu i{width:16px; height:30px; line-height:30px; vertical-align:top; font-size:12px; padding-right:3px; visibility:hidden}
+.menu em{width:16px; height:16px; font-size:14px; position:absolute; bottom:7px; left:50%; margin-left:-8px; color:#ddd; visibility:hidden}
+.menu .on{color:#fff; background-color:#b6babb}
+.user-info{float:right; padding-right:15px; position:relative; height:27px; padding-top:23px}
+.user-info .item-link{color:#666; float:left; padding:1px 5px; line-height:24px; height:24px}
+.user-info i{color:#666; float:left; width:10px; text-align:center; padding:0; line-height:24px}
+.user-info a.item-link:hover{text-decoration:underline; color:#f60}
+
+.side-nav{width:170px; position:absolute; top:70px; left:0; bottom:0; background-color:#158ce8; z-index:2; padding:0 10px}
+.fn-menu{padding-top:15px; display:none; font-size:14px}
+.fn-li{padding-bottom:4px}
+.fn-li a{display:block; line-height:20px; height:20px; padding:5px 0 5px 25px; color:#add7f7; position:relative}
+.fn-li a i,.fn-li a span{display:inline-block; vertical-align:top}
+.fn-li .on{color:#fff; background-color:#2aa3fe}
+.fn-li a:hover{background-color:#2aa3fe; color:#fff}
+.fn-li a i{width:26px; font-size:16px}
+.fn-li a em{position:absolute; right:12px; top:5px; font-size:16px}
+.child-on em,.fn-li .on em{transform:rotate(180deg); -webkit-transform:rotate(180deg);}
+.child-on a{color:#fff}
+/*二级菜单*/
+.sub-menu{overflow:hidden; display:none; height:0}
+.sub-li a{display:block; line-height:20px; height:20px; padding:5px 0 5px 52px; color:#add7f7}
+.sub-li span{display:inline-block; vertical-align:top}
+.sub-li i{visibility:hidden; vertical-align:top; width:24px}
+.sub-li a:hover{background-color:#2aa3fe; color:#fff}
+.sub-li .on{padding-left:49px; background-color:#2aa3fe; color:#fff}
+.sub-li a:hover i{visibility:visible}
+
+
+/*skin list*/
+.ui-skins{padding:7px}
+.ui-skins a{display:block; float:left; width:10px; height:10px; margin-right:5px; border-radius:6px}
+
+/*lnest-logo*/
+.top-bar{height:27px; background-color:#3D474A}
+.brand{width:180px; text-align:center; float:left}
+.brand_a{color:#bbb; display:inline-block; vertical-align:top; line-height:26px}
+.brand_a:hover{text-decoration:underline; color:#f60}
+.brand img{height:20px; width:20px; display:inline-block; margin-right:4px; padding:3px; vertical-align:top}
+
+#main{position:absolute; top:70px; left:191px; bottom:24px; right:0; overflow:auto}
+#content-box{}
+.html-box{padding:15px}
+#foot{height:24px; position:absolute; bottom:0; left:0; z-index:1; line-height:24px; color:#888; background-color:#f3f3f3; right:10px}
+#foot span{display:inline-block; vertical-align:top}
+#foot div{padding:0 10px; text-align:right}
+#foot a{color:#999}
+#foot a:hover{color:#f60; text-decoration:underline}
+
+
+/*标题*/
+.info-tag{color:#777; border-bottom:1px solid #eee; margin-bottom:2px; padding:7px 16px 8px; font-size:14px}
+.info-tag span{color:#f40;font-size:12px;font-weight:100}
+.info-tag label{ padding-right: 20px; }
+
+
+/*按钮*/
+.uiBtn{cursor:pointer;display:inline-block;font-size:12px;font-weight:bold;text-align:center;text-decoration:none;vertical-align:middle;white-space:nowrap;background:#eee;line-height:18px;padding:4px 10px;color:#666; border-radius:3px}
+.uiBtn:hover{color: #000}
+.BtnGreen{background-color:#69a74e;color:#fff;border-bottom-color:#2c5115}
+.BtnGreen:hover{ color: #fff; }
+.BtnBlue{background-color:#2aa3fe;color:#fff;border-bottom-color:#1A356E}
+.BtnBlue:hover{ color: #fff; }
+.BtnOrange{background-color:#f77f00;color:#fff;border-bottom-color:#8a4801}
+.BtnOrange:hover{ color: #fff; }
+.uiBtn-disabled{background-color:#cacccd;color:#999;cursor:default}
+.uiBtn-disabled:hover{ color: #999; }
+.uiBtn:active{background-image:none;box-shadow:rgba(0,0,0,0.2) 0 1px 1px 0 inset;padding:5px 9px 3px 11px}
+.uiBtn:focus{border-color:#900}
+.btnFocus{border-color:#09F}
+.btnS1{font-size:14px;height:30px;width:120px;line-height:30px}
+
+
+
+/*用户基本信息*/
+.user-info .sel-role{position:relative}
+.sel-role:hover .role-div{display:block}
+.role-div{position:absolute; top:34px; right:-1px; width:160px; background-color:#fff; border:1px solid #bbb; border-top:none; z-index:3; display:none; padding:5px}
+.role-div b{position:absolute;color:#fff;font-size:12px;display:block;font-family:Arial, Helvetica, sans-serif; top:-12px; right:22px}
+.role-div .z1{color:#fff}
+.role-div label{display:block; cursor:pointer; padding-left:5px; color:#090}
+.role-div label:hover{background-color:#090; color:#fff}
+.role-div label em{color:#999; padding-right:5px}
+.role-div label:hover em{color:#eee}
+#curr-role b{color:#f90}

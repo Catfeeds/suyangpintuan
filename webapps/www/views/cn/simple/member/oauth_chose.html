@@ -1,0 +1,17 @@
+{$headTit="登录"}
+{$headUrl[0]['title']="立即注册"}
+{$headUrl[0]['link']=url("/member/register")}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<style type="text/css">
+    .user-box{ text-align: center; }
+    .user-box .btn { display: block; width:90%; padding:5px 0; border:0; border-radius: 3px; background: #e54048; font-size:1rem; color: #fff; cursor: pointer; -webkit-appearance: none; margin:0 auto; }
+</style>
+<div class="main">
+    <div class="user-box">
+        <input type="button" onclick="window.location.href='/member/login'" style="margin-bottom: 10px;" class="btn" value="绑定已有账号">
+        <input type="button" onclick="window.location.href='/member/register'" class="btn" value="注册新账号">
+    </div>
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,25 @@
+{$headTit="网站公告"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<div class="main f14 top_b">
+    <div class="notice common_bor">
+        <a href="/member/message"{if !$data.type} class="hover"{/if}>所有信息</a>
+        <a href="/member/message?type=1"{if $data.type eq 1} class="hover"{/if}>未读信息</a>
+    </div>
+    <ul class="list notice_list">
+        {foreach from=$data.list item=m}
+        {include file="member/lbi/message_list.html"}
+        {/foreach}
+    </ul>
+    <script type="text/javascript">
+        var ExtendOptions = {
+            path: function(index) {
+                return "/member/message/"+index+"?load&type={$data.type}";
+            }
+        };
+    </script>
+    {include file="public_scroll.html"}
+</div>
+<div class="ft"></div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

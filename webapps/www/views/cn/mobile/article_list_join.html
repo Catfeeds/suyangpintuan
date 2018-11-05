@@ -1,0 +1,13 @@
+{$headTit=$data.cat.catname}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+<div class="main">
+    <ul class="list index3">
+        {foreach from=$data.list item=m}
+        {include file="lbi/article_list_join.html"}
+        {/foreach}
+    </ul>
+    {include file="public_scroll.html"}
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

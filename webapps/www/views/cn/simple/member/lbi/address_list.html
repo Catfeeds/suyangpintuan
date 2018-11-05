@@ -1,0 +1,10 @@
+<div class="li-radio-check" data-target="#address" data-id="{$addr.id}">
+<a href="javascript:;" class="no-address li-radio-check-triger {if !empty($data.address.id) and $data.address.id eq $addr.id}active{/if}" data-target="#address_id_checked" data-id="{$addr.id}">
+    <p >{$addr.name}，{$addr.mobile}</p>
+    {$addr.area} {$addr.address}
+</a>
+<div class="address-btn2 clearfix">
+    <button type="button" class="toggle-modal" data-title="编辑收货地址" data-target="#modal-address-edit" data-url="/member/address_ajax_edit/{$addr.id}?back={if !empty($back)}{$back}{/if}" ><span class="modify-bt">修改</span></button>
+    <button type="button" ><span class="delete-bt address-remove" data-url="/member/address_ajax_del/{$addr.id}">删除</span></button>
+</div>
+</div>

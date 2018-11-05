@@ -1,0 +1,170 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/business/coupon/edit">
+        <input type="hidden" name="post[id]" value="{if !empty($row.id)}{$row.id}{/if}" />
+        <table class="table-list">
+            <tbody>
+                <tr>
+                    <td class="td-label">
+                        <label>优惠名称: <i class="c-red">*</i></label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w300" name="post[title]" value="{if !empty($row.title)}{$row.title}{/if}" placeholder="请设置优惠券名称" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>剩余数量: <i class="c-red">*</i></label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w120" name="post[stock]" value="{if !empty($row.stock)}{$row.stock}{/if}" placeholder="数量需是正整数" /> 张
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>有效时间: </label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w120" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00' })" autocomplete="false" name="post[start_time]" value="{if !empty($row.start_time)}{date('Y-m-d H:i',$row.start_time)}{/if}" placeholder="输入生效时间" /> 至
+                        <input type="text" class="form-i w120" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00' })" autocomplete="false" name="post[end_time]" value="{if !empty($row.end_time)}{date('Y-m-d H:i',$row.end_time)}{/if}" placeholder="输入过期时间" />
+                        <span>(不设置则永久有效)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>优惠面额: <i class="c-red">*</i></label>
+                    </td>
+                    <td class="td-input">
+                        满
+                        <input type="text" class="form-i w60" name="post[need_amount]" value="{if empty($row.need_amount)}0{else}{$row.need_amount}{/if}" placeholder="为0则不限" /> 元减
+                        <input type="text" class="form-i w60" name="post[amount]" value="{if !empty($row.amount)}{$row.amount}{/if}" placeholder="输入金额" /> 元
+                        <span>(优惠券不拆分,抵扣金额超出商品售价的部分直接忽略不折现)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>品类限制: </label>
+                    </td>
+                    <td class="td-input">
+                        <div style="height:30px;">
+                            <span>如需限制使用品类,请选择.不限请不选</span> <a href='javascript:;' class='c-green e2-main-modal' title='点击查看品类限制说明' data-toggle="modal" data-target="#modal-goodscat" data-title="品类限制说明">点我看说明</a>
+                            <input id="post-target" data-tree-id="goodscat-selection-1" type="hidden" name="post[target]" value="{if !empty($row.target)}{$row.target}{/if}">
+                        </div>
+                        <ul id="goodscat-selection-1" class="goodscat-selection ztree" data-target="#post-target"></ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>附加设置: </label>
+                    </td>
+                    <td class="td-input">
+                        <ul class="check-list">
+                            <li>
+                                <input type="checkbox" name="post[uniqued]" value="1" {if !isset($row.uniqued) or $row.uniqued}checked="checked" {/if}>
+                                <span class="check-list-info">每人只能领一张,不可反复领取</span>
+                            </li>
+                            {* <li>
+                                <input type="checkbox" name="post[share]" value="1" {if !empty($row.share)}checked="checked" {/if}>
+                                <span class="check-list-info">
+                                    分享后才可使用
+                                    <a href='javascript:;' class='c-green e2-main-modal' title='点击查看什么是分享式优惠券' data-toggle="modal" data-target="#modal-share" data-title="分享式优惠券说明">点我看说明</a>
+                                </span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="post[exchange]" value="1" {if !empty($row.exchange)}checked="checked" {/if}>
+                                <span class="check-list-info">
+                                    可用积分兑换,兑换所需分值:
+                                    <input type="text" name="post[score]" value="{if !empty($row.score)}{$row.score}{/if}" placeholder="可选输入所需分值">积分
+                                </span>
+                            </li> *}
+                            <li>
+                                <input type="checkbox" name="post[paid]" value="1" {if !empty($row.paid)}checked="checked" {/if}>
+                                <span class="check-list-info">
+                                    完成交易赠送,所需满足金额:
+                                    <input type="text" name="post[paid_amount]" value="{if !empty($row.paid_amount)}{$row.paid_amount}{/if}" placeholder="可选输入所需金额">元
+                                    <a href='javascript:;' class='c-green e2-main-modal' title='点击查看完成交易赠送优惠券说明' data-toggle="modal" data-target="#modal-paid" data-title="完成交易赠送送优惠券说明">点我看说明</a>
+                                    <p style="height: 30px;">
+                                        <span>如需购买指定品类才送券,请选择品类.所有品类都送,请不选</span>
+                                        <input id="post-need-goodscat" data-tree-id="goodscat-selection-2" type="hidden" name="post[paid_goodscat]" value="{if !empty($row.paid_goodscat)}{$row.paid_goodscat}{/if}">
+                                    </p>
+
+                                <ul id="goodscat-selection-2" class="goodscat-selection ztree" data-target="#post-need-goodscat"></ul>
+                                </span>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>附加说明: </label>
+                    </td>
+                    <td class="td-input">
+                        <textarea class="form-i" name="post[remark]" placeholder="直接展示给会员的附加说明">{if !empty($row.remark)}{$row.remark}{/if}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>显示开关: </label>
+                    </td>
+                    <td class="td-input">
+                        <label class="check-label">
+                            <input type="radio" class="form-i" name="post[is_view]" value="1" {if !empty($row.is_view)}checked="checked" {/if}>开启</label>
+                        <label class="check-label">
+                            <input type="radio" class="form-i" name="post[is_view]" value="0" {if empty($row.is_view)}checked="checked" {/if}>关闭</label>
+                        <span>显示在前台领券中心/coupon/receive_center</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>状态开关: </label>
+                    </td>
+                    <td class="td-input">
+                        <label class="check-label">
+                            <input type="radio" class="form-i" name="post[status]" value="1" {if !empty($row.status)}checked="checked" {/if}>开启</label>
+                        <label class="check-label">
+                            <input type="radio" class="form-i" name="post[status]" value="0" {if empty($row.status)}checked="checked" {/if}>关闭</label>
+                    </td>
+                </tr>
+                <tr class="tr-btn">
+                    <td class="td-label"></td>
+                    <td class="td-input">
+                        <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                        <a class="uiBtn" href="javascript:;" onclick="main.refresh();">重&nbsp;&nbsp;置</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <div id="modal-share" class="hidden">
+        <h3>分享式优惠券是扩散营销的利器.具体规则如下:</h3>
+        <ol>
+            <li>1. 分享式优惠券同时有母子两张,母券获取后无法直接使用</li>
+            <li>2. 子券必须被分享给另外一个人.被分享人可以自由使用子券</li>
+            <li>3. 当子券被使用后,对应母券才可以被使用</li>
+            <li>4. 注意由于分享式优惠券是成对发放的.请注意核算成本.以免亏损</li>
+        </ol>
+    </div>
+    <div id="modal-goodscat" class="hidden">
+        <h3>品类限制规则如下</h3>
+        <ol>
+            <li>1. 不选品类则没有品类限制</li>
+            <li>2. 如果有品类被选中,则被选中的品类才能使用本优惠券</li>
+            <li>3. 如果有品类限制.新增的子品类处于未勾选状态</li>
+        </ol>
+    </div>
+    <div id="modal-paid" class="hidden">
+        <h3>完成交易赠送优惠券说明</h3>
+        <ol>
+            <li>1. 当用户确认收货的时候,判断是否满足发放条件</li>
+            <li>2. 可选设置所需满足的最低金额</li>
+            <li>3. 可选设置所需购买的商品品类</li>
+            <li>4. </li>
+        </ol>
+        <h3>同时满足多张优惠券发放条件时只赠送抵扣金额最大的那一张</h3>
+    </div>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/coupon.js', function() {
+    main.coupon.initGoodscatSelection();
+});
+</script>

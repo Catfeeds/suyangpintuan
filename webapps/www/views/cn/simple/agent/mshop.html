@@ -1,0 +1,60 @@
+{include file="public_header.html"}
+<div class="weidian-top" style='background-image: url("{if $info.mshop_img}{$info.mshop_img}{else}/style/images/weidianbg.jpg{/if}");'>
+	<section>
+		<a class="tuoxiang" href="/member" style="background-image:url({photo($info.mid)})">
+
+		</a>
+		<p class="p1">
+			{if $info.mshop_name}{$info.mshop_name}{else}{$info.username|nickname:$info.nickname:1}的小店{/if}
+		</p>
+		<p class="p2">
+			{if $info.wx}微信号：{$info.wx}{/if}
+		</p>
+	</section>
+</div>
+
+<div class="weidian-nav">
+	<ul class="ft-ul">
+		<li class="li1">
+			<a href="/goods"><em><i class="icon  ">{$data.total}</i></em>全部商品</a>
+		</li>
+		<li class="li2">
+			<a href="/goods/cat"><em><i class="icon iconfenxiao">&#xe604;</i></em> 商品分类</a>
+		</li>
+		<li class="li3">
+			<a href=""><em><i class="icon iconfenxiao">&#xe631;</i></em> 收藏本店</a>
+		</li>
+		<li class="li4">
+			<a href="/agent/myivt_pic/{$info.mid}"><em><i class="icon iconfenxiao">&#xe655;</i></em>二维码</a>
+		</li>
+	   
+	</ul>
+</div>
+
+<div class="w">
+	<section class="xinpin-row">
+		<ul class="xinpin-ul list">
+			{foreach from=$data.list item=m}
+                        {include file="agent/lbi/mshop_list.html"}
+                        {foreachelse}
+                        <div class="zfzt">
+                            没有相关产品哦！
+                        </div>		
+                        {/foreach}		
+		</ul>
+	</section>
+</div>
+{if $data.list}
+{assign var=event value='nclick'}
+<script type="text/javascript">       
+    var ExtendOptions = {
+        path: function(index) {            
+            return "/agent/mshop/{$info.mid}/"+index+"?load";
+        }
+    };   
+</script>
+{include file="public_scroll.html"}
+{/if}
+<!--{include file="public_footer_agent_nav.html"}-->
+<div class="ft"></div>
+{include file="public_footer.html"}

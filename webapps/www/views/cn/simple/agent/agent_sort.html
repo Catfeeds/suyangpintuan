@@ -1,0 +1,33 @@
+{include file="public_header.html"}
+<div class="fenxph">
+	<ul>
+		<li {if $type==1}class="on"{/if}>
+			<a href="/agent/agent_sort/1">总{L('unit_distribution')}排行</a>
+		</li>
+		<li {if $type==2}class="on"{/if}>
+			<a href="/agent/agent_sort/2">我的盟友</a>
+		</li>
+	</ul>
+</div>
+<div class="fenxph-list">
+	<ul>
+		<li>
+			<span>排行</span>
+			<span>用户</span>
+			<span>{L('unit_comm')}</span>
+		</li>
+                {foreach from=$data.list item=m key=k}
+		<dd>
+                    <span> <i>{$k+1}</i></span><span>{$m.username|nickname:$m.nickname:1}</span> <span>{$m.commission_total}</span>
+		</dd>
+		{/foreach}
+	</ul>
+</div>
+<div class="ft"></div>
+{include file="public_footer_agent_nav.html"}
+<script>
+$(function () {
+        $('.fenxph-list dd:nth-child(even)').addClass("ddOdd");
+
+})</script>
+{include file="public_footer.html"}

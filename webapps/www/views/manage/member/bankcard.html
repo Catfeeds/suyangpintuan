@@ -1,0 +1,31 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="oid w40">ID</th>
+            <th class="w120">持卡人</th>
+            <th class="w120">银行名称</th>
+            <th class="w120">银行卡号</th>
+            <th class="title">开户行地址</th>
+        </tr>
+        </thead>
+        <tbody>
+        {if $list}
+        {foreach from=$list item=m}
+        <tr>
+            <td class="oid">{$m.id}</td>
+            <td align='center'>{$m.name}</td>
+            <td align='center'>{$m.bankname}</td>
+            <td align='center'>{$m.bankcard}</td>
+            <td>{$m.bankaddress}</td>
+        </tr>
+        {/foreach}
+        {else}
+        <tr>
+            <td colspan="5" align='center'>用户暂时没有银行账户</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+</div>

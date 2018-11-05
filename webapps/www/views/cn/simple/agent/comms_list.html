@@ -1,0 +1,31 @@
+{include file="public_header.html"}
+<div class="fxyjlb">{$data.head}：￥{$total|default:0.00}</div>
+    <div class="fxyjlb-list">
+        {foreach from=$data.list item=m}
+        {include file="agent/lbi/comms.html"}
+        {foreachelse}
+        <div class="zfzt">
+            暂时还没有{L('unit_comm')}哦！
+        </div>		
+        {/foreach}
+    </div>    	
+<script>
+$(function () {
+	$('.fxyjlb-list dd:nth-child(even)').addClass("ddOdd");
+
+})</script>
+{assign var=event value='nclick'}
+{if $data.list}
+<script type="text/javascript">       
+    var ExtendOptions = {
+        itemSelector: 'table',
+        path: function(index) {            
+            return "/agent/comms_list/"+index+"?load";
+        }
+    };   
+</script>
+{include file="public_scroll.html"}
+{/if}
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+{include file="public_footer.html"}

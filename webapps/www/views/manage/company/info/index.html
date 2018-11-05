@@ -1,0 +1,107 @@
+<h3 class="info-tag">
+    <a class="uiBtn BtnGreen r pr" href="#!news/add">添加新闻</a>
+    {$title} <span></span></h3>
+
+<div class="html-box">
+
+    <form method="post" action="" style="width:586px; padding:0 5px 80px">
+
+        <div class="f-unit">
+            <label class="ui-label w60" for="start_use_time">修改时间：</label>
+            <input type="text" class="form-i w200" name="start_use_time" id="start_use_time" placeholder="开始时间" onfocus="WdatePicker()" value="">
+
+        </div>
+
+        <div class="f-unit">
+            <label class="ui-label w60" for="start_use_time">修改时间：</label>
+            <a href="javascript:;" class="uiBtn BtnOrange" onclick="upfiles.image()">上传图片</a>
+            <a href="javascript:;" class="uiBtn BtnBlue" onclick="upfiles.file()">上传文件</a>
+        </div>
+        <div class="f-unit">
+            <label class="ui-label w60 l" for="start_use_time">&nbsp;</label>
+            <div id="upImgs" class="l" style="width:300px"></div>
+        </div>
+
+        <div class="f-unit">
+            <textarea id="editor" name="desc"></textarea>
+            <pre class="editorPre"></pre>
+        </div>
+
+        <div class="f-unit btn-wrp">
+            <button type="submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript">
+var upfiles=function(){
+};upfiles.prototype={
+    file:function(){
+        var t=this;
+        upload.show({
+            maxnum:1,//允许选择的图片数量.
+            type:'file',
+            //返回的数据回调函数:data格式为:
+            // [{ imgSrc:'原图路径',imgPath:'相对路径',imgName:'图片名称'}]
+            callback:function(data){
+                t.getFileData(data);
+            }
+        });
+    },
+    image:function(){
+        var t=this;
+        upload.show({
+            maxnum:1,//允许选择的图片数量.
+            type:'image',
+            //返回的数据回调函数:data格式为:
+            // [{ imgSrc:'原图路径',imgPath:'相对路径',imgName:'图片名称'}]
+            callback:function(data){
+                t.getImageData(data);
+            }
+        });
+    },
+
+    getImageData:function(data){
+        data.each(function(){
+            var div = document.createElement('div');
+            div.className = 'ui-label';
+            div.id = 'pic_area';
+            var imgPath = this.imgPath.replace('_src', '_thumb');
+            div.innerHTML = '<img src="'+imgPath+'" title="'+this.imgName+'" alt="'+this.imgName+'">'
+            div.innerHTML += '<input type="hidden" value="'+this.imgID+'" name="cover"/>'
+
+            if (typeof document.getElementById('pic_area') != "undefined" && document.getElementById('pic_area') != null) {
+                document.getElementById('pic_area').remove();
+            }
+
+            $('#upButton').html('修改图片');
+            $('#upImgs').append(div);
+        });
+    },
+
+    getFileData:function(data){
+        data.each(function(){
+            var div = document.createElement('div');
+            //fileUrl:文件URL地址,filePath:文件相对路径,fileName:文件名,fileExt:扩展名
+
+            div.innerHTML = '<input type="text" value="'+this.filePath+'">' +
+                '<input type="text" value="'+this.fileName+'">' +
+                '';
+            //alert(this.imgSrc+"\n"+this.imgPath+"\n"+this.imgName);
+
+            $('#upImgs').append(div);
+        });
+    }
+};upfiles = new upfiles;
+
+
+$.loadJs('/admin/js/upload.js',function(){
+    //$.loadJs('/admin/js/manage/upfiles.js',function(){});
+});
+
+$.loadJs('/admin/js/edit/kindeditor.js',function(){ //2
+    $.loadJs('/admin/js/edit/lang/zh_CN.js',function(){ //3
+        com.initEdit(false);
+    });
+});
+</script>

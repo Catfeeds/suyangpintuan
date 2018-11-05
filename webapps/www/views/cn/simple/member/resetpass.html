@@ -1,0 +1,39 @@
+{$headTit="重置密码"}
+{$headBack=url()}
+{$headUrl[0]['title']="立即注册"}
+{$headUrl[0]['link']=url("/member/login")}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<script src="/style/js/Validform_min.js" type="text/javascript"></script>
+<div class="main">
+    <div class="beijing2 common_bor">
+        <form action="" target="iframeNews" id="myform" name="myform" method="post">
+        <input type="hidden" name="back_url" value="{$back_url}">
+        <ul class="enter">
+            <li>
+                <div class="enter_1">
+                    <i class="icon iconfont">&#xe617;</i>
+                    <p><input name="password" value="" placeholder="新密码" class="enter_iw" datatype="*" nullmsg="请输入您的新密码" /></p>
+                </div>
+            </li>
+            <li>
+                <div class="enter_1">
+                    <i class="icon iconfont">&#xe617;</i>
+                    <p><input name="confirm_password" value="" placeholder="确认密码" class="enter_iw" datatype="*" nullmsg="请再次确认新密码" /></p>
+                </div>
+            </li>
+            <li><input type="submit" name="Submit" value="确认重置" class="enter_s1 enter_w1"></li>
+        </ul>
+        </form>
+    </div>
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}
+<script type="text/javascript">
+$(function(){
+    $("#myform").Validform({
+        tiptype:function(msg,o,cttl){ validTip(msg,o,cttl); },
+        showAllError:true
+    });
+});
+</script>

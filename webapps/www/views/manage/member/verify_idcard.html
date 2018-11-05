@@ -1,0 +1,85 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!member/verify_idcard" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $k eq 'username'}selected{/if}>会员名</option>
+                <option value="realname" {if $k eq 'realname'}selected{/if}>真实姓名</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$q}" type="text">
+            <div class="l">
+                <select name="status">
+                    <option value="">-状态-</option>
+                    <option value="1" {if $status eq '1'}selected{/if}>待审核</option>
+                    <option value="2" {if $status eq '2'}selected{/if}>已通过</option>
+                    <option value="3" {if $status eq '3'}selected{/if}>未通过</option>
+                </select>
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="w30">ID</th>
+            <th class="w120">会员名/手机</th>
+            <th class="w200"><b class="c-orange">认证姓名</b>/身份证号</th>
+            <th>身份证图片</th>
+            <th class="w120">提交时间</th>
+            <th class="w80">状态</th>
+            <th class="w80">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td>{$m.id}</td>
+            <td>
+                {$m.username}<br />{$m.mobile}
+                {if $m.is_voice eq 1}
+                <span class='iconfont icon-a c-orange' title='已语音验证'>&#xe63b;</span>
+                {else}
+                <span class='iconfont icon-a' title='短信验证'>&#xe612;</span>
+                {/if}
+            </td>
+            <td>
+                <b class="c-orange">{$m.realname}</b><br />{$m.card}<a href="http://www.baidu.com/s?wd=%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E6%9F%A5%E8%AF%A2&rsv_spt=1&issp=1&f=3&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_sug3=21&rsv_sug6=7&rsv_sug1=19&rsv_pq=ce6639f2000c9926&rsv_t=eb5dsKSUWglHCEVkd%2FKpBAt37VsPobuWgLu%2B6n7tRJrJ9fb4wNWK9jOsG5vVUsvm7wMJ&oq=%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7&rsv_sug2=1&rsp=0&inputT=5437&rsv_sug4=5437&qq-pf-to=pcqq.discussion" target="_blank">检测</a>
+            </td>
+            <td align="center"><img src="{yunurl($m.card_image)}" width="100" /></td>
+            <td nowrap>{date('Y-m-d H:i',$m.add_time)}</td>
+            <td>
+                {if $m.status eq 1}
+                <span class="c-red">待审核</span>
+                {elseif $m.status eq 2}
+                <span class="c-green">已审核</span>
+                {else}
+                <span class="c-gary">未通过</span>
+                {/if}
+            </td>
+            <td><a href="#!member/verify_idcard_edit/{$m.id}">查看</a> </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+</div>
+
+<script src="/js/manage/member.js"></script>
+{literal}
+<script>
+    $.loadJs('/admin/js/manage/member.js',function(){
+    });
+    var menus = $('#page_container a'), i;
+    for(i = 0;i < menus.length;i++){
+        menus[i].onclick = function() {
+            var page = this.rel;
+            member.search(page);
+        }
+    }
+</script>
+{/literal}

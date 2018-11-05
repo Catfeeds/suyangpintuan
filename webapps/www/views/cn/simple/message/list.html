@@ -1,0 +1,62 @@
+{$slider = 1}
+{include file="public_header.html"}
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+    <h1 class="mui-title">我的消息</h1>
+</header>
+{if $list}
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <ul id="OA_task_1" class="mui-table-view myxx-box hot-list">
+            {foreach from=$list item=m} {include file="message/lbi/list.html"} {/foreach}
+        </ul>
+    </div>
+</div>
+{else}
+    {$empty_tip = "您还没有消息!"}
+    {include file="public_empty.html"}
+{/if}
+<script>
+{literal}var D = {load: 1};{/literal}//load:1必填
+var ajax_url = "/message/index/";//请求的地址  
+var ajax_class = ".hot-list";//加载的元素
+var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+</script>
+{literal}
+<script>
+    $("#OA_task_1 li").on('tap', function(event){
+        var id = $(this).attr('id');
+        $.ajax({
+            async: false,
+            type: 'GET',
+            url: '/message/setRead/'+id,
+            dataType: "json",
+        });
+        $(this).addClass("current").next("div.myxx-txt").slideToggle(300).siblings("div.myxx-txt").slideUp("slow");
+        $(this).siblings().removeClass("current");
+    });
+    mui.init();
+    (function($) {
+        var btnArray = [ '确认','取消'];
+        //第一个demo，拖拽后显示操作图标，点击操作图标删除元素；
+        $('#OA_task_1').on('tap', '.mui-btn', function(event) {
+            var elem = this;
+            var li = elem.parentNode.parentNode;
+            var ids = li.id;
+            mui.confirm('确认删除选中消息吗？', '拼团商城', btnArray, function(e) {
+                if (e.index == 0) {
+                    $.post("/message/remove",{ids:ids},function(data){
+                        li.parentNode.removeChild(li);
+                    },"json")
+                } else {
+                    setTimeout(function() {
+                        $.swipeoutClose(li);
+                    }, 0);
+                }
+            });
+        });
+    })(mui);
+</script>
+{/literal}
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

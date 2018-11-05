@@ -1,0 +1,77 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/business/withdraw_commission_edit/{$row.id}" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$row.id}" />
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>商家名：</label></td>
+                <td class="td-input">{$row.name}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>提现方式：</label></td>
+                <td class="td-input">{if $row.type==1}银行卡{elseif $row.type==2}微信{$row.type==3}支付宝{/if}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>真实姓名：</label></td>
+                <td class="td-input">{$row.realname}</td>
+            </tr>
+            {if $row.type==1}
+            <tr>
+                <td class="td-label"><label>收款账号：</label></td>
+                <td class="td-input">{$row.account}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>开户行：</label></td>
+                <td class="td-input">{$row.bank}</td>
+            </tr>
+            {elseif $row.type==2}
+            <tr>
+                <td class="td-label"><label>微信号：</label></td>
+                <td class="td-input">{$row.wx}</td>
+            </tr>
+            {elseif $row.type==3}
+            <tr>
+                <td class="td-label"><label>支付宝账号：</label></td>
+                <td class="td-input">{$row.alipay}</td>
+            </tr>
+            {/if}
+            <tr>
+                <td class="td-label"><label>提现金额：</label></td>
+                <td class="td-input">{$row.amount}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>手续费：</label></td>
+                <td class="td-input">{$row.fee}</td>
+            </tr>            
+            <tr>
+                <td class="td-label"><label>到账总额：</label></td>
+                <td class="td-input">{$row.amount-$row.fee}</td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>状态：</label></td>
+                <td class="td-input">
+                    {if $row.status==0}
+                    <label><input type="radio" name="status" value="0" {if $row.status eq 0}checked{/if} >审核中</label>
+                    <label><input type="radio" name="status" value="1" {if $row.status eq 1}checked{/if} >通过</label>
+                    <label><input type="radio" name="status" value="2" {if $row.status eq 2}checked{/if} >不通过</label>
+                    {elseif $row.status==1}
+                    通过
+                    {elseif $row.status==2}
+                    不通过
+                    {/if}
+                </td>
+            </tr>
+            {if $row.status==0}
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+    </form>
+</div>

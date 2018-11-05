@@ -1,0 +1,17 @@
+<li class="mui-table-view-cell">
+    <div class="assess-top">
+        <span class="user-portrait">
+            <img src="{photo($m.mid)}"/>
+        </span>
+        <span class="user-name">
+            {$m.username|nickname:$m.nickname}
+        </span>
+        <span class="assess-date">{$m.c_time|date_format:"Y-m-d H:i:s"}</span>
+    </div>
+    <div class="assess-bottom">
+        <span class="comment-item-star">
+            <span class="real-star comment-stars-width{$m.star}"></span>
+        </span>
+        <p class="assess-content">{$m.content|stripcslashes}</p>
+    </div>
+</li>

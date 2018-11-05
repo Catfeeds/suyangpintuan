@@ -1,0 +1,66 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form id="form-score" target="iframeNewsTarget" method="post" action="/manage/score/index/{$row.id}">
+        <input type="hidden" name="post[rule_id]" value="{$row.id}" />
+        <table class="table-list">
+            <tbody>
+                <tr>
+                    <td class="td-label">
+                        <label>分享积分说明: </label>
+                    </td>
+                    <td>
+                        <h3>{$row.description}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>分享积分开关: </label>
+                    </td>
+                    <td class="td-input">
+                        <fieldset style="border:none;padding:0;margin:0">
+                            <label>
+                                <input type="radio" class="form-i" name="post[status]" value="1" {if $row.status}checked="checked" {/if}/>开启
+                            </label>
+                            <label>
+                                <input type="radio" class="form-i" name="post[status]" value="0" {if empty($row.status)}checked="checked" {/if}/>关闭
+                            </label>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>当前分销级数: </label>
+                    </td>
+                    <td>
+                        <b style="color:red;">{$smarty.const.COMSS_LEVEL}</b> 级
+                    </td>
+                </tr>
+
+                {section name=loop loop=$smarty.const.COMSS_LEVEL+1}
+                {assign var="i" value=$smarty.section.loop.index}
+
+                <tr class="extend">
+                    <td><label> 分享者{if empty($i)}本人{else}上{$i}级{/if}</label></td>
+                    <td>
+                        奖励
+                        <input type="input" class="form-i w40" name="post[extend][{$i}]" value="{if empty($row.config.extend[$i])}10{else}{$row.config.extend[$i]}{/if}" />积分
+                    </td>
+                </tr>
+                {/section}
+
+                <tr class="tr-btn">
+                    <td class="td-label"></td>
+                    <td class="td-input">
+                        <button type="button" class="uiBtn BtnGreen e2-score-formSubmit">保存设置</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/score.js', function() {
+
+});
+</script>

@@ -1,0 +1,59 @@
+<div class="html-box">
+    <style>
+    #refresh_qrcode {}
+    </style>
+    <p>绑定过本站微信的用户, 用微信扫描下面的二维码可以进入客服接待界面</p>
+    <p>本二维码有效期为5分钟. 过期请刷新二维码重新扫码</p>
+    <img id="qrcode" src="{$data.qrcode}">
+    <p>
+        <p><i id="time_left">300</i> 秒后自动刷新二维码</p>
+        <button type="button" class="uiBtn BtnBlue" id="refresh_qrcode">点击手动刷新</button>
+    </p>
+    <script>
+    var getQrcode = function(time) {
+        $.ajax({
+            url: '/manage/chat/mobile?is_ajax=1',
+            method: 'get',
+            jsonData: true,
+            callback: function(res) {
+                res = JSON.parse(res)
+                document.getElementById('qrcode').src = res.qrcode;
+
+                cooldown(time);
+            }
+        })
+    }
+
+    var btn = document.getElementById('refresh_qrcode');
+    btn.addEventListener('click', function() {
+        getQrcode(300);
+    });
+
+    var cooldown = function(time){
+        var left = time;
+        var el = document.getElementById('time_left');
+
+        if (!el){
+            return;
+        }
+
+        if (el.interval){
+            clearInterval(el.interval);
+        }
+
+        el.interval = setInterval(function(){
+            if (left<1){
+                clearInterval(el.interval);
+                getQrcode(time);
+                return;
+            }
+            el.innerHTML = left;
+            left--;
+        }, 1000);
+    };
+    getQrcode(300);
+
+
+
+    </script>
+</div>

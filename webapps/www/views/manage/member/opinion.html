@@ -1,0 +1,56 @@
+<h3 class="info-tag">
+    意见反馈列表
+</h3>
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/opinion" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $smarty.get.k eq 'username'}selected{/if}>会员名</option>                
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$smarty.get.q}" type="text"> 
+            <label class="ui-label w60">提交时间：</label>
+            <div class="l">
+                <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|strip_tags}" type="text" autocomplete="off" onclick="WdatePicker()">
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|strip_tags}" type="text"  autocomplete="off" onclick="WdatePicker()">
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+    <table class="list">
+        <thead>
+        <tr>
+            <!-- <th class="w30"><input type="checkbox" class="checkall"></th> -->
+            <th class="w30">ID</th>
+            <th class="w120">会员名称</th>
+            <th class="w120">手机</th>            
+            <th class="w120">邮箱</th>
+            <th class="w120">内容</th>            
+            <th class="w120">发送时间</th>            
+            <th class="w120">状态</th>            
+            <th class="w120">操作</th>            
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <!-- <td><input type="checkbox" name="id" value="{$m.id}"></td> -->
+            <td>{$m.id}</td>
+            <td><a href="#!member/edit/{$m.mid}?act=show&com=xshow|会员信息({$m.mid})">{$m.username}</a></td>
+            <td>{$m.mobile}</td>            
+            <td>{$m.email}</td>    
+			<td>{$m.content}</td>			
+            <td>{date('Y-m-d H:i',$m.c_time)}</td>  			
+            <td>{if $m.status==1}已读{else}未读{/if}</td>  			
+			<td>
+				<a href="#!member/opinion_edit/{$m.id}?com=xshow|意见反馈"  class='iconfont icon-a' title="编辑">&#xe603;</a>
+				<a onclick="main.confirm_del('member/opinion_del/{$m.id}')"  class='iconfont icon-a'  title="删除">&#xe606;</a>
+			</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>       
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="shop-topbox">    
+    <a href="javascript:;" class="btn guanz {if $data.is_fav}active{/if}" data-sid='{$data.sid}'></a>
+    <img src="{$data.info.banner|default:'/style/img/dpt.jpg'}"/>
+    <div class="shop-top clearfix">
+        <dl class="shop-logo">
+            <dt><img src="{$data.info.logo}" /></dt>
+            <dd>
+                <p class="title-1"><a href="/store/index/{$data.sid}">{$data.info.name}</a></p>
+                <p>
+                    <img src="/style/img/rz1.png"/>
+                    <img src="/style/img/rz2.png"/>
+                    {if $data.info.type==1}<img src="/style/img/rz4.png"/>{else}<img src="/style/img/rz3.png"/>{/if}
+                    <em id="fans_num">{$data.info.fav_num}</em>人关注
+                </p>
+            </dd>
+        </dl>
+    </div>
+</div>
+<ul class="shop-nav clearfix">
+    <li><a href="/store/goods/{$data.sid}"><span>全部商品({$data.goods_total|default:0})</span></a></li>
+    <li><a href="/store/goods_news/{$data.sid}"><span>上新</span></a></li>
+    <li><a href="/store/goods/{$data.sid}?order=sell"><span>热销</span></a></li>
+    <li style="display: none;"><a href="#">30<span>店铺动态</span></a></li>
+</ul>

@@ -1,0 +1,45 @@
+{include file="public_header.html"}
+	<body>
+		<div class="xz-appbg">
+			<div class="app-logo">
+				<img src="{zz mod=fileurl source=C('app_logo')}"/>
+			</div>
+			
+			<div class="app-txt1">
+				<img src="{zz mod=fileurl source=C('app_text')}"/>
+			</div>
+			
+			<div class="app-btn">
+				<a href="{C('ios_url')}" class="app-ip"><span>iphone 版下载</span></a>
+				<a href="{C('android_url')}" class="app-an"><span>Android 版下载</span></a>
+			</div>
+			
+			<div class="app-ts">
+				<strong>温馨提示</strong>
+				<p>请点击微信右上角按钮，然后在弹出的菜单中，点击在浏览器中打开，即可安装</p>
+			</div>
+		</div>
+		<div class="app-js">
+            {$ad = getAd(7)}
+            {if $ad}
+			<div id="hot-gd" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<div class="mui-scroll">
+
+                    {zz mod=fileurl source=$ad var=ad_list}
+                    {foreach from=$ad_list item=m}
+                    <a class="mui-control-item">
+						<img src="{$m.path}"/>
+					</a>
+                    {/foreach}
+				</div>
+			</div>
+            {/if}
+			<div class="app-txt2">
+				{zz mod=block mark='app_intro'}
+			</div>
+		</div>
+
+        {include file="public_footer.html"}
+
+
+

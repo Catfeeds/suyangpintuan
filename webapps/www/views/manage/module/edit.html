@@ -1,0 +1,112 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/module/edit">
+    <input type="hidden" name="post[id]" value="{$row.id}" />
+
+    <table class="table-list">
+    <tbody>
+
+        <tr>
+            <td class="td-label"><label>模型名称：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" name="post[title]" value="{$row.title}" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>模型表名：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" name="post[name]" value="{$row.name}" {if $row.id} onfocus="blur()" readonly style="background:#eee;color:#999;"{/if} />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>模型简介：</label></td>
+            <td class="td-input">
+                <textarea name="post[description]">{$row.description}</textarea>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>所属模块：</label></td>
+            <td class="td-input">
+                <select name="post[type]">
+                    {foreach from=$menusOneList item=v}
+                    <option value="{$v.id}"{if $v.id==$row.type} selected{/if}>{$v.name}</option>
+                    {/foreach}
+                </select>
+            </td>
+        </tr>
+
+        {if !$id}
+        <tr>
+            <td class="td-label"><label>表字段：</label></td>
+            <td class="td-input">
+                <label><input type="radio" name="emptyfield" value="1" /> 空表字段</label>
+                <label><input type="radio" name="emptyfield" value="0" checked /> 普通文章表字段</label>
+
+            </td>
+        </tr>
+        {/if}
+
+        <tr class="table-h3">
+            <td colspan="2">后台配置</td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>列表检索字段：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w300" name="post[listsearch]" value="{$row.listsearch}" />
+                <span class="form-tip"> 默认：title,catid,posid,status</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>列表显示字段：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w300" name="post[listshow]" value="{$row.listshow}" />
+                <span class="form-tip"> 默认：title</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>列表排序：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w300" name="post[htorder]" value="{$row.htorder}" />
+                <span class="form-tip"> 默认：listorder DESC,id DESC</span>
+            </td>
+        </tr>
+
+        <tr class="table-h3">
+            <td colspan="2">前台配置</td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>列表调用字段：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w300" name="post[listfields]" value="{$row.listfields}" />
+                <span class="form-tip"> 例：id,title,url,catid</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>列表搜索：</label></td>
+            <td class="td-input">
+                <label><input type="radio" name="post[issearch]" value="1"{if $row.issearch==1} checked{/if} /> 是</label>
+                <label><input type="radio" name="post[issearch]" value="0"{if $row.issearch!=1} checked{/if} /> 否</label>
+            </td>
+        </tr>
+
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+            </td>
+        </tr>
+
+    </tbody>
+    </table>
+
+    </form>
+</div>

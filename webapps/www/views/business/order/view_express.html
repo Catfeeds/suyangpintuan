@@ -1,0 +1,44 @@
+<style type="text/css">
+    .oi-text{ border: 1px solid #90BFFF; margin-top:5px; color: #878787; background: #FBFBFB;width: 610px; line-height: 1.4; }
+    .oi-text td{ border-top:1px solid #ccc; padding: 5px 10px; color: #999; }
+    .oi-text td.td1{ white-space: nowrap; width: 10px; }
+    .oi-text tr.last td{ color: #FF8C00; border: 0; }
+    .oi-text tr.last td.td1{ color: #FF8C00; }
+</style>
+<div class="html-box">
+    <div class="order-info">
+        <div class="oi-tag">
+            {$express.name}单号：
+            {if !empty($order.express_num)}
+            {$order.express_num}
+            {/if}
+
+            {if $list.status eq 200}
+            <br>物流状态：
+            {if $list.state eq 0}在途，即货物处于运输过程中
+            {elseif $list.state eq 1}揽件，货物已由快递公司揽收并且产生了第一条跟踪信息
+            {elseif $list.state eq 2}疑难，货物寄送过程出了问题
+            {elseif $list.state eq 3}<span class="c-green">签收，收件人已签收</span>
+            {elseif $list.state eq 4}退签，即货物由于用户拒签、超区等原因退回，而且发件人已经签收
+            {elseif $list.state eq 5}派件，即快递正在进行同城派件
+            {elseif $list.state eq 6}退回，货物正处于退回发件人的途中
+            {/if}
+            {/if}
+        </div>
+        {if $list.status eq 200}
+        <div class="oi-text">
+            <table width="100%">
+                {foreach from=$list.data item=m name=list}
+                <tr class="{if $smarty.foreach.list.first} last{elseif $smarty.foreach.list.last} first{/if}">
+                    <td class="td1">{$m.time}</td>
+                    <td class="td3">{$m.context}</td>
+                </tr>
+                {/foreach}
+            </table>
+        </div>
+        {else}
+        <span class="c-gray">物流单暂无结果！</span>
+        {/if}
+    </div>
+
+</div>

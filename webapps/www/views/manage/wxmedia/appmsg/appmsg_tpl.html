@@ -1,0 +1,57 @@
+{if count($list)==1}
+
+<div class="media_preview_area">
+    <div class="media_preview">
+        <div class="preview-box">
+            <!--主图文-->
+            <div class="xmsg">
+                <h4 class="mtitle"><a href="javascript:;" target="_blank">{$list[0].title}</a></h4>
+
+                <div class="msg-cover edit-area">
+                    <div class="msg-thumb-wrp has-thumb">
+                        <img class="msg-thumb" src="{$list[0].imgurl_src}">
+                        <i class="msg-thumb-default">封面图片</i>
+                    </div>
+                </div>
+
+                <div class="msg-desc">{$list[0].desc}</div>
+            </div>
+            <!--主图文End-->
+        </div>
+    </div>
+</div>
+
+{elseif count($list)>1}
+<div class="media_preview_area">
+    <div class="media-multi">
+        <div class="preview-box">
+            <!--主图文-->
+            {foreach from=$list item=m key=k}
+            {if $k==0}
+            <div class="msg-top">
+                <div class="msg-info">
+                    <div class="msg-date"></div>
+                </div>
+                <div class="msg-cover edit-area">
+                    <div class="msg-thumb-wrp has-thumb">
+                        <img class="msg-thumb" src="{$m.imgurl_src}">
+                        <i class="msg-thumb-default">封面图片</i>
+                        <h4 class="msg-title">
+                            <a href="javascript:;" target="_blank">{$m.title}</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            {else}
+            <div class="msg-item has-thumb"><img class="msg-thumb" src="{$m.imgurl_src}">
+                <h4 class="msg-title">
+                    <a href="javascript:void(0);" target="_blank">{$m.title}</a>
+                </h4>
+            </div>
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+</div>
+{/if}
+<div class="clear"></div>

@@ -1,0 +1,30 @@
+<div class="area-box">
+        <div class="payment-t">
+                果易购{$m.is_refund}
+                <span class="rmb">{$m.status_name}</span>
+        </div>
+        {foreach from=$m.goods item=g key=k}
+        <a href="/member/order/?order_sn={$m.o_order_sn}">
+            <dl class="fx-cpbox clearfix">
+                <dt>
+                        <img src="{zz mod=fileurl source=$g.thumb}"/>
+                </dt>
+                <dd>
+                        <h3>{$g.goods_name}</h3>
+                        <p>{$g.goods_spec}</p>
+                        <p>数量：{$g.buy_num}</p>
+                        <p class="tr-txt">合计：<span class="rmb">￥{$m.o_order_amount}</span>（免运费）</p>
+                </dd>
+        </dl>
+        </a>
+        {/foreach}
+        <div class="prize-btn">         
+            <button type="button" class="mui-btn  mui-btn-danger" onclick='tel://{C('contact_mobile')}'>联系卖家</button>                    
+            {if $m.status==2}
+            <button type="button" class="mui-btn" onclick="tourl('/refund/apply/{$m.order_id}')">再次申请</button>
+            {elseif $m.status_shipping<10 && $m.status==10 && $m.type==2}
+            <button type="button" class="mui-btn" onclick="tourl('/refund/shipping/{$m.id}')">退货</button>            
+            {/if}                
+            <button type="button" class="mui-btn" onclick="tourl('/refund/detail/{$m.id}')">退款详情</button>
+        </div>
+</div>

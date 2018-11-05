@@ -1,0 +1,54 @@
+<div class="area-box">
+        <div class="payment-t">
+                {if $m.sid>0}{$m.store_name}{else}{C('site_name')}{/if}
+                <span class="rmb">{$m.status_name}</span>
+        </div>
+        {foreach from=$m.goods item=g key=k}
+        <a href="/member/order/?order_sn={$m.order_sn}">
+            <dl class="fx-cpbox clearfix">
+                <dt>
+                        <img src="{zz mod=fileurl source=$g.thumb}"/>
+                </dt>
+                <dd>
+                        <h3>{$g.goods_name}</h3>
+                        <p>{$g.goods_spec}</p>
+                        <p>数量：{$g.buy_num}</p>
+                        <p class="tr-txt">合计：<span class="rmb">￥{$m.order_amount}</span>（免运费）</p>
+                        {if $m.extension_code==$smarty.const.CART_STEP}<p class="tr-txt">定金：<span class="rmb">￥{$m.pre_amount}</span>（免运费）</p>{/if}
+                </dd>
+        </dl>
+        </a>
+        {/foreach}
+        <div class="prize-btn">                
+            {if $m.status_id eq $smarty.const.CS_AWAIT_PAY}
+                {if $m.status_pay==0}
+                <button type="button" class="mui-btn" onclick="zz_confirm('您确认要取消该订单？','/member/order_cencel/{$m.id}')">取消订单</button>
+                <button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/flow/pay/{$m.order_sn}')">去支付</button>
+                {elseif $m.status_pay==1 && $m.status_common==10}
+                <button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/flow/pay/{$m.order_sn}')">支付尾款</button>
+                {else}
+                <button type="button" class="mui-btn" onclick="tourl('/member/order/?order_sn={$m.order_sn}')">订单详情</button>
+                {/if}
+            {elseif $m.status_id eq $smarty.const.CS_AWAIT_SHIP}
+                <button type="button" class="mui-btn" onclick='tel://{C('contact_mobile')}'>联系卖家</button>
+                <button type="button" class="mui-btn" onclick="tourl('/member/order/?order_sn={$m.order_sn}')">订单详情</button>
+            {elseif $m.status_id eq $smarty.const.CS_AWAIT_GET}
+                {if $m.goods[0].verify_code_id > 0}
+                <button type="button" class="mui-btn mui-btn-danger" onclick="showTakeVerifyCode({$m.goods[0].verify_code_id})">查看提货码</button>
+                {else}
+                <button type="button" class="mui-btn" onclick="tourl('/member/order_ship/{$m.order_sn}')">查看物流</button>
+                {*AA团只有团长才能确认收货*}
+                {if $m.extension_code==$smarty.const.CART_AA && $m.mid==$m.com_mid || $m.extension_code!=$smarty.const.CART_AA}<button type="button" class="mui-btn mui-btn-danger" onclick="zz_confirm('您确认已经收到所有订单商品？','/member/finish_order/{$m.id}')">确认收货</button>{/if}
+                {/if}
+            {elseif  C('goods_isComment') && $m.status_order eq 10}
+                {*<button type="button" class="mui-btn" onclick="tourl('/goods/show/{$m.goods.0.good_id}')">再来一单</button>*}
+                {if !$m.is_rate}<button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/member/order_rate/{$m.order_sn}')">去评价</button>{/if}
+                {if $m.refund eq 1}<button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/refund/apply/{$m.id}')">申请退款/货</button>{/if}
+            {elseif $m.status_id eq $smarty.const.CS_CENCEL}
+                <button type="button" class="mui-btn" onclick="zz_confirm('您确认删除该订单？','/member/order_del/{$m.id}')">删除订单</button>
+            {/if}
+            {if $m.status_order > 0}
+                <button type="button" class="mui-btn" onclick="tourl('/member/order/?order_sn={$m.order_sn}')">订单详情</button>
+            {/if}
+        </div>
+</div>

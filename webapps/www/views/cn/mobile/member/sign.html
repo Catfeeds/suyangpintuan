@@ -1,0 +1,310 @@
+{$headTit="签到赚{L('unit_score')}"} {include file="public_header.html"}
+{literal}
+<style>
+    .qiandao .qiandao-hdgz {
+        font-size: .4rem;
+        color: #ffbcbc;
+        border: 1px #ffbcbc solid;
+        padding: .2rem .4rem;
+        border-radius: 25px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .qiandao .qiandao-ljqd {
+        box-shadow: inset 0 -4px 0 #d29d00;
+        border: 0;
+        background-color: #ffc80b;
+        color: #fff;
+        width: 120px;
+        transition: all 500ms ease-in-out;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 18px;
+        display: inline-block;
+        text-align: center;
+        position: absolute;
+        top: 110px;
+        left: 46%;
+        margin-left: -2.5rem;
+    }
+    .qiandao a.signed {
+        background: #d29d00;
+        color: #ccc;
+    }
+    .qiandao-jf {
+        overflow: hidden;
+        background-color: #fff;
+        text-align: center;
+        border: 1px #d7d7d7 solid;
+        border-radius: 5px;
+        margin: 0 .4rem;
+    }
+    .qiandao-jf li {
+        width: 33.33%;
+        float: left;
+        padding: .4rem 0;
+        line-height: 18px;
+    }
+    .qiandao-jf li:nth-child(1) i {
+        border-left: 0;
+    }
+
+    .qiandao-jf li i {
+        color: #434343;
+        font-size: .4rem;
+        display: block;
+        border-left: 1px #dbdbdb solid;
+    }
+    .qiandao-jf li i em {
+        color: #818181;
+        font-size: .48rem;
+        display: block;
+    }
+    .qiandao-hdgz {
+        position: relative;
+        padding: 0.4rem;
+    }
+    .qiandao-list {
+        border: 1px #ff5467 dashed;
+        margin: 0 .4rem;
+        margin-top: 1rem;
+        border-radius: 5px;
+        position: relative;
+    }
+    .qiandao-list .qiandao-list-p {
+        height: 1.2rem;
+        line-height: 1.2rem;
+        background-color: #ff2e45;
+        width: 4rem;
+        position: absolute;
+        left: 50%;
+        border-radius: 30px;
+        margin-left: -2rem;
+        margin-top: -.6rem;
+        color: white;
+        text-align: center;
+    }
+    .qiandao-list .qiandao-list-ul {
+        padding: 1rem .4rem;
+    }
+    .qiandao-list .qiandao-list-ul li {
+        color: #818181;
+        line-height: 1.3rem;
+        border-bottom: 1px #e6e6e6 solid;
+    }
+    .qiandao-list .qiandao-list-ul li span {
+        float: right;
+    }
+    .qiandao-list .qiandao-list-ul li span em {
+        color: #ff2e45;
+    }
+    .qiandao-list .qiandao-list-ul li i {
+        font-size: .6rem;
+        vertical-align: middle;
+        margin-right: .1rem;
+    }
+    .qiandao-list .qiandao-list-ul li label {
+        margin-left: .1rem;
+    }
+
+
+    .qiandao-ceng {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        top: 0;
+        left: 0;
+    }
+    .qiandao-ceng section {
+        text-align: center;
+        width: 9rem;
+        height: 9rem;
+        background-color: #ff2e45;
+        border-radius: 50%;
+        position: absolute;
+        left: 45%;
+        margin-left: -3.2rem;
+        top: 45%;
+        margin-top: -2.9rem;
+    }
+    .qiandao-ceng section h3 {
+        margin-top: .9rem;
+        height: 1.2rem;
+        line-height: 1.2rem;
+        color: #ffde00;
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 1.6rem;
+    }
+    .qiandao-ceng section p {
+        font-size: .36rem;
+        line-height: 1rem;
+        color: #fff;
+    }
+    .qiandao-ceng section a {
+        height: 2.2rem;
+        width: 2.2rem;
+        display: block;
+        line-height: 2.2rem;
+        text-align: center;
+        background-color: white;
+        margin: 0 auto;
+        color: #ff2e45;
+        font-size: .6rem;
+        border-radius: 50%;
+    }
+
+
+
+    .qiandao-rule {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        top: 0;
+        left: 0;
+    }
+    .qiandao-rule section {
+        margin-top: 20%;
+        padding: .4rem 0;
+        position: relative;
+        border-radius: 5px;
+        background: #fff;
+        text-align: center;
+        width: 12rem;
+        position: absolute;
+        left: 45%;
+        margin-left: -4.4rem;
+    }
+    .qiandao-rule section i {
+        position: absolute;
+        right: 0;
+        top: -.1rem;
+        font-size: .6rem;
+        color: #fff;
+        z-index: 1;
+        color: red;
+        cursor: pointer;
+    }
+</style>
+{/literal}
+<div class="qiandao">
+    <img src="/style/img/qiandao.png" />
+    <a href="javascript:;" class="qiandao-hdgz">活动规则</a> {if empty($score['signed'])} <a class="qiandao-ljqd" href="javascript:;" role="button"  data-unit="{L('unit_score')}">立即签到</a> {else}
+    <a class="qiandao-ljqd signed" href="javascript:;" role="button"  data-unit="{L('unit_score')}">已签到</a> {/if}
+</div>  <style>
+    body {
+        background-color: #fff !important;
+    }
+</style>
+
+<div class="qiandao-jf">
+    <ul>
+        <li>
+            <i>剩余总{L('unit_score')} <em id="left-total">{if empty($score['total_left'])}0{else}{$score['total_left']}{/if}</em></i>
+        </li>
+        <li>
+            <i>签到总{L('unit_score')} <em id="sign-total">{if empty($score['score_1'])}0{else}{$score['score_1']}{/if}</em></i>
+        </li>
+        <li>
+            <i>消费总{L('unit_score')} <em id="sign-shopping">{if empty($score['score_5'])}0{else}{$score['score_5']}{/if}</em></i>
+        </li>
+    </ul>
+    {if !empty($score.continue_sign)}
+    <h3>您已经连续签到 <b id="sign-continue">{$score.continue_sign}</b> 天</h3>{/if} {if !empty($rule['extend'])}
+    <p>连续签到有额外奖励, 详情见<a class="qiandao-hdgz" style="color:ff2e45;" href="javascript:;">活动规则</a></p>{/if}
+</div>
+<div class="qiandao-list">
+    <p class="qiandao-list-p">签到记录</p>
+    <ul class="qiandao-list-ul">
+        {if !empty($logs)} {section name=loop loop=min(count($logs),10)} {assign var="i" value=$smarty.section.loop.index}
+        <li>
+            <span> 获得  <em>{$logs[$i].amount}</em>  {L('unit_score')}</span>
+            {date('Y-m-d H:i:s', $logs[$i].c_time)}
+            <label>签到成功</label>
+        </li>
+        {/section} {else}
+        <li class="qiandao-nolist" style="text-align: center;">
+            暂无签到记录
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="qiandao-ceng" onclick="$(this).hide();">
+    <section>
+        <h3>签到成功</h3>
+        <p>
+            <span id="sign-score-tip"></span>
+            <br /> 明天记得再来哦！
+        </p>
+        <a href="javascript:;">OK</a>
+    </section>
+</div>
+<div class="qiandao-rule" onclick="$(this).hide();">
+    <section>
+        <i class="icon iconfenxiao">X</i>
+        <ul>
+            <li>{if !empty($rule['amount'])}每日签到奖励 {$rule['amount']} {L('unit_score')}{/if}</li>
+            {if !empty($rule['extend'])} {foreach from=$rule['extend'] item=m key=k}
+            <li>连续签到 {$k} 天, 奖励 {$m} {L('unit_score')}</li>
+            {/foreach} {/if}
+        </ul>
+    </section>
+</div>
+<div class="ft"></div>
+<script type="text/javascript">
+    (function() {
+        $(document).on('click', '.qiandao-ljqd', function() {
+
+            var $this = $(this);
+            if ($this.hasClass('signed')) {
+                return false;
+            }
+
+            $.ajax({
+                url: '/sign/action',
+                type: 'post',
+                cache: false,
+                dataType: 'json',
+                beforeSend: function() {},
+                success: function(res) {
+
+                    if (res.error == 0) {
+                        $this.addClass('signed');
+                        $this.html('已签到');
+
+                        var data = res.data,
+                            score = parseInt(data.score),
+                            $leftTotal = $('#left-total'),
+                            $signTotal = $('#sign-total');
+
+                        $leftTotal.html(parseInt($leftTotal.html()) + score);
+                        $signTotal.html(parseInt($signTotal.html()) + score);
+
+                        $('#sign-continue').html(data.continue);
+                        $('#sign-score-tip').html((data.continue ? '您已经连续签到' + data.continue+'天' : '今天已签到') + '<br>奖励 <b >' + score + '</b> 个{L("unit_score")}');
+                        $('.qiandao-list-ul:first').prepend('<li><span>获得<em> ' + score + '</em> {L("unit_score")}</span>' + data.date + '<label> 签到成功 </label></li>');
+                        $('.qiandao-nolist').hide();
+                        $('.qiandao-ceng').show();
+
+                    } else {
+                        alert(res.msg);
+                    }
+
+                },
+                error: function() {
+                    alert('对不起 系统繁忙请稍后重试');
+                },
+                complete: function() {}
+            });
+        }).on('click', '.qiandao-hdgz', function(res) {
+            $('.qiandao-rule').show();
+        });
+
+    })();
+</script>
+{include file="public_footer.html"}

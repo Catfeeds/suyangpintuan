@@ -1,0 +1,15 @@
+<div class="shop-abs"></div>
+<ul class="shop-name">
+    {if $data.info.logo}
+    <li class="shop-logoimg">
+        <img src="{$data.info.logo}"/>
+    </li>
+    {/if}
+    <li class="shop-name-li">
+        <h2>{$data.info.name}</h2>
+        <p class="clearfix shop-txt">
+            <span>销量：{formatNum($data.sell_total)}件</span>
+            <a href="javascript:;" class="guanz {if $data.is_fav}active{/if}"  data-sid='{$data.sid}'>收藏店铺</a>
+        </p>
+    </li>
+</ul>

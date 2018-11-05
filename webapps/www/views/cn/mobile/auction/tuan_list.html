@@ -1,0 +1,27 @@
+{$headTit="团购"}
+{$headNav=1}
+{include file="public_header.html"}
+<script src="/style/js/lefttime.js" type="text/javascript"></script>
+<div class="w">
+	<section class="tuanguo-row">
+		<ul class="tuanguo-ul">
+                    {foreach from=$data.list item=m}
+			{include file="auction/lbi/tuan_list.html"}
+                    {/foreach}
+		</ul>
+	</section>
+</div>
+{if $data.list}
+{assign var=event value='nclick'}
+<script type="text/javascript">
+var ExtendOptions = {
+	path: function(index) {
+		return "/tuan/index/"+index+"?load";
+	}
+};
+</script>
+{include file="public_scroll.html"}
+{/if}
+<div class="ft"></div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

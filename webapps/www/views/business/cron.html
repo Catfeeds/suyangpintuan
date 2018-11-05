@@ -1,0 +1,15 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+    #cron{ position:fixed;right:10px;bottom:20px;display:block; }
+    #processBox li{ border: 1px solid #ccc; border-radius: 5px; margin-bottom:10px; padding-bottom: 5px; }
+    #processBox li .head{ background: #ccc; height: 24px; line-height: 24px; overflow: hidden; padding:0 10px; }
+    #processBox li .head em{ float: right; font-size: 12px; color: #f00; }
+    #processDemo{ display: none; }
+    .process{ width: 145px; height: 15px; line-height: 15px; background:#ddd; position: relative; margin:10px 10px 0; border-bottom-right-radius: 3px;border-top-right-radius: 3px; }
+    .process span{ display: block; position:relative; height: 100%; background: url('/admin/images/process.gif') no-repeat 0 0; width: 0; }
+    .process em{ position: absolute; right: -5px; top:15px; color: #f00; font-size: 10px; }
+    .processmsg{ padding:0 10px; color: #999; font-style:italic; }
+</style>
+<div id="cron">
+    <ul id="processBox"></ul>
+</div>

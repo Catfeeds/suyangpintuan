@@ -1,0 +1,30 @@
+<ul class="lingjiang-jl-ul">
+    <dt><span>{$m.remark}</span>
+        {if $m.need_express}
+            {if $m.status eq 2}
+            <a href="/prize/detail?type={$type}&id={$m.id}" class="lj2">进度</a>
+            {elseif $m.status eq 1}
+            <a href="/prize/detail?type={$type}&id={$m.id}" class="lj2">已发奖</a>
+            {elseif !empty($m.left_time)}
+                <a href="/prize/express?type={$type}&id={$m.id}" class="lj1">领奖</a>
+            {else}
+                <a href="javascript:;" class="lj3">已过期</a>
+            {/if}
+        {/if}
+    </dt>
+    <li>
+        <a href="/goods/show/{$m.good_id}">
+            <img src="{zz mod=fileurl source=$m.good_thumb type=1}">
+            <section>
+                <a href="javascript:;">{$m.good_name}
+                    </a>
+                <p>
+                    中奖时间：{date('Y-m-d H:i:s', $m.create_time)}
+                </p>
+                <p>
+                    {$status[$m.status]}  {if $m.status eq 3}{if !empty($m.left_time)} 距离自动放弃奖品还有<i>{$m.left_time}</i> 天, 请尽快领奖{else}{date('Y-m-d H:i:s', $m.expire_time)}已过期, 已放弃领奖{/if}{/if}
+                </p>
+            </section>
+        </a>
+    </li>
+</ul>

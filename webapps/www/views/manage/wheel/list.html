@@ -1,0 +1,107 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!wheel/index" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <span class="input-group l">
+                <label class="input-group-addon-left">ID</label>
+                <input class="form-i" type="text" name="filters[id]" value="{$filters['id']}" placeholder="id需是整数">
+            </span>
+            <span class="input-group l">
+                <label class="input-group-addon-left">标题</label>
+                <input class="form-i" type="text" name="filters[title]" value="{$filters['title']}" placeholder="输入要查找的主题">
+                <label class="input-group-addon-right">
+                    <input type="hidden" name="filters[title_blur]" value="0">
+                    <input type="checkbox" name="filters[title_blur]" value="1" {if $filters['title_blur']}checked="checked" {/if}> 模糊
+                </label>
+            </span>
+            <span class="input-group l">
+                <input class="form-i w120 sitem" name="filters[start_time_egt]" value="{$filters['start_time_egt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="开始时间起" />
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[start_time_elt]" value="{$filters['start_time_elt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="开始时间止" />
+            </span>
+            <span class="input-group l">
+                <input class="form-i w120 sitem" name="filters[end_time_egt]" value="{$filters['end_time_egt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="结束时间起" />
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[end_time_elt]" value="{$filters['end_time_elt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="结束时间止" />
+            </span>
+            <span class="input-group l">
+                <input class="form-i w120 sitem" name="filters[create_time_egt]" value="{$filters['create_time_egt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="创建时间起" />
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[end_time_elt]" value="{$filters['end_time_elt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="创建时间止" />
+            </span>
+            <span class="input-group l">
+                <select name="filters[status]">
+                    <option value="" {if !is_numeric($filters['status'])}selected="selected" {/if}>状态不限</option>
+                    {foreach from=$status item=item key=key}
+                    <option value="{$key}" {if is_numeric($filters[ 'status']) and $filters[ 'status'] eq $key}selected="selected" {/if}>{$item}</option>
+                    {/foreach}
+                </select>
+            </span>
+        </div>
+        <div class="f-unit">
+            <label class="l">排序:</label>
+            <span class="l">
+        {section name=loop loop=3} {assign var="i" value=$smarty.section.loop.index}
+            <span class="input-group">
+                <select name="orders[{$i}][key]">
+                    {foreach from=$orderTypes item=item key=key}
+                        <option value="{$key}" {if !empty($orders[{$i}]['key']) and $orders[{$i}]['key'] eq $key}selected="selected"{/if}>{$item}</option>
+                    {/foreach}
+                </select>
+                <select name="orders[{$i}][status]">
+                    <option value="asc" {if !empty($orders[{$i}]['status']) and $orders[{$i}]['status'] eq 'asc'}selected="selected"{/if}>顺序</option>
+                    <option value="desc" {if !empty($orders[{$i}]['status']) and $orders[{$i}]['status'] eq 'desc'}selected="selected"{/if}>逆序</option>
+                </select>
+            </span> {/section}
+            </span>
+            <button type="submit" style="margin-left: 10px;" class="uiBtn BtnBlue l">搜索</button>
+            <a style="margin-left: 10px;" class="uiBtn" href="/manage#!wheel/index">重置</a>
+        </div>
+    </form>
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+        <table class="list">
+            <thead>
+                <tr>
+                    <th align="left">ID</th>
+                    <th align="left">标题</th>
+                    <th align="left">有效时间</th>
+                    <th align="left">编辑时间</th>
+                    <th align="left">参与人数</th>
+                    <th align="left">中奖人数</th>
+                    <th class="w60">状态</th>
+                    <th class="w80">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$list item=m}
+                <tr>
+                    <td>{$m.id}</td>
+                    <td>{$m.title}</td>
+                    <td>{if !empty($m.start_time)}起:{date('Y-m-d H:i:s', $m.start_time)}{/if} {if !empty($m.end_time)}止:{date('Y-m-d H:i:s', $m.end_time)}{else}不限{/if}</td>
+                    <td>{date('Y-m-d H:i:s', $m.update_time)}</td>
+                    <td>{$m.hit_times}</td>
+                    <td>{$m.winning_times}</td>
+                    <td>
+                        {if $m.status}
+                        <a href="javascript:;" onclick="main.chang_status('{$m.id}','wheel','status','id')" class="c-green" title="点击禁用">已激活</a> {else}
+                        <a href="javascript:;" class="c-red toggle-active" data-id="{$m.id}" title="点击激活">未激活</a> {/if}
+                    </td>
+                    <td class='opera' align='center' nowrap>
+                        <a href='#!wheel/logs?filters[coupon_id]={$m.id}' class='iconfont icon-a' title='中奖记录'>&#xe605;</a>
+                        <a href='#!wheel/edit?id={$m.id}' class='iconfont icon-a' title='编辑'>&#xe603;</a>
+                    </td>
+                </tr>
+                {foreachelse}
+                <tr>
+                    <td colspan="8" align="center">本条件暂无记录</td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+        <div class="foot-btn">
+            <div class="pager r">{$page}</div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/wheel.js', function() {
+
+});
+</script>

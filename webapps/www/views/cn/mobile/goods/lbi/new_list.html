@@ -1,0 +1,23 @@
+<div class="fl-list2">
+    <a href="/goods/show/{$m.id}">
+        <div class="list-img"><em><img src="{$m.img_cover}"></em></div>
+        <p class="pro-name">{$m.name}</p>
+        <div class="mui-card-footer pintuan-title">
+            <div class="mui-card-link">
+                <span class="rmb">¥</span>
+                <span class="price-int">{$m.team_price}</span>
+                <span class="price-ori">¥{$m.price}</span>
+            </div>
+            <div class="mui-card-link">
+                {if $m.join_member}
+                <ul class="new-ul clearfix new-ul1" >
+                    {foreach from=$m.join_member item=p}
+                    <li style="display: block;overflow: hidden;width: 30px;height: 30px;background: #e5e5e5;border: 1px solid #fff;border-radius: 50%;float: left"><img src="{$p}"></li>
+                    {/foreach}
+                </ul>
+                {/if}
+                <!--{if $m.sell+$m.sales_num>0}<p>已团<span>{$m.sell+$m.sales_num}</span>件</p>{/if}-->
+            </div>
+        </div>
+    </a>
+</div>

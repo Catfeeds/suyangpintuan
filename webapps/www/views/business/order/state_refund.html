@@ -1,0 +1,55 @@
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/business/order/refund/{$order.id}">
+        <table class="table-list">
+            <tbody>
+            <tr>
+                <td class="td-label"><label>订单号：</label></td>
+                <td class="td-input">
+                    {$order.order_sn}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>状态：</label></td>
+                <td class="td-input">
+                   <label><input type="radio" name="post[status_order]" value="3" checked="" class="state">通过</label>
+                   <label><input type="radio" name="post[status_order]" value="4" class="state">不通过</label>
+                </td>
+            </tr>
+            <tr id="refund_amount">
+                <td class="td-label"><label>退款金额：</label></td>
+                <td class="td-input">
+                   <input type="text" name="post[refund_amount]" value="{$order.goods_amount}" checked="">订单金额：{$order.order_amount},商品总额：{$order.goods_amount},运费：{$order.shipping_fee}
+                   <p>将退款到用户余额</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label"><label>操作备注：</label></td>
+                <td class="td-input">
+                    <textarea class="form-area w300" name="post[refund_note]" id="state_info"></textarea>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input td-button">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{literal}
+<script>
+$.loadJs('/style/js/jquery-1.11.2.min.js',function(){
+	jQuery.noConflict();
+	jQuery('.state').click(function(){
+            if(jQuery(this).val()==4){
+                jQuery("#refund_amount").hide();
+            }else{
+                jQuery("#refund_amount").show();
+            }            
+	});
+});
+</script>
+{/literal}

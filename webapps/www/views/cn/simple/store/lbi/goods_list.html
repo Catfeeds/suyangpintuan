@@ -1,0 +1,19 @@
+<div class="area-box">
+    <a href="/goods/show/{$m.id}" class="shop-a">
+    <dl class="fx-cpbox clearfix">
+        <dt>
+        <img src="{zz mod=fileurl source=$m.img_cover}"/>
+        </dt>
+        <dd>
+            <h3>{$m.name}</h3>
+            <p>已团<span class="rmb">{$m.sell}</span>件</p>
+            <div class="mui-card-link">
+                <span class="tuan-rs">{$m.team_num}人团</span>
+                <span class="rmb">¥</span>
+                <span class="price-int">{$m.team_price}</span>
+                <button type="button" class="mui-btn mui-btn-danger" onclick="tourl('/goods/show/{$m.id}')">去开团></button>
+            </div>
+        </dd>
+    </dl>
+    </a>
+</div>

@@ -1,0 +1,29 @@
+<div class="backmap">
+
+    {foreach from=$menus_map item=m}
+
+    {if $m.parentid==0}
+
+    <dl>
+
+        <dt>{$m.name}</dt>
+
+        {foreach from=$menus_map item=n}
+
+        {if $n.parentid==$m.id}
+
+        <dd><a href="/business#!{$n.mod}{if $n.action}/{$n.action}{/if}{if $n.param}/{$n.param}{/if}">{$n.name}</a></dd>
+
+        {/if}
+
+        {/foreach}
+
+    </dl>
+
+    {/if}
+
+    {/foreach}
+
+    <br class="clear" />
+
+</div>

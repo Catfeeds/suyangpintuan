@@ -1,0 +1,51 @@
+{zz var=LAYOUT_NO}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{$item.title}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="/style/wechat_news.css"/>
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/style/wechat_news_lt_ie9.css"/>
+    <![endif]-->
+    {literal}
+    <style type="text/css">
+        ol,ul{list-style-position:inside}
+        #page-content img{ max-width: 100%; }
+    </style>
+    {/literal}
+</head>
+<body id="activity-detail">
+    <div class="rich_media">
+        <div class="rich_media_inner">
+
+            <h2 class="rich_media_title" id="activity-name">{$item.title}</h2>
+
+            <div class="rich_media_meta_list">
+                <em id="post-date" class="rich_media_meta text">{date('Y-m-d',$item.c_time)}</em>
+                <a class="rich_media_meta link nickname" href="javascript:viewProfile();" id="post-user" style="display:none">公众号名称</a>
+            </div>
+            <div id="page-content">
+                <div id="img-content">
+
+                    {if $item.cover_in_detail}
+                    <div class="rich_media_thumb" id="media">
+                        <img onerror="this.parentNode.removeChild(this)" src="{$item.imgurl_src}" />
+                    </div>
+                    {/if}
+
+                    <div class="rich_media_content" id="js_content">
+                        {$item.content}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

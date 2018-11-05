@@ -1,0 +1,55 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/business/chat/autoreplay_edit" enctype="multipart/form-data">
+        <table class="table-list">
+            <tbody>
+                <tr>
+                    <td class="td-label">
+                        <label>关键字：</label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[keyword]" value="{if isset($row.keyword)}{$row.keyword}{/if}">
+                        <div class="form-tip">与客服发送的信息做匹配的关键字.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>匹配方式：</label>
+                    </td>
+                    <td class="td-input">
+                        <input class="form-i" type="radio" name="post[type]" value="0" {if empty($row.type)}checked{/if} />模糊匹配
+                        <input class="form-i" type="radio" name="post[type]" value="1" {if !empty($row.type)}checked{/if} />精确匹配
+                        <div class="form-tip">模糊匹配时, 客户信息<i class="c-red">包含</i>关键字时. 就回复信息</div>
+                        <div class="form-tip">精确匹配时, 客户信息<i class="c-red">等于</i>关键字时. 才回复信息</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>回复内容：</label>
+                    </td>
+                    <td class="td-input">
+                        {$row.content_editor}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>当前状态：</label>
+                    </td>
+                    <td class="td-input">
+                        <input class="form-i" type="radio" name="post[status]" value="1" {if !empty($row.status)}checked{/if} />已启用
+                        <input class="form-i" type="radio" name="post[status]" value="0" {if empty($row.status)}checked{/if} />已禁用
+                    </td>
+                </tr>
+                <tr class="tr-btn">
+                    <td class="td-label"></td>
+                    <td class="td-input">
+                        <input type="hidden" name="id" value="{if isset($row.id)}{$row.id}{/if}">
+                        <input type="hidden" name="Submit" value="1">
+                        <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                        <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

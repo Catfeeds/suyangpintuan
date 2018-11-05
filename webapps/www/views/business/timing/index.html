@@ -1,0 +1,112 @@
+{include file='../public_btn.html'}
+<style>
+.background-color {
+    background: #f2f2f2 none repeat scroll 0 0;
+    height: 100%;
+}
+.padding-big {
+    padding: 20px;
+}
+.clearfix::after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.admin-top {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e6e7e9;
+    padding: 20px;
+}
+.admin-top dt {
+    float: left;
+}
+.admin-top dd {
+    color: #999;
+    font-size: 14px;
+    line-height: 30px;
+    margin-left: 220px;
+}
+.admin-top dd p {
+    float: left;
+    width: 40%;
+}
+.admin-top span.col-1 {
+    color: #0056ab;
+}
+.admin-top p span {
+    color: #333;
+}
+.admin-top h2 {
+    color: #333;
+    font-size: 16px;
+    height: 30px;
+    overflow: hidden;
+}
+.account-product {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e6e7e9;
+    padding: 20px;
+}
+.account-product ul {
+    padding-top: 10px;
+}
+.account-product li {
+    float: left;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    width: 20%;
+}
+.account-product li a {
+    display: block;
+}
+.account-product li span {
+    color: #f00;
+    font-weight: bold;
+}
+.admin-logo img{
+    height: 60px;
+}
+</style>    
+<div class="html-box">
+    <div class="padding-big background-color">
+            <div class="account-info clearfix">
+                    <dl class="admin-top clearfix">
+                            <dt class="admin-logo">
+                                    <img src="{$data.logo}"/>
+                            </dt>
+                            <dd>
+                                    <h2>用户名：{$data.mobile}【<a href="#!business/geolbs/{$smarty.const.BID}?com=xshow|定位">定位</a>】</h2>
+                                    <p>管理权限：<span>管理员</span></p>
+                                    <p>最后登陆：<span>{$data.login_time|date_format:'Y-m-d H:i:s'}</span></p>
+                                    <p>店铺名称：<span class="col-1">{$data.name}</span></p>
+                                    <p>店铺类型：<span>{if $data.type==1}个人{else}企业{/if}</span></p>
+                            </dd>
+
+                    </dl>
+            </div>
+            <!--产品-->
+            <div class="account-product margin-big-top clearfix">
+                    <h2 class="h2">今日概况</h2>
+                    <ul class="clearfix">
+                            <li><a href="/business#!order/index?lstype=shipping">待发货订单：<span>{$data.ship_num}</span></a></li>
+                            <li><a href="/business#!team/index?status=1">待成团：<span>{$data.team_num|default:0}</span></a></li>
+                            <li><a href="/business#!refund/lists/1">待退款订单：<span>{$data.refund_num}</span></a></li>							
+                            <li><a href="/business#!refund/lists/2">待退货订单：<span>{$data.return_num}</span></a></li>							
+                            <li><a href="/business#!rate/index">等审核评论：<span>{$data.rate_num}</span></a></li>
+                    </ul>
+            </div>
+            <div style="text-align: center;padding: 30px 0">
+                    {if C('wx_url')}
+                    <img src="/wechat/build_qrcode?data=http://{C('wx_url')}/store/index/{$data.id}" width="180px" height="180px"/>
+                    {else}
+                    <img src="/wechat/build_qrcode?data={url('/store/index/')}{$data.id}" width="180px" height="180px"/>
+                    {/if}
+                    <h2 style="font-weight: 400;color: #666;padding-top: 15px">店铺二维码</h2>
+            </div>
+    </div>
+</div>

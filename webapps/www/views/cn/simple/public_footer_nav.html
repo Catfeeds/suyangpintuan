@@ -1,0 +1,21 @@
+<footer>
+    <ul class="ft-ul">		
+	{foreach from=$nav_b item=m name=foo}
+        <li class="li{$smarty.foreach.foo.index+1}">
+            <a href="{$m.linkurl}"><em><i class="icon iconfenxiao">{$m.fonticon}{if $m.linkurl=="/flow/cart"}<span class="cartNum">{$cartNum|default:0}</span>{/if}</i></em>{$m.title}</a>
+        </li>
+	{/foreach}
+        <!-- <li class="li2">
+            <a href="/goods/cat"><em><i class="icon iconfenxiao">&#xe604;</i></em> 全部分类</a>
+        </li>
+        <li class="li3">
+            <a href="/flow/cart"><em><i class="icon iconfenxiao">&#xe603;<span class="cartNum">{$cartNum|default:0}</span></i></em> 购物车</a>
+        </li>
+        <li class="li4">
+            <a href="/agent"><em><i class="icon iconfenxiao">&#xe604;</i></em>{L('unit_distribution')}中心</a>
+        </li>
+        <li class="li5">
+            <a href="/member"><em><i class="icon iconfenxiao">&#xe60a;</i></em> 个人中心</a>
+        </li> -->
+    </ul>
+</footer>

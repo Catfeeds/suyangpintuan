@@ -1,0 +1,29 @@
+<li class="mui-clearfix">
+	<a href="/bargain/show/{$m.id}" class="bargain1-img"><img src="{$m.img_cover}"></a>
+	<div class="bargain1-text">
+		<a href="javascript:;" class="bargain-big">{$m.goods_name}</a>
+		<div class="bargain1-1 mui-clearfix">
+			<span class="mui-pull-right">
+				<p><big style="color: #f70000;">￥{formatPrice($m.price-$m.bargain_price)}</big></p>
+				{if $m.status==0 && $m.end_time>0}
+				<input type="submit" value="继续砍价" class="bargin-bg1 mui-btn mui-btn-block" onclick="tourl('/bargain/show/{$m.id}?share=1')"/>
+				{elseif $m.status==1 && $m.order_id==0}
+				<input type="submit" value="立即购买" class="bargin-bg1 mui-btn mui-btn-block bargain_order" data-val="{$m.id}" />
+				{else}
+				<input type="submit" value="重砍一个" class="bargin-bg1 mui-btn mui-btn-block" onclick="bargain_apply('{$m.bargain_id}','{$m.spec}')"/>
+				{/if}
+			</span>
+			<div class="bargain-my">
+				{if $m.status==0 && $m.end_time>0}
+				<div class="bargain-my-time"><em id="leftTimeJx{$m.id}">00:00:00</em>后结束</div>
+				<script>onload_leftTime_jx({$m.id},{$m.end_time},"","");</script>
+				<div class="bargain-my-text">还差{$m.price-$m.last_price-$m.bargain_price}元</div>
+				{elseif $m.status==2 || ($m.status==0 && $m.end_time==0)}
+				砍价失败
+				{elseif $m.status==1 }
+				砍价成功
+				{/if}
+			</div>
+		</div>
+	</div>
+</li>

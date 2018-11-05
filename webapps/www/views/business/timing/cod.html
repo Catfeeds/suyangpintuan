@@ -1,0 +1,32 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+
+    <form name="formlist" target="iframeNewsTarget" method="post" action="">
+    <table class="list">
+        <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th align="left">开奖号</th>
+                <th class="w120">发布日期</th>
+                <th class="w120">下期开奖日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$data.list item=m}
+            <tr>
+                <td class='id' align='center'>{$m.id}</td>
+                <td>{$m.cod}</td>
+                <td align="center">{$m.addtime|date_format:'Y-m-d'}</td>
+                <td align="center">{$m.nexttime|date_format:'Y-m-d'}</td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+    </form>
+
+</div>
+

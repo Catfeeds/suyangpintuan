@@ -1,0 +1,38 @@
+{include file="public_header.html"}
+
+<link href="/style/style/enter.css" rel="stylesheet" />
+
+<style type="text/css">
+
+    .main{ text-align: center; }
+
+    .empty{ font-size: 16px; }
+
+</style>
+
+<div class="main">
+
+    <div class="empty" style="color: #999">{$message}</div>
+
+    {if !empty($link)}
+
+    {foreach from=$link item=m}
+
+    <a href="{$m.link}">{$m.text}</a>&nbsp;
+
+    {/foreach}
+
+    {else}
+
+    <script type="text/javascript">
+
+        setTimeout(function(){ location.href='{$url}' },3*1000);
+
+    </script>
+
+    {/if}
+
+</div>
+
+
+{include file="public_footer.html"}

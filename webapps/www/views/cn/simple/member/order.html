@@ -1,0 +1,100 @@
+{$headTit="我的订单"}
+{$headOrder=1}
+{$slider=1}
+{include file="public_header.html"}
+<header id="header" class="mui-bar mui-bar-nav">
+    <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="mui-scroll">
+            <a class="mui-control-item {if $smarty.get.status==''}mui-active{/if}" href="/member/order">
+                全部
+            </a>
+            <a class="mui-control-item {if isset($smarty.get.status) && $smarty.get.status=='100'}mui-active{/if}" href="/member/order?status=100">
+                待付款
+            </a>
+            <a class="mui-control-item {if isset($smarty.get.status) && $smarty.get.status=='111'}mui-active{/if}" href="/member/order?status=111">
+                已取消
+            </a>
+            <a class="mui-control-item {if isset($smarty.get.status) && $smarty.get.status=='101'}mui-active{/if}" href="/member/order?status=101">
+                待发货
+            </a>
+            <a class="mui-control-item {if isset($smarty.get.status) && $smarty.get.status=='102'}mui-active{/if}" href="/member/order?status=102">
+                待收货
+            </a>
+            <a class="mui-control-item {if isset($smarty.get.status) && $smarty.get.status=='110' && $smarty.get.is_rate=='0'}mui-active{/if}" href="/member/order?status=110&is_rate=0">
+                待评价
+            </a>
+            <a class="mui-control-item" href="/refund/index">
+                退款退货
+            </a>
+        </div>
+    </div>
+</header>
+{if $data.list}
+<div class="refreshContainer mui-scroll-wrapper haotao-guan">        
+    <div class="mui-scroll">
+        <div class="hot-list">
+            {foreach from=$data.list item=m}
+            {include file="member/lbi/order_list.html"} 
+            {/foreach}
+        </div>             
+    </div>          
+</div>
+<div class="fb-box" style="display: none">
+    <div class="pop-tj">
+        <div class="pop-gb1 close">
+            <a href="#"><img src="/style/img/v-gb1.png"/></a>
+        </div>
+        <h2>自提订单提货凭证</h2>
+        <h3>提货码：1234 5569 78001</h3>
+        <div class="pop-rwm1">
+            <img src="/style/img/rwm1.png" class="img_qrcode">
+        </div>
+        <div class="pop-txt2">
+            <p class="address">取货地址：厦门软件园二期望海路41号506号</p>
+            <p class="mobile">联系电话：0592-5552482</p>
+            <p class="good_name">商品名称：口水鱼香辣味15g*20/盒 小鱼仔小鱼干 新老包装交替中</p>
+            <p>商品价格：<span class="goods_amount">￥198.00</span> <span class="status_pay">已支付</span></p>
+        </div>
+    </div>
+</div>
+{else}
+{$empty_tip = "您还没有订单!"}
+{include file="public_empty.html"}
+{/if}
+<script>
+  var status = '{$smarty.request.status}';
+  //load:1必填
+  {literal} var D = {load: 1, status: status};{/literal}
+  var ajax_url = "/member/order/";//请求的地址  
+  var ajax_class = ".hot-list";//加载的元素
+  var ajax_type = 2;//1加载页面时加载，2下拉时才加载
+  function showTakeVerifyCode(verify_code_id){
+      {literal}var obj = {verify_code_id: verify_code_id};{/literal}
+      $.ajax({
+          async: false,
+          type: 'POST',
+          url: '/member/ajax_verify_code',
+          dataType: "json",
+          data: obj,
+          success: function (data) {
+              if(data.error) {
+                  mui.alert(data.msg)
+              }else {
+                  $('.fb-box').css('display','block');
+                  $('.pop-tj h3').html('提货码：'+data.verify_code);
+                  $('.address').html('取货地址：'+data.address);
+                  $('.mobile').html('联系电话：'+data.mobile);
+                  $('.good_name').html('商品名称：'+data.goods_name);
+                  $('.goods_amount').html('￥'+data.goods_amount);
+                  $('.status_pay').html(data.status_pay);
+                  $('.img_qrcode').attr('src','/wechat/build_qrcode?data='+data.code_url);
+              }
+          }
+      });
+  }
+    $('.close').on('click', function(){
+        $('.fb-box').css('display','none');
+    });
+</script>
+{include file="public_scroll.html"}
+{include file="public_footer.html"}

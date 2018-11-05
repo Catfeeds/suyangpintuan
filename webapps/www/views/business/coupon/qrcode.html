@@ -1,0 +1,57 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <table class="table-list">
+        <tbody>
+            <tr>
+                <td class="td-label">
+                    <label>优惠券: </label>
+                </td>
+                <td class="td-input">
+                    {$coupon.title}
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td class="td-label">
+                    <label>二维码: </label>
+                </td>
+                <td class="td-input">
+                    <p>下载请右键点击图片. 选另存为</p>
+                    <img src="{$qrcode}" width="240" height="240" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/clipboard/clipboard.min.js', function() {
+
+
+    var clearCopyResult = function() {
+        setTimeout(function() {
+            var $result = $('.copy-result');
+            $result.html('');
+            $result.removeClass('on');
+        }, 3000);
+    }
+
+    var clipboard = new Clipboard('.btn');
+    clipboard.on('success', function(e) {
+        var $result = $('.copy-result');
+        if (!$result.hasClass('on')) {
+            $result.html('已复制到剪切板');
+            $result.addClass('on');
+            clearCopyResult();
+        }
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+        var $result = $('.copy-result');
+        if (!$result.hasClass('on')) {
+            $result.html('请选中文字使用ctrl+c来复制');
+            $result.addClass('on');
+            clearCopyResult();
+        }
+    });
+});
+</script>

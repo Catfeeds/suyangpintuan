@@ -1,0 +1,93 @@
+{include file='../public_btn.html'}
+<h3 class="info-tag">
+    提现列表(共{$page_total}个提现记录)<span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>申请提现总计: </b> 提现总金额￥<span>{$total.amount}</span>  <b>申请提现手续费: </b> 提现总手续费￥<span>{$total.fee}</span></h3>
+
+<div class="html-box">
+
+    <form class="cond-form clear" action="#!business/withdrawals_log/{$row.mid|default:0}" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <input type="hidden" value="{$smarty.get.mid|default:0}" name="mid">
+        <div class="f-unit">
+            <select name="k" id="k">
+            	<option value="name" {if $smarty.get.k eq 'name'}selected{/if}>商家名</option>
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$smarty.get.q}" type="text">
+            <div class="l">
+                <select name="stage" style="display:none;">
+                    <option value="">-操作类型-</option>
+                    {foreach from=$stages item=m}
+                    <option value="{$m.key}" {if $m.key eq $smarty.get.stage}selected{/if}>{$m.title}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="l" style="display:none;">
+                <select name="points">
+                    <option value="">-币值-</option>
+                    <option value="user_money"{if $points eq 'user_money'} selected{/if}>可用余额</option>
+                    <option value="pay_points"{if $points eq 'pay_points'} selected{/if}>积分</option>
+                    <option value="rank_points"{if $points eq 'rank_points'} selected{/if}>经验值</option>
+                </select>
+                <select name="sortorder" id="sortorder">
+                    <option value="">-排序-</option>
+                    <option value="DESC" {if $sortorder eq 'DESC'}selected{/if}>降序</option>
+                    <option value="ASC" {if $sortorder eq 'ASC'}selected{/if}>升序</option>
+                </select>
+            </div>
+            <label class="ui-label w60">操作时间：</label>
+            <div class="l">
+                <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|default:''}" autocomplete="off" onclick="WdatePicker()" type="text">
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|default:''}" autocomplete="off" onclick="WdatePicker()" type="text">
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+
+    <table class="list">
+        <thead>
+        <tr>
+            <th class="w40">ID</th>
+            <th>商家名</th>
+            <th class="w80">提现余额</th>
+            <th class="w80">手续费</th>
+            <th class="w160">提现类型</th>
+            <th>信息</th>
+            <th class="w160">操作时间</th>
+            <th class="w80">状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td>{$m.id}</td>
+            <td>{$m.name}</td>
+            <td><b style="color:#f80">{$m.amount}</b></td>
+            <td>{$m.fee}</td>
+            <td>{if $m.type==1}银行卡{elseif $m.type==2}微信{elseif $m.type==3}支付宝{/if}</td>
+            <td>{if $m.type==1}{$m.bank}:{$m.account}{elseif $m.type==2}微信号:{$m.wx}{elseif $m.type==3}支付宝账号:{$m.alipay}{/if}</td>
+            <td>{date('Y-m-d H:i',$m.addtime)}</td>
+            <td>{if $m.status==0}未处理{elseif $m.status==1}已审核{elseif $m.status==2}审核不通过{/if}</td>
+            <td><a class="uiBtn" href="#!business/withdraw_commission_edit/{$m.id}?com=xshow|佣金提现">查看</a></td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {$page}
+
+</div>
+
+<script src="/js/manage/member.js"></script>
+{literal}
+<script>
+    $.loadJs('/admin/js/manage/member.js',function(){
+    });
+    var menus = $('#page_container a'), i;
+    for(i = 0;i < menus.length;i++){
+        menus[i].onclick = function() {
+            var page = this.rel;
+            member.search(page);
+        }
+    }
+</script>
+{/literal}

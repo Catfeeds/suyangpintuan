@@ -1,0 +1,83 @@
+{$headTit=""}
+{$slider=1}{$active = 4}
+{include file="public_header.html"}
+<div class="search search_container_city search_container">
+    <form action="" method="get" onsubmit="return win.submit();">
+        <div class="search_input">
+            <input type="text" name="key" class="input_keys" id="keyWords1" value="" onblur="blur()" onfocus="focus()" onkeyup="getData()" autocomplete="off" placeholder="输入城市名或首字母">
+            <span class="mui-icon mui-icon-search"></span>
+            <div class="delBtn hide" id="delBtn" onclick="delEvent()"></div>
+        </div>
+        <!--<div class="search_but body_bg" ></div>-->
+    </form>
+    <div class="search_ajax">
+        <ul id="search_mes">
+        </ul>
+    </div>
+</div>
+<div class="city_box">
+    {if $data.local_city}<div class="curr_city" >当前城市：{$data.local_city}</div>{/if}
+    <h3>热门城市</h3>
+    <ul class="city_lst hot">
+        {foreach from=$data.hot_list item=m}
+        <li><a href="javascript:;" onclick="load_index(this,{$m.id});" class="nobor">{$m.name}</a></li>
+        {/foreach}
+    </ul>
+    <h3>按字母排序</h3>
+
+    <ul class="letters_lst">
+        {foreach from=$data.pin_list item=m key=k}
+        <li><a href="#city_{$k}">{$k}</a></li>
+        {/foreach}
+    </ul>
+    {foreach from=$data.pin_list item=list key=k}
+    <a href="javascript:;" name="city_{$k}"></a>
+    <h4 ><p><span>{$k}</span></p></h4>
+    <ul class="city_lst">
+        {foreach from=$list item=m}
+        <li><a href="javascript:;" onclick="load_index(this,{$m.id});" class="nobor">{$m.name}</a></li>
+        {/foreach}
+    </ul>
+    {/foreach}
+</div>
+{literal}
+<script>
+    function delEvent(){
+        $(".input_keys").val('');
+        $(".search_ajax").hide();
+        $("#delBtn").addClass("hide");
+    }
+    function getData(){
+        $("#delBtn").removeClass("hide");
+        $(".search_ajax").show();
+        var keyword = $(".input_keys").val();
+        if(keyword!=''){
+            var D = {keyword:keyword};
+            mui.get("/city/ajaxGetSearch", D, function(data) {
+                if (data) {
+                    $("#search_mes").html(data);
+                }else{
+                    $("#search_mes").html('');
+                }
+            });
+        }else{
+            $("#search_mes").html('');
+        }
+    }
+    function load_index(_this,id) {
+        var D = {id:id};
+        mui.get("/city/setLocalCity", D, function(data) {
+            if (data==1) {
+                 //location.reload();
+                location.href="/city/index";
+            }else{
+                 alert("操作失败");
+            }
+        });
+    }
+</script>
+<style>
+   body{background: #fff !important;}
+</style>
+{/literal}
+{include file="public_footer.html"}

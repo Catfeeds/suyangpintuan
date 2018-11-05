@@ -1,0 +1,40 @@
+<div class="mui-card {if $m.stock==0}ms-qgl{/if}">
+	<div class="mui-card-header mui-card-media">
+		<a href="/goods/show/{$m.id}"><img src="{$m.img_src}"/></a>
+                <div class="ribbon">
+                    <span>{discount($m.price,$m.team_price)}折</span>
+                    <span>{$m.team_num}人团</span>
+                </div>
+	</div>
+	<div class="mui-card-content">
+		<div class="mui-card-content-inner">
+			<p>{$m.name}</p>
+		</div>
+	</div>
+        {if $type!='now'}
+        <p class="ms-date"><span>{$m.start_time|date_format:'m'}</span>月<span>{$m.start_time|date_format:'d'}</span>日 <span>{$m.start_time|date_format:'H:i'}</span>开抢</p>
+        {else}
+        <p class="ms-date">距离结束还有<em id="leftTimeJx{$m.id}"><span>00</span>时<span>00</span>分<span>00</span>秒</em></p>   
+	<script>onload_leftTime_jx({$m.id},{$m.end_time-time()},"span","zh");</script>
+        {/if}
+	<div class="mui-card-footer">
+		<div class="mui-card-link">
+			<span class="rmb">￥</span>
+			<span class="price-int">{$m.team_price}</span>
+			<span class="price-ori">￥{$m.price}</span>
+		</div>
+		<div class="mui-card-link">
+			{if $m.start_time>$smarty.const.RUN_TIME}
+			<button type="button" class="mui-btn mui-btn-warning">即将开始</button>					
+			{else}
+			<button type="button" class="mui-btn mui-btn-danger"  onclick="location.href='/goods/show/{$m.id}'">{if $m.stock==0}已抢光{else}立即抢购 >{/if}</button>
+			<dl class="barbox clearfix">
+				<dt> {if $m.stock==0}{$m.stock}件已被抢光啦！{else}已售：{$m.scale}%{/if}</dt>
+				<dd class="barline">
+					<div w="{$m.scale}" style="width:0px;" class="charts"></div>
+				</dd>
+			</dl>
+			{/if}			
+		</div>
+	</div>
+</div>

@@ -1,0 +1,38 @@
+{include file="public_header.html"}
+<div class="fenxiao-dpsz">
+	<ul>
+		<li>
+			<a href="/agent/mshop_setting">店铺资料</a>
+		</li>
+		<li>
+			<a href="/agent/mshop_edit">店铺素材</a>
+		</li>
+		<li class="on">
+			<a href="/agent/mshop_share">分享设置</a>
+		</li>
+	</ul>
+</div>
+<form action="" method="post" target="iframeNews" >
+<div class="fenxiao-dpsz-fxsz">
+
+	<h3>微店分享语</h3>
+
+	<textarea name="post[mshop_share]" placeholder="我开的小店，请多多捧场~~（200字以内）">{$row.mshop_share}</textarea>
+</div>
+
+
+<div class="fenxiao-dpsz-fxsz">
+
+	<h3>商品分享语</h3>
+
+	<textarea name="post[good_share]" placeholder="我的小店，商品物美价廉，赶快来看看吧~~（200字以内）">{$row.good_share}</textarea>
+</div>
+<ul class="fenxiao-dpsz-tj">
+	<li>
+		<input type="submit" name="Submit" value="保存">
+	</li>
+</ul>
+</form>
+{include file="public_footer_agent_nav.html"}
+<div class="ft"></div>
+{include file="public_footer.html"}

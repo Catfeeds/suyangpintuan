@@ -1,0 +1,36 @@
+<div class="area-box everybody-pin">
+    <div class="group-tit">
+        <span>大家都在团</span>
+    </div>
+    <ul class="mores-list clearfix">        
+    </ul>    
+</div>
+<script>
+    var id = '{$data.row.id}';
+    var page = 1;
+    $(function() {
+        mui.ajax("/goods/ajax_rand", {
+            dataType: 'xhr', //服务器返回json格式数据
+            type: 'get', //HTTP请求类型
+            beforeSend:function(){                
+                $(".mores-list").html("正在加载...");
+            },
+            success: function(data) {
+                if (data) {
+					$(".everybody-pin").show();
+                    $(".mores-list").html(data);
+                    $('.fl-list2 .list-img em').width($('.fl-list2 .list-img').width())
+                    $('.fl-list2 .list-img em').height($('.fl-list2 .list-img').width())
+                    $('.fl-list2 a').on('click',function () {
+                        if(window.__wxjs_environment==='miniprogram'){
+                            wx.miniProgram.navigateTo({ url: '/pages/goods/show?id='+$(this).attr('gid') });
+                            return false;
+                        }
+                    });
+                }else{
+					$(".everybody-pin").hide();
+				}
+            }
+        });        
+    });
+</script>

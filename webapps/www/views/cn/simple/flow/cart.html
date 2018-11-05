@@ -1,0 +1,228 @@
+{include file="public_header.html"} {if $data.cart_goods}
+<script type="text/javascript" src="/style/js/Calculation.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(function() {
+
+        $(".allselect").click(function() {
+            $(this).prev().addClass('on');
+            $("input[name=newslist]").each(function() {
+                $(this).attr("checked", true).prev().addClass('on');
+                $("#select-" + $(this).attr("data-id")).val("1");
+            });
+            GetCount();
+        });
+        $(".allselect").prev().addClass('on');
+        $("input[name=newslist]").each(function() {
+            $(this).attr("checked", true).prev().addClass('on');
+            $("#select-" + $(this).attr("data-id")).val("1");
+        });
+        GetCount();
+    });
+
+    // 所有复选(:checkbox)框点击事件
+    $(".gwc_tb2 input[name=newslist]").click(function() {
+        if ($(this).attr("checked")) {
+            $(this).attr("checked", false);
+            $(this).prev().toggleClass('on');
+            $("#select-" + $(this).attr("data-id")).val("0");
+            //$(this).next().css({ "background-color": "#ffffff", "color": "#000000" });
+        } else {
+            $(this).attr("checked", true);
+            $(this).prev().toggleClass('on');
+            $("#select-" + $(this).attr("data-id")).val("1");
+            //$(this).next().css({ "background-color": "#3366cc", "color": "#000000" });
+        }
+    });
+
+    // 输出
+    $(".gwc_tb2 input[name=newslist]").click(function() {
+        // $("#total2").html() = GetCount($(this));
+        GetCount();
+        //alert(conts);
+    });
+});
+//******************
+function GetCount() {
+    var conts = 0;
+    var aa = 0;
+    $(".gwc_tb2 input[name=newslist]").each(function() {
+        if ($(this).attr("checked")) {
+            for (var i = 0; i < $(this).length; i++) {
+                conts += parseFloat($(this).val());
+                aa += 1;
+            }
+        }
+    });
+    $("#shuliang").text(aa);
+    if (aa > 0) {
+        $(".gwc-del").show();
+        $("#jz2").addClass("on");
+    } else {
+        $(".gwc-del").hide();
+        $(".gwc .gwc-qx label em").removeClass('on');
+        $("#jz2").removeClass("on");
+
+    }
+    $("#zong1").html((conts).toFixed(2));
+    $("#jz1").css("display", "none");
+    $("#jz2").css("display", "block");
+}
+</script>
+<div class="gwc">
+    <form id="cartForm" action="{url('/flow/checkout')}" method="post">
+        <input type="hidden" name="ids" value=''>
+        <div class="gwc-qx">
+            <a href="javascript:delCart();" class="gwc-del"><i class="icon iconfenxiao">&#xe60c;</i></a>
+            <label><em></em>全选
+                <input style="display:none;" type="checkbox" class="allselect" />
+            </label>
+        </div>
+        <ul class="gwc-ul">
+            {foreach from=$data.cart_goods item=m name=foo}
+            <li class="gwc_tb2">
+                <label>
+                    <em {if $m.is_selected==1}class="on" {/if}></em>
+                    <input type="checkbox" value='1' data-id="{$m.id}" name="newslist" id="newslist-{$m.id}" {if $m.is_selected==1}checked="checked" {/if}>
+                    <input type="hidden" name="is_selected[{$m.id}]" value="{$m.is_selected}" id="select-{$m.id}">
+                </label>
+                <a href="/goods/show/{$m.goods_id}"><img src="{zz mod=fileurl source=$m.img_src type=1}" /></a>
+                <div class="gwc_cpxx">
+                    <h3>
+                        <a href="/goods/show/{$m.goods_id}">{$m.goods_name}</a>
+                    </h3>
+					<p>{$m.goods_spec}</p>
+                    <i>￥<em id="total{$m.id}" class="tot">{$m.subtotal}</em><section class="tb1_td5">
+                        <a id="min{$m.id}" href="javascript:;">-</a>
+                        <input id="text_box_{$m.id}" name="num[{$m.id}]" readonly="true" type="text" value="{$m.qty}" />
+                        <a id="add{$m.id}" href="javascript:;">+</a>
+                    </section></i>
+                    <input name="goods_id[{$m.id}]" type="hidden" value="{$m.goods_id}" />
+                    <input name="spec[{$m.id}]" type="hidden" value="{$m.spec}" />
+                </div>
+                <!---商品加减算总数---->
+                <script type="text/javascript">
+                $(function() {
+                    var max = {$m.goods_stock|default:0};
+                    var t = $("#text_box_{$m.id}");
+                    $("#add{$m.id}").click(function() {
+                        var qty = parseInt(t.val()) + 1;
+                        if (qty <= max) {
+                            t.val(qty)
+                            setTotal();
+                            GetCount();
+                        }
+                    })
+                    $("#min{$m.id}").click(function() {
+                        if (t.val() > 1) {
+                            var qty = parseInt(t.val()) - 1;
+                            t.val(qty)
+                            setTotal();
+                            GetCount();
+                        }
+                    })
+
+                    function setTotal() {
+                        $("#total{$m.id}").html((parseInt(t.val()) * {$m.goods_price}).toFixed(2));
+                        $("#newslist-{$m.id}").val(parseInt(t.val()) * {$m.goods_price});
+                    }
+                    setTotal();
+                })
+                </script>
+            </li>
+            {/foreach}
+        </ul>
+        <div class="gwc_tb3">
+            <p>
+                <i>
+                    总计
+                    <span>￥</span>
+                    <label id="zong1">0.00</label>
+                </i>
+                <em>
+                    (共<label id="shuliang">0</label> 件不含运费)
+                </em>
+            </p>
+            <a href="javascript:;" class="jz2" id="jz2">结算</a>
+        </div>
+        <div class="gwc_tb4"></div>
+    </form>
+</div>
+<!---总数---->
+<script type="text/javascript">
+{literal}
+
+function delCart() {
+    var ids = "";
+    $(".gwc_tb2 input[name=newslist]").each(function() {
+        if ($(this).attr("checked")) {
+            for (var i = 0; i < $(this).length; i++) {
+                ids = ids ? ids + ',' + $(this).attr('data-id') : $(this).attr('data-id');
+            }
+        }
+    });
+    if (ids != '') {
+        str = "确定删除选中商品？\n";
+    }
+    if (confirm(str)) {
+        $.get('/flow/del_cart/' + ids, function(data) {
+            location.reload();
+        })
+    }
+}
+$(function() {
+    $(".quanxun").click(function() {
+        setTotal();
+        //alert($(lens[0]).text());
+    });
+
+    function setTotal() {
+        var len = $(".tot");
+        var num = 0;
+        for (var i = 0; i < len.length; i++) {
+            num = parseInt(num) + parseInt($(len[i]).text());
+
+        }
+        //alert(len.length);
+        $("#zong1").text(parseInt(num).toFixed(2));
+        $("#shuliang").text(len.length);
+    }
+    //setTotal();
+
+    $(".jz2").click(function() {
+        var ids = "";
+        $(".gwc_tb2 input[name=newslist]").each(function() {
+            if ($(this).attr("checked")) {
+                for (var i = 0; i < $(this).length; i++) {
+                    ids = ids ? ids + ',' + $(this).attr('data-id') : $(this).attr('data-id');
+                }
+            }
+        });
+        if (ids) {
+            $.ajax({
+                type: "POST",
+                url: "/flow/ajax_cart",
+                dataType: 'json',
+                data: $("#cartForm").serialize(),
+                success: function(data) {
+                    if (data.error != 0) {
+                        console.log(data.error);
+                    } else {
+                        location.href = "/flow/checkout";
+                    }
+                }
+            });
+            return false;
+        }
+
+    })
+
+});
+
+{/literal}
+</script>
+{else}
+<div class="gwckong">
+</div>
+<a class="qgwa" href="/goods/index">前去购物</a>
+<a class="qgwa-ck" href="/member/order">我的订单</a> {/if} {include file="public_footer.html"}

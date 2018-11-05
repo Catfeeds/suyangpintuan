@@ -1,0 +1,111 @@
+{$slider = 1}
+{include file="public_header.html"}
+<link rel="stylesheet" type="text/css" href="/style/css/assist.css">
+<script src="/style/js/lefttime.js" type="text/javascript"></script>
+<div class="bargain-1 mui-clearfix">
+    {$ad = getAd(22)}
+    {if $ad}
+    <span><img src="{zz mod=fileurl source=$ad}"/></span>
+    <p><img src="/style/img/help-img-1.png"></p>
+    {/if}
+</div>
+<ul class="bargain1-ul mui-clearfix list">
+    {foreach from=$data.list item=m}
+    {include file="assist/lbi/log_list.html"}
+    {/foreach}
+</ul>
+{assign var=event value='nclick'}
+<script type="text/javascript">
+    var ExtendOptions = {
+        path: function(index) {
+            return "/bargain/log_list/"+index+"?load";
+        }
+    };
+</script>
+{include file="bargain/scroll.html"}
+<div class="bar-bottom-height mui-clearfix"></div>
+<div class="mui-clearfix bar-bottom mui-text-center">
+    <a href="/assist/index">
+        <em><img src="/style/img/help-bottom1-1.png"></em><i><img src="/style/img/help-bottom1-2.png"></i>今日免单
+    </a>
+    <a href="/assist/log_list" class="hover">
+        <em><img src="/style/img/bar-list2-1.png"></em><i><img src="/style/img/bar-list2-3.png"></i>我的免单
+    </a>
+</div>
+<div class="bargain-screen"></div>
+<!--规则弹窗 开始-->
+<div class="bargain-rule">
+    <div class="bargain2-close"><i class="mui-icon mui-icon-closeempty"></i></div>
+    <h2>助力赢免单规则</h2>
+    <section>
+        {zz mod=block mark='assist_rule'}
+    </section>
+</div>
+<!--规则弹窗 结束-->
+<!--助力分享 开始-->
+<div class="help-fx" style="display: none">
+    <div class="help-fx-bg"></div>
+    <div class="help-fx1 mui-clearfix mui-text-center">
+        长按图片，发送给朋友<br>长按保存图片，发送到朋友圈
+    </div>
+    <div class="help-fx2 mui-clearfix" id="qrcode_share">
+    </div>
+</div>
+<!--助力分享 结束-->
+{literal}
+<script>
+    $('.bargain-1 p').click(function(){
+        $('.bargain-screen').fadeIn();
+        $('.bargain-rule').fadeIn();
+        $('.bargain-rule section').css({'max-height':$('.bargain-rule').height()-$('.bargain-rule h2').height()-16});
+        $('.bargain-rule').css({'margin-top':-$('.bargain-rule').height()*.5});
+    })
+    $('.bargain2-close').click(function(){
+        $('.bargain-screen').fadeOut();
+        $('.bargain-rule').fadeOut();
+        $('.help-help').fadeOut();
+    })
+    $('.bargin-bg2').click(function(){
+        $(this).parents('li').find('.help-fx').fadeIn();
+    })
+    $('.help-fx-bg').click(function(){
+        $(this).parent('.help-fx').fadeOut();
+    })
+    $('.bargin-bg3').click(function(){
+        $('.bargain-screen').fadeIn();
+        $(this).parents('li').find('.help-help').fadeIn();
+        $(this).parents('li').find('.help-help .help-ul').css({'max-height':$(this).parents('li').find('.help-help').height()-$(this).parents('li').find('.help-help h2').height()-16});
+        $(this).parents('li').find('.help-help').css({'margin-top':-$('.help-help').height()*.5});
+    })
+
+</script>
+<script src="/style/js/layer1.8.5/layer.min.js"></script>
+<script src="/style/js/html2canvas.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function qrcode_share(log_id){
+        mui.post("/assist/qrcode_share/"+log_id, function(data) {
+            $('.help-fx').fadeIn();
+            $("#qrcode_share").html(data.html);
+            $('.pic').height(($(window).width()*0.7)*0.7);
+            if(!$("#qrcode_share").hasClass('hasqr')){
+                var canvas = document.querySelector("canvas");
+                html2canvas(document.getElementById("qrcode_share"), { canvas: canvas }).then(function(canvas) {
+                    document.getElementById("qrcode_share").appendChild(canvas);
+                    $("canvas").hide();
+                    //$("#qrcode_share").html('').addClass('hasqr');
+                    $("#qrcode_share").html('');
+                    document.getElementById("qrcode_share").appendChild(convertCanvasToImage(canvas));
+                });
+            }
+        },'json');
+    }
+
+    function convertCanvasToImage(canvas) {
+        var image = new Image();
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+</script>
+{/literal}
+
+{include file="public_footer.html"}

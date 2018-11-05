@@ -1,0 +1,35 @@
+{include file="public_header.html"}
+<div class="app-box" style='background: rgba(0, 0, 0, 0) url("{zz mod=fileurl source=$data.ban_thumb}") no-repeat scroll center top;"'>
+	<div class="content-box clearfix">
+		<div class="app-xz pull-right">
+			<img src="/default/img/tt1.png"/>
+			<p>立即扫码下载，开启拼团之旅吧</p>
+			<div class="slideTxtBox">
+				<div class="hd">
+					<ul>
+						<li><img src="/default/img/btn01.png"/></li>
+						<li><img src="/default/img/btn02.png"/></li>
+					</ul>
+				</div>
+				<div class="bd">
+					<ul>
+						<li>
+							<img src="{yunurl(C('ios_code.png','images'))}"  style="width: 182px;height: 182px"/>
+						</li>
+					</ul>
+					<ul>
+						<li>
+							<img src="{yunurl(C('an_code.png','images'))}" style="width: 182px;height: 182px"/>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    jQuery(".slideTxtBox2").slide();
+    jQuery(".slideTxtBox").slide();
+</script>
+{include file="public_footer.html"}

@@ -1,0 +1,1 @@
+<?php$config['host'] = 'localhost';$config['user'] = 'root';$config['pass'] = '111111';$config['dbname'] = 'wangpai';$config['pre'] = 'zz_';

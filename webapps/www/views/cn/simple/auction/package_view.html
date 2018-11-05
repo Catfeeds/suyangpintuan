@@ -1,0 +1,82 @@
+{$headTit="套餐详情"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<div class="main pd_10 f14">
+    <div class="car4 beijing2 car_bor">
+        <dl class="cxx_top">
+            <dt><p>{$data.row.act_name}</p></dt>
+            <dd>套餐价格：{$data.row.act_price}元</dd>
+        </dl>
+        <dl class="cxx_top">
+            <dt style="float: none">该套餐从下单时间开始计算，{$data.row.ext_info.act_day}天内有效。</dt>
+            <dt style="float: none;font-size: 14px"><b>已售<span style="color:red;">{$data.row.act_sell}</span> / 剩余<span style="color:red;">{$data.row.act_stock}</span>（限量<span style="color:red;">{$data.row.act_stock+$data.row.act_sell}</span>）</b></dt>
+        </dl>
+        <div class="center_xx">
+            <dl class="center_xx1">
+                <dt>选菜：</dt>
+                <dd id="pack_{$data.row.act_id}">
+                    {foreach from=$data.row.goods_list item=m name=f}
+                    <p>
+                        <b>{$smarty.foreach.f.index+1}、{$m.cat_name}{$m.cat_number}{$m.cat_unit|default:$site_config.unit}</b>
+                        {if $data.row.order_sn}
+                        <span style="color:#999">（剩余{$m.cat_number_have}{$m.cat_unit|default:$site_config.unit}）</span>
+                        {/if}
+                    </p>
+                    <ul id="pack_cats_{$m.cat_id}" class="pack_cats" cat_id="{$m.cat_id}" data-param="{ cat_number:'{if $data.row.order_sn}{$m.cat_number_have}{else}{$m.cat_number}{/if}' }">
+                        {foreach from=$m.list item=g}
+                        <li id="pack_goods_{$g.id}" class="pack_goods" goods_id="{$g.id}" goods_name="{$g.name}" goods_price="{$g.price}" pack_num="{$g.pack_num|default:1}">
+                            <div class="pack_button">
+                                <input type="button" value="&#xe618;" class="pro_jia pro_i" onclick="addPack('{$data.row.act_id}','{$m.cat_id}','{$g.id}','+')" />
+                                <input type="text" class="pro_text" value="0" onblur="addPack('{$data.row.act_id}','{$m.cat_id}','{$g.id}')" />
+                                <input type="button" value="&#xe61e;" class="pro_jian pro_i" onclick="addPack('{$data.row.act_id}','{$m.cat_id}','{$g.id}','-')" />
+                                <label style="color: #999;display: none;">{$g.unit|default:$site_config.unit}</label>
+                            </div>
+                            <label>{$g.name}</label>
+                            <label style="color: #999">(每{$g.unit|default:$site_config.unit}占{$g.pack_num|default:1}{$m.cat_unit|default:$site_config.unit})</label>
+                            <a href="/goods/show/{$g.id}?type=detail" style="color: #2da23a;">查看详情</a>
+                            <div style="clear: both"></div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                    {/foreach}
+                </dd>
+            </dl>
+            <dl class="center_xx1">
+                <dd>{$data.row.act_desc|nl2br}</p></dd>
+            </dl>
+            <div class="center_xx2">
+                {zz mod=block mark=pack_tip}
+            </div>
+        </div>
+        {if $data.row.order_sn}
+        <div class="center_xx3">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th colspan="3">套餐使用详细（已配送<b>{$data.row.count_qishu}</b>次）</th>
+                </tr>
+                <tr class="center_tb">
+                    <td width="33%">名称</td>
+                    <td width="33%">已用</td>
+                    <td>剩余</td>
+                </tr>
+                {foreach from=$data.row.goods_list item=m name=f}
+                <tr>
+                    <td>{$m.cat_name}</td>
+                    <td>-{$m.cat_number_order}</td>
+                    <td>{$m.cat_number_have}</td>
+                </tr>
+                {/foreach}
+            </table>
+        </div>
+        {/if}
+    </div>
+    {if $data.row.order_sn}
+    <a href="javascript:;" onclick="addPackCart('{$data.row.act_id}','{$data.row.order_sn}')" class="car_add1 center_bor"><span>加入套餐</span></a>
+    {else}
+    <a href="javascript:;" onclick="addPackCart('{$data.row.act_id}')" class="car_add1 center_bor"><span>立即购买</span></a>
+    {/if}
+    <input type="hidden" name="token" id="token" value="{createToken()}" />
+</div>
+<div class="layerAgree" style="display:none;"><div style="font-size:12px;padding:10px;">{zz mod=block mark=agree_pack}</div></div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

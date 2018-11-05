@@ -1,0 +1,62 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+
+<form class="cond-form clear" action="#!product/index" onsubmit="return xForm.submit(this)">
+    <div class="f-unit">
+        <select name="k" id="k">
+            <option value="name" {if $k eq 'name'}selected{/if}>商品名称</option>
+            <option value="id" {if $k eq 'id'}selected{/if}>ID</option>
+        </select>
+        <input id="q" class="form-i w160 sitem" name="q" value="{$q}" type="text">
+        <select name="cid"><option value="">商品分类</option> {$select_categorys}</select>
+        <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+    </div>
+</form>
+
+<table class="list">
+    <thead>
+    <tr>
+        <th class="w30">排序</th>
+        <th class="w30">ID</th>
+        <th colspan="2" class="title">商品</th>
+        <th>原价</th>
+        <th>已售</th>
+        <th class="title">分类</th>
+        <th>创建时间</th>
+        <th>上架</th>
+        <th class="w100">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {foreach from=$list item=m}
+    <tr>
+        <td align='center'><input type='text' class='form-i-s w30' name='listorders[{$m.id}]' value='{$m.listorder}' /></td>
+        <td align='center'>{$m.id}</td>
+        <td><img src="{$m.imgurl_thumb}" width="{$m.thumb_size.width}" height="{$m.thumb_size.height}"></td>
+        <td class="title"><div class="oBlk">{$m.name}</div></td>
+        <td align='center'><b style="color:#f60">{$m.price}￥</b></td>
+        <td align='center'>{$m.sell}</td>
+        <td class="title">{$m.catestr}</td>
+        <td align='center'>{date('Y-m-d',$m.c_time)}</td>
+
+        <td align='center'>
+            {if $m.is_sale==1}
+            <a href="javascript:;" onclick="main.chang_status('{$m.id}','product','is_sale')" class="c-green" title="当前上架状态">上架</a>
+            {else}
+            <a href="javascript:;" onclick="main.chang_status('{$m.id}','product','is_sale')" class="c-red" title="当前下架状态">下架</a>
+            {/if}
+            </td>
+        <td class="opera" align='center' nowrap>
+            <a href='#!product/edit/{$m.id}' class='iconfont icon-a' title='编辑'>&#xe603;</a>
+            <a href='javascript:;' onclick="main.confirm_del('product/del','{$m.id}')" class='iconfont icon-a' title='删除'>&#xe606;</a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+<div class="foot-btn">
+    <div class="pager r">{$page}</div>
+    <button type="button" class="uiBtn BtnGreen" onclick="main.batch_order('formlist','order','product')">更新排序</button>
+</div>
+</div>

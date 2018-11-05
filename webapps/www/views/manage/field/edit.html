@@ -1,0 +1,91 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <h3 class="table-title">{$module.title}({$module.name})</h3>
+
+    <form target="iframeNewsTarget" method="post" action="/manage/field/edit">
+    {if $row.id}
+    <input type="hidden" name="post[type]" value="{$row.type}" />
+    <input type="hidden" name="post[id]" value="{$row.id}" />
+    <input type="hidden" name="post[oldfield]" value="{$row.field}" />
+    {/if}
+    <input type="hidden" name="moduleid" value="{$moduleid}" />
+
+    <table class="table-list">
+    <tbody>
+
+        <tr>
+            <td class="td-label"><label>字段类型：</label></td>
+            <td class="td-input">
+                {$field_type}
+            </td>
+        </tr>
+
+        <tr id="fieldTR">
+            <td class="td-label"><label>字段名：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" id="fieldID" name="post[field]" value="{$row.field}"{if $row.issystem==1 && $id && $module.issystem} disabled{/if} />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>别名：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" id="nameID" name="post[name]" value="{$row.name}" />
+            </td>
+        </tr>
+
+        <tr class="table-h3">
+            <td colspan="2">表单验证</td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>必填：</label></td>
+            <td class="td-input">
+                <label><input name="post[required]" type="radio" value="1"{if $row.required==1} checked{/if} /> 是 </label>
+                <label><input name="post[required]" type="radio" value="0"{if !$row.required} checked{/if} /> 否 </label>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>验证规则：</label></td>
+            <td class="td-input">
+                {$field_validate}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-label"><label>验证提示：</label></td>
+            <td class="td-input">
+                <input type="text" class="form-i w200" name="post[tips]" value="{$row.tips}" />
+            </td>
+        </tr>
+
+        <tr class="table-h3">
+            <td colspan="2">字段相关</td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <div id="field_step"></div>
+            </td>
+        </tr>
+
+        <tr class="tr-btn">
+            <td class="td-label"></td>
+            <td class="td-input">
+                <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+            </td>
+        </tr>
+
+    </tbody>
+    </table>
+
+    </form>
+</div>
+
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/field.js',function(){
+    field.chang_field("{$row['type']}","{$row.id}");
+});
+</script>

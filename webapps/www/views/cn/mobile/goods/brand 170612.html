@@ -1,0 +1,75 @@
+{$nav = 1}
+{$slider = 1}
+{include file="public_header.html"}
+{if $data.cat_list}
+<header id="header" class="mui-bar mui-bar-nav">
+	<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+		<div class="mui-scroll">
+			<a class="mui-control-item mui-active" href="/goods/brand">
+				全部
+			</a>
+			{foreach from=$data.cat_list item=m}
+			{if $m.ismenu==1}
+			<a class="mui-control-item " href="/goods/brand_goods/{$m.id}">
+				{$m.catname}
+			</a>
+			{/if}
+			{/foreach}
+		</div>
+	</div>
+</header>
+{/if}
+{if $data.list}
+<div class="refreshContainer ">
+	<div class="mui-scroll">
+		<div class="hot-list"  style="padding-bottom: 60px;">
+			{foreach $data.list as $v}
+			<div class="mui-card">
+				<div class="mui-card-header mui-card-media">
+					<a href="/goods/brand_goods/{$v.id}"><img src="{zz mod=fileurl source=$v.thumb}"/></a>
+				</div>
+				<div class="mui-card-footer">
+					<div class="mui-card-link">
+						<span class="price-int">{$v.sale}折起</span>
+						<span class="price-int3">{$v.catname}</span>
+					</div>
+					{if $v.end_day>0}
+                        <div class="mui-card-link">
+							<span class="dd-tim">还剩{$v.end_day}天</span>
+						</div>
+                    {/if}
+				</div>
+				{if $v.goods_list}
+				<div class="sy-hot">
+					<div id="hot-gd" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+						<div class="mui-scroll">
+							{foreach from=$v.goods_list item=t}
+							<a class="mui-control-item" href="/goods/show/{$t.id}">
+								<img src="{$t.img_cover}"/>
+								<p>{$t.name}</p>
+								<div class="mui-card-footer">
+									<div class="mui-card-link">
+										<span class="rmb">¥</span>
+										<span class="price-int">{$t.team_price}</span>
+										<span class="price-ori">¥{$t.price}</span>
+									</div>
+								</div>
+							</a>
+							{/foreach}
+							<a class="mui-control-item hot-agd" href="/goods/index/?is_best=1" style="display: none;">
+								查看<br />全部
+							</a>
+						</div>
+					</div>
+				</div>
+				{/if}
+			</div>
+			{/foreach}
+		</div>
+	</div>
+</div>
+{else}
+{$empty_tip = "没有超值大牌!"}
+{include file="public_empty.html"}
+{/if}
+{include file="public_footer.html"}

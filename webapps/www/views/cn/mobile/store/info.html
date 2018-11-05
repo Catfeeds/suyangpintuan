@@ -1,0 +1,96 @@
+{include file="public_header.html"}
+{literal}
+<style type="text/css">
+	.mui-pull-bottom-pocket{
+		display:none !important;
+	}
+	.mui-scroll-wrapper{overflow-y: auto;}
+	.mui-scroll-wrapper .mui-scroll{padding-bottom: 60px;}
+</style>
+{/literal}
+<div class="refreshContainer mui-scroll-wrapper">
+	<div class="mui-scroll">
+		{include file="store/nav.html"}
+		<div class="shop-about" style="margin-top: 10px;">
+			<dl class="clearfix">
+				<dt>店铺二维码</dt>
+				<dd>
+					<a href="/store/qrcode/{$data.info.id}" class="shop-rwm">
+						<img src="/style/img/rwm.png" />
+					</a>
+				</dd>
+			</dl>
+			<dl class="clearfix">
+				<dt>店铺简介</dt>
+				<dd>
+					<p>{$data.info.note}</p>
+				</dd>
+			</dl>
+			{*<dl class="clearfix">
+				<dt>联系电话</dt>
+				<dd>
+					<p>{$data.info.mobile}</p>
+				</dd>
+			</dl>*}
+				<dl class="clearfix">
+						<dt>店铺认证 </dt>
+						<dd>
+								<p>{if $data.info.type==1}通过个人认证{else}通过企业认证{/if}</p>
+						</dd>
+				</dl>
+			{*
+			{if $data.info.deposit>0}
+			<dl class="clearfix">
+					<dt>保证金金额 </dt>
+					<dd>
+							<p><span class="rmb">￥{$data.info.deposit}</span>元</p>
+					</dd>
+			</dl>
+			{/if}
+			*}
+			<dl class="clearfix">
+				<dt>所在地区</dt>
+				<dd>
+					<p>{$data.info.zone}{if $data.info.latitude && $smarty.const.IS_WECHAT}&nbsp;<a href="javascript:;" onclick="showmap('{$data.info.latitude}','{$data.info.longitude}','{$data.info.name}','{$data.info.company_addr}')" style="border: 1px #ea120f solid;padding: 6px 10px;border-radius: 8px;">点击导航<img src="/style/img/gps.png" style="width: 19px;height: 19px;float: none;vertical-align: -4px;"></a>{/if}</p>
+				</dd>
+			</dl>
+			<dl class="clearfix">
+				<dt>开店时间</dt>
+				<dd>
+					<p>{$data.info.c_time|date_format:"Y-m-d"}</p>
+				</dd>
+			</dl>
+		</div>
+		<div class="shop-brand">
+			<h3>主营品牌</h3>
+			<ul class="clearfix shop-brand-list">
+				{zz mod=fileurl source=$data.info.brand var=brand num=2}
+				{foreach from=$brand item=m}
+				<li><a href="javascript:;"><img src="{$m.path}"/></a></li>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+</div>
+<nav class="mui-bar mui-bar-tab">
+	<a class="mui-tab-item "  href="/store/index/{$data.info.id}">
+			<span class="mui-icon">
+				<img src="/style/img/zy.png" class="f-im1">
+			</span>
+		<span class="mui-tab-label">上新</span>
+	</a>
+	<a class="mui-tab-item " target="_blank" href="/store/info/{$data.sid}">
+			<span class="mui-icon">
+				<img src="/style/img/shop-ic1.png" class="f-im1">
+			</span>
+		<span class="mui-tab-label">店铺详情</span>
+	</a>
+	<a class="mui-tab-item " target="_blank" href="{if $data.info.kf_online}{$data.info.kf_online}{else}/chat?backUrl=/store/index/{$data.sid}&bid={$data.sid}{/if}">
+			<span class="mui-icon">
+				<img src="/style/img/ic.png" class="f-im1">
+			</span>
+		<span class="mui-tab-label">客服</span>
+	</a>
+</nav>
+{$share_logo = $data.info.logo}
+{include file="public_footer.html"}

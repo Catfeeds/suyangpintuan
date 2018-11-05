@@ -1,0 +1,51 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form class="cond-form clear" action="#!yunbuy/order" onsubmit="return xForm.submit(this)">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $k eq 'username'}selected{/if}>会员名</option>
+                <option value="code" {if $k eq 'code'}selected{/if}>分享码</option>
+            </select>
+            <input class="form-i w160 sitem" name="q" value="{$q}" type="text">
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue">搜索</button>
+        </div>
+    </form>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th class="w30">ID</th>
+                <th>分享码</th>
+                <th>会员名</th>
+                <th class="w120">价值</th>
+                <th class="w120">使用次数/允许使用次数</th>
+                <th>生成时间</th>
+                <th>使用记录</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$list item=m}
+            <tr>
+                <td class='id' align='center'>{$m.id}</td>
+                <td align='center'>{$m.code}</td>
+                <td align='center'>{$m.username}</td>
+                <td align='center'>{$m.value}</td>
+                <td align='center'>{$m.used_time}/{$m.allow_time}</td>
+                <td align='center'>{date('Y-m-d H:i:s',$m.add_time)}</td>
+                <td align='center'>
+                    <ul>
+                    {foreach $m.log item=r}
+                    <li><b>{$r.username}</b>  订单号{$r.order_sn}  {date('Y-m-d H:i:s',$r.use_time)}</li>
+                    {/foreach}
+                    </ul>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+
+</div>
+

@@ -1,0 +1,35 @@
+<div class="box4">
+    <div class="clearfix content-box">
+        <div class="title">
+            <h2>
+                商家入驻流程
+            </h2>
+            <h3>
+                渠道支持高效、精准、专业的客户服务体系，强大的技术支持实力
+            </h3>
+        </div>
+        <div class="lc-img">
+            <img src="/default/img/rzimg.jpg" /> 
+        </div>
+        {if !$smarty.session.b_id}       
+        <div class="ff-box">
+            <a href="javascript:;" class="login_reg">立即入驻</a> 
+        </div>
+        {/if}
+    </div>
+</div>
+<div class="box6">
+    <div class="content-box ">
+        <div class="title">
+            <h2>使用微信扫描下方二维码即可进入拼团平台</h2>			
+        </div>		
+        <dl class="rwm-box clearfix">
+            <dt>
+            <img src="/default/img/limg.png"/>
+            </dt>
+            <dd>
+                <img src="{C('qr_code.png','images')}" width="314px" height="314px"/>				
+            </dd>
+        </dl>
+    </div>
+</div>

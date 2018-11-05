@@ -1,0 +1,95 @@
+<h3 class="info-tag">
+    红包记录列表(共{$page_total}个记录) 金额统计:<span>￥{$total/100}</span> 
+</h3>
+
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/member_redpack" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $smarty.get.k eq 'username'}selected{/if}>会员名</option>                
+            </select>
+            <input id="q" class="form-i w160 sitem" name="q" value="{$smarty.get.q}" type="text"> 
+            <label class="ui-label w60">发送时间：</label>
+            <div class="l">
+                <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|strip_tags}" type="text" autocomplete="off" onclick="WdatePicker()">
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|strip_tags}" type="text"  autocomplete="off" onclick="WdatePicker()">
+            </div>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+    <table class="list">
+        <thead>
+        <tr>
+            <!-- <th class="w30"><input type="checkbox" class="checkall"></th> -->
+            <th class="w30">ID</th>
+            <th class="w120">会员名称{if $smarty.get.type eq 1}/<span class="c-orange">真实姓名</span>{/if}</th>
+            <th class="w120">手机</th>            
+            <th class="w120">金额</th>
+            <th class="w120">发送时间</th>            
+            <th class="w120">祝福语</th>            
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <!-- <td><input type="checkbox" name="id" value="{$m.id}"></td> -->
+            <td>{$m.id}</td>
+            <td><a href="#!member/edit/{$m.mid}?act=show&com=xshow|会员信息({$m.mid})">{$m.username}</a> {if $m.type eq 1}<b class="c-orange">{$m.realname}</b>{/if}</td>
+            <td>{$m.mobile}</td>            
+            <td><b style="color:#f80">{$m.amount/100}</b></td>            
+            <td>{date('Y-m-d H:i',$m.add_time)}</td>  
+			<td>{$m.wishing}</td>
+			<!-- <td>
+                <a href="#!member/member_account_edit/{$m.id}?com=xshow|充值/提现申请"  class='iconfont icon-a' title="编辑">&#xe603;</a>
+                <a onclick="main.confirm_del('member/member_account_del','{$m.id}')"  class='iconfont icon-a'  title="删除">&#xe606;</a></td> -->
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+        <!-- <a class="uiBtn BtnGreen"  href="javascript:;" onclick="exportAccount()">导出Excel</a>&nbsp;&nbsp;<a class="uiBtn BtnBlue e2-member-batchAccount"  href="javascript:;">批量完成</a> -->
+    </div>
+</div>
+
+<script src="/js/manage/member.js"></script>
+{literal}
+<script>
+    $.loadJs('/admin/js/manage/member.js',function(){
+    });
+    var checkboxs=document.getElementsByName("id");
+
+    $('.checkall').click(function(){
+        var checkboxs=document.getElementsByName("id");
+        for (var i=0;i<checkboxs.length;i++) {
+            var e=checkboxs[i];
+            e.checked=!e.checked;
+        }
+    });
+    function exportAccount(){
+        var ids = "";
+        for (var i=0;i<checkboxs.length;i++) {
+            var e=checkboxs[i];
+            if(e.checked) ids = ids ? ids+','+e.value : e.value;
+        }
+        if(ids!=''){
+            str="确定导出记录？\n";
+        }else{
+            str='确定导出所有记录，这可能会需要较多时间。';
+        }
+
+        if(confirm(str)){
+            location.href='/manage/member/export_account/?ids='+ids;
+        }
+    }
+
+    var menus = $('#page_container a'), i;
+    for(i = 0;i < menus.length;i++){
+        menus[i].onclick = function() {
+            var page = this.rel;
+            member.search(page);
+        }
+    }
+</script>
+{/literal}

@@ -1,0 +1,16 @@
+{$headTit='网站公告'}
+{include file="public_header.html"}
+<link href="/style/style/index.css" rel="stylesheet" />
+<div class="main pd_10">
+    <div class="see_articel">
+        <div class="active_top ">
+            <h1>{$data.row.title}</h1>
+        </div>
+        <div class="see1 active_color">
+            {$data.row.content|stripcslashes}<br><br>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

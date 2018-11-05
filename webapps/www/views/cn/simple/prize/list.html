@@ -1,0 +1,28 @@
+{$headTit="中奖记录"} {include file="public_header.html"}
+<link rel="stylesheet" type="text/css" href="/style/images/mem.css"/>
+<div class="lingjiang">
+    <div class="lingjiang-jl">
+        <span>中奖纪录</span> {* <span>幸运大转盘<i class="icon iconfenxiao">&#xe659;</i></span> *}
+    </div>
+    {if empty($list)}
+    <ul>
+        <li class="norecord">暂无中奖记录</li>
+    </ul>
+    {else}
+    <div class="list">
+        {foreach from=$list item=m} {include file="prize/lbi/list.html"} {/foreach}
+    </div>
+    {assign var=event value='nclick'}
+    <script type="text/javascript">
+    var ExtendOptions = {
+        itemSelector: 'ul',
+        path: function(index) {
+            // return "/prize/index/" + index + "?type={$type}&load";
+            return '/prize/index/' + index + '?load';
+        }
+    };
+    </script>
+    {include file="public_scroll.html"}{/if}
+</div>
+<div class="ft"></div>
+{include file="public_footer_nav.html"} {include file="public_footer.html"}

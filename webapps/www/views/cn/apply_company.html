@@ -1,0 +1,268 @@
+<!--描述：企业入驻-->
+<form action="/content/apply_company" id="myform" name="myform" target="iframeNews" method="post" enctype="multipart/form-data">
+<input type="hidden" name="Submit" value="1">
+<input type="hidden" name="post[id]" value="{$data.b_info.id}">
+<div class="qy-rz">
+    <h2>填写企业信息</h2>
+    <div class="lc-zctable">
+        <table>	
+            <tr>
+                <th>
+                    <span>*</span>营业执照注册号：
+                </th>
+                <td>
+                    <input type="text" name="post[license]"  value="{$data.b_info.license}" class="zc-inpt shop-name"  datatype="*" nullmsg="请填写营业执照注册号" />
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>公司名称：</th>
+                <td>
+                    <input type="text" name="post[company]"  value="{$data.b_info.company}" class="zc-inpt shop-name" placeholder="与营业执照公司名一致"  datatype="*" nullmsg="请填写公司名称"/>
+                </td>
+            </tr>
+            {*<tr>
+                <th><span>*</span>营业时间：</th>
+                <td><input class="zc-inpt yxjq-box" name="control_date" type="text"  id="control_date" size="10" maxlength="10" onClick="new Calendar().show(this);" placeholder="选择日期" readonly="readonly" />
+                    <label>至</label>
+                    <input class="zc-inpt  yxjq-box" name="control_date2" type="text" id="control_date2" size="10" maxlength="10" onClick="new Calendar().show(this);"  placeholder="选择日期" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>营业执照所在地：</th>
+                <td>
+                    <select name="" class="zc-select">
+                        <option value="">省/直辖市</option>
+                    </select>
+                    <select name="" class="zc-select">
+                        <option value="">市/区/县</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>组织代码机构有效期：</th>
+                <td><input class="zc-inpt yxjq-box" name="control_date" type="text"  id="control_date" size="10" maxlength="10" onClick="new Calendar().show(this);" placeholder="选择日期" readonly="readonly" />
+                    <label>至</label>
+                    <input class="zc-inpt  yxjq-box" name="control_date2" type="text" id="control_date2" size="10" maxlength="10" onClick="new Calendar().show(this);"  placeholder="选择日期" readonly="readonly" />
+                </td>
+            </tr>*}
+            <tr>
+                <th><span>*</span>注册资金：</th>
+                <td>
+                    <input type="text" name="post[company_capital]"  value="{$data.b_info.company_capital}" class="zc-inpt " placeholder=""  datatype="*" nullmsg="请填写注册资金"/> 万元
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>经营范围：</th>
+                <td>
+                    <textarea class="rz-textarea" name="post[company_range]" datatype="*" nullmsg="请填写经营范围">{$data.b_info.company_range}</textarea>
+                    <p>经营范围请与营业执照保持一致哦</p>
+                </td>
+            </tr>
+            <tr>
+                <th>公司网址：</th>
+                <td>
+                    <input type="text" name="post[company_url]"  value="{$data.b_info.company_url}" class="zc-inpt shop-name"  />
+                </td>
+            </tr>
+            <tr>
+                <th>旗下／品牌代理：</th>
+                <td>
+                    <textarea class="rz-textarea" name="post[company_agent]">{$data.b_info.company_agent}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>营业执照扫描件：</th>
+                <td>
+                    <input type="hidden" name="post[license_image]"  value='{$data.b_info.license_image}'/>
+                    <img id="imgShow_WU_FILE_0" src="{$data.b_info.license_image|default:'/default/img/img.png'}" class="div-imgbox" />
+                    <input type="file" id="up_img_WU_FILE_0" name="license_image" class="btn2"  />
+                    <div class="clearfix"></div>
+                    <p>复印件需加盖公章，支持png，jpg，gif等基本图片格式</p>
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>税务登记证件扫描件：<br />（国税或地税）</th>
+                <td>
+                    <input type="hidden" name="post[tax_image]"  value='{$data.b_info.tax_image}'/>
+                    <img id="imgShow_WU_FILE_1" src="{$data.b_info.tax_image|default:'/default/img/img.png'}" class="div-imgbox" />
+                    <input type="file" id="up_img_WU_FILE_1" name="tax_image" class="btn2"  />
+                    <div class="clearfix"></div>
+                    <p>若已多证合一，请直接上传最新的营业执照。复印件需加盖公章，支持png，jpg，gif等基本图片格式</p>
+                </td>
+            </tr>
+            <tr>
+                <th><span>*</span>组织机构代码证扫描件：</th>
+                <td>
+                    <input type="hidden" name="post[code_image]"  value='{$data.b_info.code_image}'/>
+                    <img id="imgShow_WU_FILE_2" src="{$data.b_info.code_image|default:'/default/img/img.png'}" class="div-imgbox" />
+                    <input type="file" id="up_img_WU_FILE_2" name="code_image" class="btn2"  />
+                    <div class="clearfix"></div>
+                    <p>若已多证合一，请直接上传最新的营业执照。复印件需加盖公章，支持png，jpg，gif等基本图片格式</p>
+                </td>
+            </tr>
+            <tr>
+                <th>品牌授权书：</th>
+                <td>
+                    <input type="hidden" name="post[brand_auth]"  value='{$data.b_info.brand_auth}'/>
+                    <img id="imgShow_WU_FILE_3" src="{$data.b_info.brand_auth|default:'/default/img/img.png'}" class="div-imgbox" />
+                    <input type="file" id="up_img_WU_FILE_3" name="brand_auth" class="btn2"  />
+                    <div class="clearfix"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>商标证书：</th>
+                <td>
+                    <input type="hidden" name="post[trademark]"  value='{$data.b_info.trademark}'/>
+                    <img id="imgShow_WU_FILE_4" src="{$data.b_info.trademark|default:'/default/img/img.png'}" class="div-imgbox" />
+                    <input type="file" id="up_img_WU_FILE_4" name="trademark" class="btn2"  />
+                    <div class="clearfix"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h2>法人信息</h2>
+    <div class="lc-zctable">
+        <table>	
+            <tr>
+                <th>
+                    <span>*</span>法人姓名：
+                </th>
+                <td>
+                    <input type="text" name="post[compay_username]" value="{$data.b_info.compay_username}" class="zc-inpt shop-name" datatype="*" nullmsg="请填写法人姓名" />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <span>*</span>联系地址：
+                </th>
+                <td>
+                    {linkage('company_zone', $data.b_info.company_zone)}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <span>*</span>详细地址：
+                </th>
+                <td>
+                    <input type="text" name="post[company_addr]" id="" value="{$data.b_info.company_addr}" class="zc-inpt shop-name" placeholder="街道/小区/门牌号"  datatype="*" nullmsg="请填写详细地址"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <span>*</span>法人手机：
+                </th>
+                <td>
+                    <input type="text" name="post[company_mobile]" id="" value="{$data.b_info.company_mobile}" class="zc-inpt shop-name" datatype="m" nullmsg="请输入法人手机" errormsg="手机号码格式不正确"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <span>*</span>法人固话：
+                </th>
+                <td>
+                    <input type="text" name="post[company_tel]" id="" value="{$data.b_info.company_tel}" class="zc-inpt shop-name"  datatype="*" nullmsg="请填写法人固话"/>
+                </td>
+            </tr>            
+            <tr style="">
+                <th><span>*</span>身份证正面：</th>
+                <td>
+                    <input type="hidden" name="post[card_image]"  value='{$data.b_info.card_image}'/>
+                    <img id="imgShow_WU_FILE_5" src="{$data.b_info.card_image|default:'/default/img/img.png'}" class="div-imgbox"  />
+                    <input type="file" id="up_img_WU_FILE_5" name="idcard" class="btn2" />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <span>*</span>身份证反面：
+                </th>
+                <td>
+                    <input type="hidden" name="post[card_image2]"  value='{$data.b_info.card_image2}'/>
+                    <img id="imgShow_WU_FILE_6" src="{$data.b_info.card_image2|default:'/default/img/img.png'}" class="div-imgbox"  />
+                    <input type="file" id="up_img_WU_FILE_6" name="idcard2" class="btn2" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h2>企业的绑定提款</h2>
+    <div class="lc-zctable">
+        <table>
+            <tr>
+                <th class="tt1">银行卡</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    真实姓名：
+                </th>
+                <td>
+                    <input type="text" name="cash[truename]"  value="{$cash.truename|default:$data.b_info.truename}" class="zc-inpt shop-name" />
+                </td>
+            </tr>
+            <tr>
+                <th>身份证号：</th>
+                <td>
+                    <input type="text" name="cash[card]"  value="{$cash.card|default:$data.b_info.card}" class="zc-inpt shop-name" />
+                </td>
+            </tr>
+            <tr>
+                <th>银行卡卡号：</th>
+                <td>
+                    <input type="text" name="cash[bankcard]"  value="{$cash.bankcard|default:$data.b_info.bankcard}" class="zc-inpt shop-name" />
+                </td>
+            </tr>
+            <tr>
+                <th>手机号：</th>
+                <td>
+                    <input type="text" name="cash[mobile]"  value="{$cash.mobile|default:$data.b_info.mobile}" class="zc-inpt shop-name" />
+                    <p>填写您在银行预留的手机号码，以验证银行卡是否属于您本人</p>
+                </td>
+            </tr>
+            <tr>
+                <th class="tt1">微信或支付宝</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>微信：</th>
+                <td>
+                    <input type="text" name="cash[wx]" value="{$cash.wx}" class="zc-inpt shop-name" />
+                </td>
+            </tr>
+            <tr>
+                <th>支付宝：</th>
+                <td>
+                    <input type="text" name="cash[alipay]" value="{$cash.alipay}" class="zc-inpt shop-name" />
+                </td>
+            </tr>
+            <tr>
+                    <th class="tt1">入驻认证费用</th>
+                    <td></td>
+            </tr>
+            <tr>
+                    <th><span>*</span>认证费用：</th>
+                    <td>
+                            <input type="hidden" name="post[fee]" value="{C('com_fee')|default:0}">
+                            <span class="rmb">{C('com_fee')|default:0}元</span>
+                            <p>认证费用在资质审核通过后需要进行交纳，交纳完成后在店铺里面会出现<img src="/default/img/rz.png" />这个图标，表示商家已通过认证
+                            </p>
+                    </td>
+            </tr>
+            <tr>
+                    <th><span>*</span>商家保证金：</th>
+                    <td>
+                            <input type="hidden" name="post[deposit]" value="{C('com_deposit')|default:0}">
+                            <span class="rmb">{C('com_deposit')|default:0}元</span>
+                            <p>1、为促进拼团平台卖家更好地服务买家，卖家在发布商品前须根据平台规定缴纳保证金，</p>
+                            <p>2、卖家应根据拼团平台要求缴纳保证金，作为卖家侵权、违约、违规、未履行服务承诺时用于对买家和其他权利人进行赔偿的资金。</p>
+                            <p>3、卖家申请退出（或被清退）拼团平台，在所有订单终止、所有索赔完结且卖家已完成交易的所有商品质保期均届满后，卖家可向拼团平台发起退还保证金的申请，自终止合作之日起满3个月，符合审批条件（如申请的材料齐全、信息完整无误、签字盖章完整、无未结算完的结算单等），拼团将扣除依据协议及相关规则等应扣除的部分后，将保证金余额退还至卖家已验证支付保证金的公司（个人）账户中。</p>
+                    </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    <button class="rz-btn1" type="submit">申请入驻</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</form>       

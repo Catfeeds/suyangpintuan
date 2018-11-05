@@ -1,0 +1,46 @@
+<li class="mui-clearfix">
+	<div class="bargain1-img">
+		<a href="javascript:;" class="bargain1-a"><img src="{$m.img_cover}"></a>
+		{if $m.status==0 && $m.end_time>0}
+		<div class="bargain1-time">
+			<span class="bargain1-span">剩余</span>
+			<div class="bargain1-time1"><em id="leftTimeJx{$m.id}">00:00:00</em></div>
+			<script>onload_leftTime_jx({$m.id},{$m.end_time},"","");</script>
+		</div>
+		{/if}
+	</div>
+	<div class="bargain1-text">
+		<a href="javascript:;" class="bargain-big">{$m.goods_name|truncate:30}</a>
+		<div class="help-1">需{$m.number}人助力，还差<strong>{$m.number-$m.number_yes}</strong>人</div>
+		<div class="bargain1-1 mui-clearfix">
+			<strong class="mui-pull-left">￥0</strong>
+			<span class="mui-pull-right">
+			{if $m.status==0}
+				<input type="submit" value="继续分享" class="bargin-bg2 mui-btn mui-btn-block" onclick="qrcode_share({$m.id})"/>
+			{elseif $m.status==1 && $m.order_id>0}
+				<input type="submit" value="订单详情" class="bargin-bg2 mui-btn mui-btn-block" onclick="tourl('/member/order?order_sn={$m.order_sn}')"/>
+			{elseif $m.status==2}
+				<input type="submit" value="助力失败" class="bargin-bg3 mui-btn mui-btn-block" onclick="tourl('/assist/index')"/>
+			{/if}
+			<input type="submit" value="助力详情" class="bargin-bg3 mui-btn mui-btn-block" /></span>
+		</div>
+	</div>
+
+	<!--助力详情-->
+	<div class="help-help">
+		<div class="bargain2-close"><i class="mui-icon mui-icon-closeempty"></i></div>
+		<h2>好友助力详情</h2>
+		<dl class="help-ul mui-clearfix">
+			{foreach from=$m.help_list item=h}
+			<dd>
+				<em><img src="{photo($h.mid)}"></em>
+				<p>{if $h.status==1}助力成功{else}助力中{/if}</p>
+				<div class="help-ul1">
+					<big>{$h.username}</big>
+					<span>{formatTime($h.c_time)}前助力</span>
+				</div>
+			</dd>
+			{/foreach}
+		</dl>
+	</div>
+</li>

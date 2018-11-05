@@ -1,0 +1,18 @@
+{include file="public_header.html"}
+<form action="/agent/agree" target="iframeNews" method="post" id="agreeForm">
+<div class="cwfxs">
+	<img src="/style/images/cwfxs-1.png" />
+	<a class="cwfxs-ljqd" href="javascript:;" role="button">我要成为{L('unit_distribution')}商</a>
+	<img src="/style/images/cwfxs-2.png" />
+</div>
+<div class="xieyi">
+	<label> <input id="Checkbox1" type="checkbox" name="agree" value="1" />我已阅读并同意</label>
+	<a href="">《{$site_config.site_name}商城{L('unit_distribution')}协议》</a>
+</div>
+</form>
+<script>
+$(".cwfxs-ljqd").on("click",function(){
+	$('#agreeForm').submit();
+})
+</script>
+{include file="public_footer.html"}

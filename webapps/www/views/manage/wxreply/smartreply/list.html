@@ -1,0 +1,51 @@
+<h3 class="info-tag media-cate">
+
+    <a class="uiBtn BtnGreen r" href="#!wxreply/smartreply/add" style="color:#fff; font-size:12px">添加规则</a>
+
+    <a class="tab-btn" href="#!wxreply/subscribe">被关注自动回复<b class="z1">◆</b><b class="z0">◆</b></a>
+
+    <a class="tab-btn" href="#!wxreply/autoreply">消息自动回复<b class="z1">◆</b><b class="z0">◆</b></a>
+
+    <a class="tab-btn on" href="#!wxreply/smartreply">关键词自动回复<b class="z1">◆</b><b class="z0">◆</b></a>
+
+    <span></span>
+
+</h3> {literal}
+<style type="text/css">
+</style>
+{/literal}
+<div class="html-box">
+    <table class="list" style="width:100%">
+        <thead>
+            <tr>
+                <th class="w120">规则</th>
+                <th>关键词</th>
+                <th>回复</th>
+                <th class="w140">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$rules item=m}
+            <tr>
+                <td>{$m.name}</td>
+                <td>{$m.keywords}</td>
+                <td>
+                    {foreach from=$m.reply_list item=n}
+                    {$n}
+                    <br> {/foreach}
+                </td>
+                <td class="opera">
+                    <a href="#!wxreply/smartreply/edit/{$m.id}" class="uiBtn"><i class="iconfont">&#xe603;</i></a>
+                    <a href="javascript:;" class="uiBtn e2-wxreply-delRule-{$m.id}"><i class="iconfont">&#xe606;</i></a>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <div style="height:80px"></div>
+</div>
+<script type="text/javascript">
+$.loadJs('/admin/js/manage/wxreply.js', function() {
+    $.loadJs('/admin/js/manage/wxmenu.js', function() {});
+});
+</script>

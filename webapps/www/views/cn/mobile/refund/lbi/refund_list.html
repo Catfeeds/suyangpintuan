@@ -1,0 +1,35 @@
+<div class="area-box">
+        <div class="payment-t">
+                {if $m.sid>0}{$m.b_name}{else}{C('site_name')}{/if}
+                <span class="rmb">{$m.status_name}</span>
+        </div>
+        {foreach from=$m.goods item=g key=k}
+        <a href="/member/order/?order_sn={$m.o_order_sn}">
+            <dl class="fx-cpbox clearfix">
+                <dt>
+                        <img src="{zz mod=fileurl source=$g.thumb}"/>
+                </dt>
+                <dd>
+                        <h3>{$g.goods_name}</h3>
+                        <p>{$g.goods_spec}</p>
+                        <p>数量：{$g.buy_num}</p>
+                        {if $g.goods_typeid==$smarty.const.CART_EXCHANGE}
+                        <p class="tr-txt">总{L('unit_score')}：<span class="rmb">{$m.o_order_amount}</span>，支付：<span class="rmb">￥{if $m.o_money_paid>0}{$m.o_money_paid}{else}{$m.o_amount}{/if}</span></p>
+                        {else}
+                        <p class="tr-txt">合计：<span class="rmb">￥{$m.o_order_amount}</span></p>
+                        {/if}
+                </dd>
+        </dl>
+        </a>
+        {/foreach}
+        <div class="prize-btn">         
+            <button type="button" class="mui-btn  mui-btn-danger" onclick="tourl('{if $m.kf_online}{$m.kf_online}{else}/chat{if !empty($m.sid)}?bid={$m.sid}{/if}{/if}')">联系卖家</button>
+            {if $m.status==2 && $m.complain_status==0}
+            {*<button type="button" class="mui-btn" onclick="tourl('/refund/apply/{$m.order_id}')">再次申请</button>*}
+            <button type="button" class="mui-btn" onclick="tourl('/refund/complain/{$m.id}')">交易投诉</button>
+            {elseif $m.status_shipping<10 && $m.status==10 && $m.type==2}
+            <button type="button" class="mui-btn" onclick="tourl('/refund/shipping/{$m.id}')">退货</button>            
+            {/if}                
+            <button type="button" class="mui-btn" onclick="tourl('/refund/detail/{$m.id}')">退款详情</button>
+        </div>
+</div>

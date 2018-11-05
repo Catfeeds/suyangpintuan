@@ -1,0 +1,118 @@
+<form action="/content/apply_personal" id="myform"  name="myform" target="iframeNews" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="Submit" value="1">
+    <input type="hidden" name="post[id]" value="{$data.b_info.id}">
+    <div class="gr-rz">
+        <h2>个人</h2>
+        <div class="lc-zctable" >
+            <table>
+                <tr style="">
+                    <th><span>*</span>身份证正面：</th>
+                    <td>
+                        <input type="hidden" name="post[card_image]"  value='{$data.b_info.card_image}'/>
+                        <img id="imgShow_WU_FILE_0" src="{$data.b_info.card_image|default:'/default/img/img.png'}" class="div-imgbox" />
+                        <input type="file" id="up_img_WU_FILE_0" name="idcard" class="btn2"   />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span>*</span>身份证反面：
+                    </th>
+                    <td>
+                        <input type="hidden" name="post[card_image2]"  value='{$data.b_info.card_image2}'/>
+                        <img id="imgShow_WU_FILE_1" src="{$data.b_info.card_image2|default:'/default/img/img.png'}" class="div-imgbox" />
+                        <input type="file" id="up_img_WU_FILE_1" name="idcard2" class="btn2" />                   			 
+                    </td>
+                </tr>                    
+                <tr>
+                    <th><span>*</span>手持身份证头部照片：</th>
+                    <td>
+                        <input type="hidden" name="post[card_image3]"  value='{$data.b_info.card_image3}'/>
+                        <img id="imgShow_WU_FILE_2" src="{$data.b_info.card_image3|default:'/default/img/img.png'}" class="div-imgbox" />
+                        <input type="file" id="up_img_WU_FILE_2" name="idcard3" class="btn2" /> 
+                    </td>
+                </tr>
+            </table>
+        </div>		
+        <h2>个人的绑定提款</h2>
+        <div class="lc-zctable">
+            <table>
+                <tr>
+                    <th class="tt1">银行卡</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>
+                        真实姓名：
+                    </th>
+                    <td>
+                        <input type="text" name="cash[truename]"  value="{$cash.truename|default:$data.b_info.truename}" class="zc-inpt shop-name" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>身份证号：</th>
+                    <td>
+                        <input type="text" name="cash[card]"  value="{$cash.card|default:$data.b_info.card}" class="zc-inpt shop-name" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>银行卡卡号：</th>
+                    <td>
+                        <input type="text" name="cash[bankcard]"  value="{$cash.bankcard|default:$data.b_info.bankcard}" class="zc-inpt shop-name" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>手机号：</th>
+                    <td>
+                        <input type="text" name="cash[mobile]"  value="{$cash.mobile|default:$data.b_info.mobile}" class="zc-inpt shop-name" />
+                        <p>填写您在银行预留的手机号码，以验证银行卡是否属于您本人</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="tt1">微信或支付宝</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>微信：</th>
+                    <td>
+                        <input type="text" name="cash[wx]" value="{$cash.wx}" class="zc-inpt shop-name" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>支付宝：</th>
+                    <td>
+                        <input type="text" name="cash[alipay]" value="{$cash.alipay}" class="zc-inpt shop-name" />
+                    </td>
+                </tr>
+                <tr>
+                        <th class="tt1">入驻认证费用</th>
+                        <td></td>
+                </tr>
+                <tr>
+                        <th><span>*</span>认证费用：</th>
+                        <td>
+                                <input type="hidden" name="post[fee]" value="{C('per_fee')}">
+                                <span class="rmb">{C('per_fee')}元</span>
+                                <p>认证费用在资质审核通过后需要进行交纳，交纳完成后在店铺里面会出现<img src="/default/img/rz.png" />这个图标，表示商家已通过认证
+                                </p>
+                        </td>
+                </tr>
+                <tr>
+                        <th><span>*</span>商家保证金：</th>
+                        <td>
+                                <input type="hidden" name="post[deposit]" value="{C('per_deposit')}">
+                                <span class="rmb">{C('per_deposit')}元</span>
+                                <p>1、为促进拼团平台卖家更好地服务买家，卖家在发布商品前须根据平台规定缴纳保证金，</p>
+                                <p>2、卖家应根据拼团平台要求缴纳保证金，作为卖家侵权、违约、违规、未履行服务承诺时用于对买家和其他权利人进行赔偿的资金。</p>
+                                <p>3、卖家申请退出（或被清退）拼团平台，在所有订单终止、所有索赔完结且卖家已完成交易的所有商品质保期均届满后，卖家可向拼团平台发起退还保证金的申请，自终止合作之日起满3个月，符合审批条件（如申请的材料齐全、信息完整无误、签字盖章完整、无未结算完的结算单等），拼团将扣除依据协议及相关规则等应扣除的部分后，将保证金余额退还至卖家已验证支付保证金的公司（个人）账户中。</p>
+                        </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button class="rz-btn1" type="submit">申请入驻</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>        

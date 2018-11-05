@@ -1,0 +1,134 @@
+{$slider=1}
+{include file="public_header.html"}
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        {include file="store/nav.html"}
+        {zz mod=fileurl source=$data.info.ad var=ad_list type=3}
+        {if $ad_list}
+        <div >
+            <div>
+                {foreach from=$ad_list item=m}
+                <div class="mui-slider-item">
+                    <a href="{$m.title|default:'javascript:;'}">
+                        <img src="{$m.path}">
+                    </a>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+        {/if}
+        {if $data.coupon}
+        <div class="shop-h2">
+            优惠劵
+        </div>
+        <div id="hot-gd" class=" shop-yhjbox mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <div class="mui-scroll">
+                {foreach from=$data.coupon item=m}
+                {*<a href="javascript:;" class="mui-control-item  clearfix  {if $m.is_has}active{else}coupon_get{/if}" data-coupon="{$m.id}">
+                    <span class="rmb"><i>￥</i>{$m.amount}</span>
+                    <div class="shop-yhj-txt">
+                        <h2>{$m.title}</h2>
+                        <p>{if $m.need_amount>0}满{$m.need_amount}元可使用{else}全场通用{/if}{if }{/if}</p>
+                    </div>
+                    <div class="shop-lq"></div>
+                </a>*}
+                <a href="javascript:;" class="mui-control-item {if !$m.is_has}coupon_get{else}active{/if}" data-coupon="{$m.id}" >
+                    <div class="par">
+                        <span><i>￥</i>{$m.amount}</span>
+                        <p>{if $m.need_amount>0}满{$m.need_amount}元可以使用{else}全场通用{/if}</p>
+                        <div class="sign">
+                            {if !$m.is_has}
+                            <i>领<br />取</i>
+                            {else}
+                            <i>已<br />领</i>
+                            {/if}
+                        </div>
+                    </div>
+                </a>
+                {/foreach}
+            </div>
+        </div>
+        {/if}
+        {if $data.bargain_list}
+        <div class="sy-hot">
+            <div class="hot-title">
+                <span>砍价活动</span>
+            </div>
+            <div id="hot-gd" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                <div class="mui-scroll">
+                    {foreach from=$data.bargain_list item=m}
+                    <a class="mui-control-item" href="/bargain/index">
+                        <img src="{$m.img_cover}"/>
+                        <p>{$m.goods_name}</p>
+                        <div class="mui-card-footer">
+                            <div class="mui-card-link">
+                                <span class="rmb">¥</span>
+                                <span class="price-int">{$m.last_price}</span>
+                                <span class="price-ori">¥{$m.price}</span>
+                            </div>
+                        </div>
+                    </a>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+        {/if}
+        <div class="shop-h2">
+            全部商品({$data.goods_total|default:0})
+        </div>
+        <div class="hot-list clearfix" style="padding-top: 0;">
+        </div>
+    </div>
+</div>
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item "  href="/store/index/{$data.info.id}">
+			<span class="mui-icon">
+				<img src="/style/img/zy.png" class="f-im1">
+			</span>
+        <span class="mui-tab-label">上新</span>
+    </a>
+    <a class="mui-tab-item " target="_blank" href="/store/info/{$data.sid}">
+			<span class="mui-icon">
+				<img src="/style/img/shop-ic1.png" class="f-im1">
+			</span>
+        <span class="mui-tab-label">店铺详情</span>
+    </a>
+    <a class="mui-tab-item " target="_blank" href="{if $data.info.kf_online}{$data.info.kf_online}{else}/chat?backUrl=/store/index/{$data.sid}&bid={$data.sid}{/if}">
+			<span class="mui-icon">
+				<img src="/style/img/ic.png" class="f-im1">
+			</span>
+        <span class="mui-tab-label" >客服</span>
+    </a>
+</nav>
+<script>
+    $(document).on('tap', '.coupon_get', function() {
+        var mid = '{$smarty.const.MID|default:0}';
+        if(mid==0){
+            //mui.alert("请先登录");
+            location.href="/member/login";
+        }
+        var $this = $(this);
+        var id = $this.data('coupon');
+        $.post("/store/ajax_coupon_get/"+id, function(res) {
+            if (res.error === 0) {
+                $this.removeClass("coupon_get");
+                $this.removeClass("mui-active");
+                $this.addClass("active");
+                $this.find(".sign").html("<i>已<br />领</i>");
+                mui.alert(res.msg);
+            } else {
+                mui.alert(res.msg);
+            }
+        }, 'json');
+    })
+</script>
+<script>  
+    var sid = '{$data.sid}';
+    {literal}var D = {load: 1};{/literal}//load:1必填
+    var ajax_url = "/store/goods/"+sid+"/";//请求的地址  
+    var ajax_class = ".hot-list";//加载的元素
+    var ajax_type = 1;//1加载页面时加载，2下拉时才加载
+</script>
+{include file="public_scroll.html"}
+{$share_logo = $data.info.logo}
+{include file="public_footer.html"}

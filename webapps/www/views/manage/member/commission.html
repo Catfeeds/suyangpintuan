@@ -1,0 +1,61 @@
+<h3 class="info-tag">
+    明细列表(共{$page_total}个记录) 佣金统计:<span>￥{$total}</span>
+</h3>
+
+<div class="html-box">
+    <form class="cond-form clear" action="#!member/commission" id="searchForm" method="get">
+        <input type="hidden" value="" name="page" id="page">
+        <div class="f-unit">
+            <select name="k" id="k">
+                <option value="username" {if $smarty.get.k eq 'username'}selected{/if}>会员名</option>
+                <option value="ivt_username" {if $smarty.get.k eq 'ivt_username'}selected{/if}>来至会员</option>
+                <option value="desc" {if $smarty.get.k eq 'desc'}selected{/if}>描述</option>
+            </select>
+            <input type="text" value="{if $smarty.get.q>0}{$smarty.get.q}{/if}" name="q" class="form-i w160 sitem" id="q">
+            <label class="ui-label w60">操作时间：</label>
+            <div class="l">
+                <input class="form-i w120 sitem" name="start_time" value="{$smarty.get.start_time|strip_tags}" type="text" autocomplete="off" onclick="WdatePicker()">
+                <input style="margin-left:-1px" class="form-i w120 sitem" name="end_time" value="{$smarty.get.end_time|strip_tags}" type="text"  autocomplete="off" onclick="WdatePicker()">
+            </div>
+            <select name="level">    
+                <option value="99" {if  $smarty.get.level eq '99'}selected{/if}>请选择</option>
+                <option value="0" {if  $smarty.get.level eq '0'}selected{/if}>推广佣金</option>
+                <option value="1" {if  $smarty.get.level eq '1'}selected{/if} >分销佣金</option>
+            </select>
+            <button type="submit" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue e2-member-searchlog-1">搜索</button>
+        </div>
+    </form>
+
+    <table class="list" style="width:100%">
+        <thead>
+        <tr>
+            <th class="w40">ID</th>
+            <th class="w80">会员名称</th>
+            <th class="w80">来至会员</th>
+            <th class="w80">订单总价</th>
+            <th class="w80">获取佣金</th>
+            <th>描述</th>
+            <th>状态</th>
+            <th class="w160">操作时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=m}
+        <tr class="opera">
+            <td>{$m.id}</td>
+            <td>{$m.username}</td>
+            <td>{$m.ivt_username}</td>
+            <td><b style="color:#f80">{$m.total}</b></td>
+            <td><b style="color:#f80">{$m.commission}</b></td>
+            <td>{$m.desc}</td>
+            <td>{if $m.status==1}到账{else}冻结中{/if}</td>
+            <td>{date('Y-m-d H:i',$m.addtime)}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div class="foot-btn">
+        <div class="pager r">{$page}</div>
+    </div>
+</div>
+<script src="/js/manage/member.js"></script>

@@ -1,0 +1,88 @@
+{$headTit="订单详情"}
+{include file="public_header.html"}
+<link href="/style/style/enter.css" rel="stylesheet" />
+<div class="main pd_10 f14">
+    <div class="car4 beijing2 car_bor">
+        <div class="car4_top"><big>套餐：{$order.extension.act_name}</big></div>
+        <div class="center_dd">
+            <p>订单号：{$order.order_sn}</p>
+            {if $order.pay_name}
+            <p>支付方式：{$order.pay_name}</p>
+            {/if}
+            <p>配送方式：{$order.fright_name}</p>
+        </div>
+    </div>
+    {foreach from=$items item=m}
+    <div class="car4 beijing2 car_bor">
+        <div class="car4_top">
+            {if $m.status_shipping eq 2}
+            <a href="javascript:;" onclick="zz_confirm('您确认已经收到选菜商品？','/member/finish_order/{$order.id}/{$m.qishu}')">确认收货</a>
+            {else}
+            <span>{$m.status_name}</span>
+            {/if}
+            <big>第{$m.qishu}次选菜</big>
+        </div>
+        <ul class="center_dd2">
+            {foreach from=$m.goods item=g key=k}
+            <li>
+                <em><a href="/goods/show/{$g.good_id}"><img src="{zz mod=fileurl source=$g.goods_thumb width=90 height=90 type=1}" /></a></em>
+                <div class="center_dd3">
+                    <h4><a href="/goods/show/{$g.good_id}">{$g.goods_name}</a></h4>
+                    <p><big>￥{$g.sell_price}</big><span>数量：{$g.buy_num}</span></p>
+                </div>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+    {/foreach}
+    <div class="car4 beijing2 car_bor">
+        <div class="car4_top"><big>收货信息</big></div>
+        <ul class="center_dd center_dd1">
+            <li>
+                <span>收货人：</span>
+                <p>{$order.name}</p>
+            </li>
+            <li>
+                <span>电话：</span>
+                <p>{$order.mobile}</p>
+            </li>
+            <li>
+                <span>收货地址：</span>
+                <p>{$order.area} {$order.address}</p>
+            </li>
+        </ul>
+    </div>
+    {if $pack.goods_list}
+    <div class="center_xx3" style="background:#fff;padding:0;border:0;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th colspan="3">套餐使用详细</th>
+            </tr>
+            <tr class="center_tb">
+                <td width="33%">名称</td>
+                <td width="33%">已用</td>
+                <td>剩余</td>
+            </tr>
+            {foreach from=$pack.goods_list item=m name=f}
+            <tr>
+                <td>{$m.cat_name}</td>
+                <td>-{$m.cat_number_order}</td>
+                <td>{$m.cat_number_have}</td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+    {/if}
+    <div class="foot_center">
+        {if $order.status_pay eq 0 && $order.status_shipping eq 0 && $order.status_order eq 0}
+        <a href="javascript:;" onclick="zz_confirm('确认取消订单吗？','/member/cancel_order/{$order.id}')" class="left">取消订单</a>
+        {/if}
+        {if $order.status_id eq $smarty.const.CS_AWAIT_PAY}
+        {if $order.is_cod neq 1}
+        <a href="/flow/checkout/{$order.order_sn}" class="right">去支付</a>
+        {/if}
+        {/if}
+    </div>
+</div>
+{include file="public_footer_nav.html"}
+{include file="public_footer.html"}

@@ -1,0 +1,1 @@
+<?php/** * 路由表配置 * Author: lowxp * Date: 2013-08-19 9:12 */$router = Lowxp_Router::getInstance();$router->map('/auth/:token', '/test/decode', array('filters' => array('token' => '([a-zA-Z0-9]+)')));

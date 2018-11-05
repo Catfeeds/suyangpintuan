@@ -1,0 +1,89 @@
+{include file="public_header.html"}
+<form action="" target="iframeNews" method="post" id="myform">
+<div class="user-grxx-tx">
+	<ul>		
+		<dd>
+			<section>
+				<div>
+					<span>
+						{L('unit_agent')}类型
+					</span>					
+					<select name="post[type]" onchange="change_type(this)">
+						<option value='0'>请选择类型</option>
+						<option value="1">合伙人</option>
+						<option value="2">省{L('unit_agent')}</option>
+						<option value="3">市{L('unit_agent')}</option>
+					</select>
+				</div>
+			</section>
+		</dd>
+		<dd class="agent">
+			<section>
+				<div>
+					<span>
+						&nbsp;&nbsp;&nbsp;{L('unit_agent')}省
+					</span>
+					{$pro}					
+				</div>
+			</section>
+		</dd>
+		<dd class="agent">
+			<section>
+				<div>
+					<span>
+						&nbsp;&nbsp;&nbsp;{L('unit_agent')}市
+					</span>
+					<select id="city" name="post[area][]">
+					<option value=''>请选择</option>
+					</select>					
+				</div>
+			</section>
+		</dd>		
+		<li>
+			<section>
+				<div>
+					<span>
+						手机号码
+					</span>
+					<input type="text" placeholder="请输入手机号码" name="post[mobile]" value="{$member.mobile}"/>
+				</div>
+			</section>
+		</li>
+	</ul>
+</div>
+<div class="wycwdl">
+	<input type="submit" name="Submit" value="提交申请">
+</div>
+</form>
+<div class="ft"></div>
+{include file="public_footer.html"}
+{literal}
+<script>
+function change_type(e){
+    if($(e).val()==1){
+        $('.agent').hide();
+    }else{
+        $('.agent').show();
+    }
+}
+var linkage=function(){
+};linkage.prototype={
+    //菜单联动
+    chang_parent:function(id,hidetop,field,start,end){
+        id=id?parseInt(id):0;
+        var D={id:id};
+        $.ajax({
+            url:'/home/get_city',
+            type:'post',
+            data:D,
+            success:function(x){				
+                if(x){
+                    $('#city').append(x);
+                }
+            }
+        });
+    }
+
+};linkage = new linkage;
+</script>
+{/literal}

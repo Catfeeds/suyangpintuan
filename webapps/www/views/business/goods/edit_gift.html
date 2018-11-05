@@ -1,0 +1,137 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" enctype="multipart/form-data" method="post" action="/business/goods/edit" id="goods-form">
+        <input name="post[id]" type="hidden" value="{$row.id}" />
+
+        <table class="table-list">
+        <tbody>
+            <tr>
+                <td class="td-label"><label>礼盒名称：<span class="c-red">*</span></label></td>
+                <td class="td-input">
+                    <input class="form-i w360" type="text" name="post[name]" value="{$row.name}" />
+                </td>
+            </tr>
+
+            <tr style="display: none;">
+                <td class="td-label"><label>商品分类：<span class="c-red">*</span></label></td>
+                <td class="td-input">
+                    <input type="hidden" name="post[cid]" value="{$smarty.const.CATE_GIFT}" />
+                </td>
+            </tr>
+
+            <tr style="display: none">
+                <td class="td-label"><label>价格：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w140" name="post[market_price]" value="{$row.market_price}" placeholder="0.00" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>促销价：</label><span class="c-red">*</span></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w140" name="post[price]" value="{$row.price}" placeholder="0.00" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>缩略图：</label><span class="c-red">*</span></td>
+                <td class="td-input">
+                    {$row.html_thumb}
+                    <span class="form-tip">建议：上传正方形尺寸的图片为最佳</span>
+                </td>
+            </tr>
+
+            <tr style="display: none;">
+                <td class="td-label"><label>展示图集：</label><span class="c-red">*</span></td>
+                <td class="td-input">
+                    {$row.html_thumbs}
+                    <span class="form-tip">建议：所有图片宽高比相同为最佳</span>
+                </td>
+            </tr>
+
+            <tr style="display: none;">
+                <td colspan="2">
+                    <div id="spec_step"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>商品详情：</label></td>
+                <td class="td-input" colspan="2">
+                    {$row.html_content}
+                </td>
+            </tr>
+
+            <tr class="table-h3">
+                <td colspan="2">其它信息</td>
+            </tr>
+
+            <tr style="display: none;">
+                <td class="td-label"><label>重量/单位：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w60" name="post[weight]" value="{$row.weight}" placeholder="0.00" />
+                    <span class="c-gray"> <input type="text" class="form-i w30" name="post[weight_unit]" value="{$row.weight_unit|default:$common.weight}" />/每 </span>
+                    <input type="text" class="form-i w30" name="post[unit]" value="{$row.unit}" placeholder="{$common.unit}" />
+                    <span class="form-tip"></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>库存：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w140" name="post[stock]" value="{$row.stock}" placeholder="" />
+                </td>
+            </tr>
+
+            <tr style="display: none;">
+                <td class="td-label"><label>时令：</label></td>
+                <td class="td-input">
+                    {$row.html_fs}
+                    <div class="form-tip">不选或都选表示四季；四季商品不属于时令产品</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-label"><label>是否上架：</label></td>
+                <td class="td-input">
+                    <label><input type="radio" name="is_sale" value="1" {if $row.is_sale eq 1}checked{/if}/>是</label>
+                    <label><input type="radio" name="is_sale" value="0" {if $row.is_sale eq 0}checked{/if}/>否</label>
+                </td>
+            </tr>
+
+            <tr class="table-h3">
+                <td colspan="2">SEO设置</td>
+            </tr>
+
+            <tr class="s h0">
+                <td class="td-label"><label>SEO关键词：</label></td>
+                <td class="td-input">
+                    <input type="text" class="form-i w200" name="post[keywords]" value="{$row.keywords}" />
+                </td>
+            </tr>
+
+            <tr class="s h0">
+                <td class="td-label"><label>SEO描述：</label></td>
+                <td class="td-input">
+                    <textarea name="post[description]">{$row.description}</textarea>
+                </td>
+            </tr>
+
+            <tr class="tr-btn">
+                <td class="td-label"></td>
+                <td class="td-input">
+                    <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                    <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                </td>
+            </tr>
+
+        </tbody>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    $.loadJs('/admin/js/manage/goods.js',function(){
+        goods.changSpec("{$row.id}");
+    });
+</script>
+

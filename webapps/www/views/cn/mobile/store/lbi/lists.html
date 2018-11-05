@@ -1,0 +1,16 @@
+<div class="mui-card store-list">
+    <a href="/store/index/{$m.id}" class="shop-a">
+        <div class="follow-box">
+                <div class="follow-tit clearfix">
+                        <img src="{$m.logo}" class="fl" />
+                        <a href="/store/index/{$m.id}" class="fr">进入店铺</a>
+                        <div class="store-list1">
+	                        <h2>{$m.name}</h2>
+	                        <p>{$m.area}</p>
+	                        <p>商品：{$m.goods_num|default:0}</p>
+	                        <p>销量：{$m.goods_sale|default:0}</p>
+                        </div>
+                </div>                
+        </div>
+    </a>
+</div>

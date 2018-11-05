@@ -1,0 +1,43 @@
+{literal}
+<style type="text/css">
+</style>{/literal}
+<div class="html-box">
+    <table class="tb-goods" style="width:100%">
+        <thead>
+        <tr>
+            <th class="oid" colspan="4">图文</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+
+    {foreach from=$list item=wxitem key=k}
+        <tr><td colspan="10" class="sep-row"></td></tr>
+        <tr class="order-head"><td colspan="5">
+            {if count($wxitem.items)==1}单图文消息{else}多图文消息{/if}，
+            创建时间：<span class="order-date">{date('Y-m-d H:i:s',$wxitem.c_time)}</span>，
+            修改时间：<span class="order-date">{date('Y-m-d H:i:s',$wxitem.c_time)}</span>
+
+            <a class="uiBtn BtnXs" href="javascript:;" rel="{$wxitem.id}"><i class="iconfont">&#xe633;</i><span>查看预览</span></a>
+        </td></tr>
+
+        {foreach from=$wxitem.items item=m key=index}
+        <tr>
+            <td class="bdl w5"></td>
+            <td class="w50"><img src="{$m.imgurl_thumb}" width="50"/></td>
+            <td><div class="oi-name">{$m.title}</div></td>
+
+            <td class="ac bdr bdl">{if $m.author}{$m.author}{else}-{/if}</td>
+            {if $index==0}
+            <td class="ac bdr" rowspan="{count($wxitem.items)}">
+                <a href="javascript:;" class="uiBtn e2-wxreply-selectnews-{$wxitem.id}">添加</a>
+            </td>
+            {/if}
+
+        </tr>
+        {/foreach}
+
+    {/foreach}
+    </table>
+
+</div>
+<script type="text/javascript">$.loadJs('/admin/js/manage/wxreply.js',function(){});</script>

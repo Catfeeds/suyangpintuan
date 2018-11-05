@@ -1,0 +1,455 @@
+{$headTit=$data.row.name}
+{$slider = 1}{$notice = 1}
+{include file="public_header.html"}
+<style>
+    body{
+        overflow-x: hidden;
+    }
+    .mui-pull-bottom-pocket{
+        opacity: 0;
+        height: 40px;
+        overflow: hidden;
+    }
+</style>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    {*<h1 class="mui-title tab_text">
+        <a href="#" class="active">商品信息</a>
+        <a href="#detail">图文详情</a>
+    </h1>*}
+    <a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a>
+</header>
+<script>
+    $(".tab_text a").on("click",function(){
+        $(this).addClass("active").siblings().removeClass('active');
+    });
+</script>
+<!--右上角弹出菜单-->
+<div id="topPopover" class="mui-popover">
+    <div class="mui-popover-arrow"></div>
+    <div class="mui-scroll-wrapper">
+        <div class="mui-scroll">
+            <ul class="mui-table-view clearfix">
+                <li class="mui-table-view-cell  sub-a-ico1">
+                    <a href="/">首页</a>
+                </li>
+                <li class="mui-table-view-cell sub-a-ico2">
+                    <a href="/goods/cat">搜索</a>
+                </li>
+                <li class="mui-table-view-cell  sub-a-ico3">
+                    <a href="/member/team">我的团</a>
+                </li>
+                <li class="mui-table-view-cell sub-a-ico4">
+                    <a href="/member">个人中心</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="/style/js/lefttime.js" type="text/javascript"></script>
+<div class="refreshContainer mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <div class="mui-content cp-dbox">
+            <div id="slider" class="mui-slider" >
+                <div class="mui-slider-group mui-slider-loop">
+                    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+
+                    {$img_first = $data.row.img_thumb.0}
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="javascript:;">
+                            <img src="{$img_first}">
+                        </a>
+                    </div>
+
+                    {foreach from=$data.row.img_thumb item=m name=f}
+                    <div class="mui-slider-item">
+                        <a href="javascript:;">
+                            <img src="{$m}">
+                        </a>
+                    </div>
+                    {/foreach}
+                    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+
+                    {$img_end=end($data.row.img_thumb)}
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="javascript:;">
+                            <img src="{$img_end}">
+                        </a>
+                    </div>
+
+                </div>
+                <div class="mui-slider-indicator">
+                    {foreach from=$data.row.img_thumb item=m key=k}
+                    <div class="mui-indicator {if $k==0}mui-active{/if}"></div>
+                    {/foreach}
+                </div>
+            </div>
+            <div class="title  clearfix">
+                <h3><span>{$data.row.typename}</span>{$data.row.name}</h3>
+                <span class="sc-xin {if $data.row.is_fav}active{/if}" onclick="addFav('{$data.row.id}',this);"></span>
+            </div>
+            {if $data.row.typeid==$smarty.const.CART_STEP}
+            <div class="jtt-box clearfix">
+                <div class="jtt-jgbox clearfix">
+                    <span class="ptjg-span">阶梯价</span>
+                    <span class="price-ori">原价： ¥{$data.row.price}</span>
+                    <span class="gmsl-tt">已有<b>{$data.row.sell+$data.row.sales_num}</b>人参团</span>
+                </div>
+                <div class="jtt-jglist">
+                    {foreach from=$data.row.step.team_price item=m key=k}
+                    <p>{$data.row.step.team_num[$k]}人以上  <span>¥{formatPrice($m)}</span></p>
+                    {/foreach}
+                </div>
+            </div>
+            {else}
+            <div class="mui-card-footer pintuan-title {if $data.row.typeid==$smarty.const.CART_AA}aa-cpxq{/if}">
+                {if $data.row.typeid==$smarty.const.CART_AA}
+                <div class="mui-card-link">
+                    <span class="rmb">{$data.row.team_num}人团总价¥</span>
+                    <span class="price-int">{$data.row.team_price_total}</span>
+                    <span class="price-ori">¥{$data.row.price}</span>
+                    <span class="xrzx-txt"><b>{$data.row.team_price}元/人</b></span>
+                </div>
+                {else}
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int">{$data.row.team_price}</span>
+                    <span class="price-ori">¥{$data.row.price}</span>
+                    {*<span class="xrzx-txt"><b>拼团节省{$data.row.price-$data.row.team_price}元</b></span>*}
+                </div>
+                {/if}
+                <div class="mui-card-link">
+                    <span>已有<b>{$data.row.sell+$data.row.sales_num}</b>人参团</span>
+                </div>
+            </div>
+            {/if}
+
+
+            {if $data.row.typeid==$smarty.const.CART_KILL}
+            <p class="ms-date">距离结束还有<em id="leftTimeJx{$data.row.id}"><span>00</span>时<span>00</span>分<span>00</span>秒</em></p>
+            <script>onload_leftTime_jx({$data.row.id},{$data.row.end_time-time()},"span","zh");</script>
+            {/if}
+            {if $data.row.typeid==$smarty.const.CART_SHARE && $data.row.share_comss>0 && $data.common_id==0}
+            <div class="tzwk-ts">
+                <span>团长佣金：</span>
+                <span class="rmb">¥</span>
+                <span class="price-int">{$data.row.share_comss}+</span>
+            </div>
+            {/if}
+            {if $data.row.desc}
+            <div class="productInfo">
+                <div class="product-txt"><em class="t">推荐理由</em>{$data.row.desc}</div>
+            </div>
+            {/if}
+            <div class="cpxt-rs clearfix">
+                {if $data.row.typeid==$smarty.const.CART_LUCK}<strong>抽奖规则</strong>{/if}
+                {if $data.row.typeid==$smarty.const.CART_FREE}<strong>试用规则</strong>{/if}
+                {if $data.row.typeid==$smarty.const.CART_AA}<strong>AA规则</strong>{/if}
+                {if $data.row.typeid==$smarty.const.CART_SHARE}<strong>推广团规则</strong>{/if}
+                {if $data.row.typeid==$smarty.const.CART_STEP}<strong>阶梯团规则</strong>{/if}
+            </div>
+
+            {if $data.row.rule}
+            <div class="rule-box">
+                {$data.row.rule}
+            </div>
+            {/if}
+            {if $data.row.goods_tip_list}
+            <ul class="pintuan-pz">
+                {foreach from=$data.row.goods_tip_list item=m}
+                <li>{$m}</li>
+                {/foreach}
+            </ul>
+            {/if}
+            {if $data.team_list}
+            <div class="area-box">
+                <div class="group-tit">
+                    <span>不想开团，参加以下的团购购购</span>
+                </div>
+                <ul class="group-list">
+                    {foreach from=$data.team_list item=m}
+                    <li>
+                        <a href="/goods/team/{$m.id}">
+                            <div class="group-tx">
+                                <img src="{photo($m.mid)}"/>
+                            </div>
+                            <div class="pt-l">
+                                <p>{$m.username}</p>
+                                <p>等你来拼 (^_^)</p>
+                            </div>
+                            <div class="pt-r">
+                                <p class="red">{if $m.team_num==$m.team_num_yes}已有{$m.team_num_yes}人参团{else}还差{$m.team_num-$m.team_num_yes}人成团{/if}</p>
+                                <p>剩余<em id="leftTimeJx{$m.id}">00:00:00</em>结束</p>
+                                <script>onload_leftTime_jx({$m.id},{$m.end_time},"","");</script>
+                            </div>
+                            <div class="mui-btn mui-btn-danger">去参团 ></div>
+                        </a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+            {/if}
+            {if $data.row.sid>0}
+            <div class="area-box shop-area">
+                <a href="/store/index/{$data.row.sid}" class="shop-title">
+                    <img src="{$data.store.info.logo}"/>
+                    <span>
+                            本产品由商户<b>{$data.store.info.name}</b>提供
+                    </span>
+                </a>
+                <a href="javascript:;" style="display: block;"><ul class="shop-ts clearfix">
+                    <li>
+                        <em id='fans_num'>{$data.store.info.fav_num}</em>人
+                        <span>关注</span>
+                    </li>
+                    <li>
+                        {$data.store.goods_total|default:0}
+                        <span>全部商品</span>
+                    </li>
+                    <li>
+                        {$data.store.sell_total|default:0}
+                        <span>销量</span>
+                    </li>
+                </ul>
+                </a>
+                <div class="clearfix shop-bt">
+                    <a href="javascript:;" class="guanz {if $data.store.is_fav}active{/if}" data-sid="{$data.row.sid}"><span></span></a>
+                    <a href="/store/index/{$data.row.sid}"><span>进入店铺</span></a>
+                </div>
+            </div>
+            {/if}
+            {zz mod=block mark='pintuan_note'}
+            <div class="area-box" id="detail">
+                <div id="segmentedControl" class="mui-segmented-control">
+                    <a class="mui-control-item mui-active" href="#item1">商品简介</a>
+                    <a class="mui-control-item" href="#item2">客户评价</a>
+                </div>
+                <div>
+                    <div id="item1" class="mui-control-content mui-active">
+                        {$data.row.content}
+                    </div>
+                    <div id="item2" class="mui-control-content">
+                        {include file="goods/lbi/comment.html"}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {include file="public_rand.html"}
+        {if C('is_contact')}
+        {include file="public_contact.html"}
+        {/if}
+    </div>
+</div>
+{if $data.common_id>0}
+<!--描述：参团按钮-->
+<nav class="mui-bar mui-bar-tab mui-bar-ct mui-bar-buy" style="display: block;">
+    {if $data.row.stock<=0}
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1">库存不足</button>
+    {elseif ($data.row.typeid==$smarty.const.CART_FREE || $data.row.typeid==$smarty.const.CART_LUCK || $data.row.typeid==$smarty.const.CART_KILL) && $data.row.end_time<$smarty.const.RUN_TIME}
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1">活动结束</button>
+    {else}
+    <button type="button" class="mui-btn mui-btn-danger ct-btn1 buy_team">立马参团</button>
+    {/if}
+    <button type="button" class="mui-btn  ct-btn2">￥{$data.row.team_price}</button>
+</nav>
+{else}
+<!--描述：开团的按钮-->
+<nav class="mui-bar mui-bar-tab mui-bar-buy" style="display: block;">
+    <button type="button" class="mui-btn mui-btn-warning buy_now"><span>￥{$data.row.price}</span><br>单独购买</button>
+
+    {if $data.row.typeid==$smarty.const.CART_FREE || $data.row.typeid==$smarty.const.CART_LUCK || $data.row.typeid==$smarty.const.CART_KILL}{*免费试用、抽奖、秒杀*}
+    {if $data.row.start_time>$smarty.const.RUN_TIME}
+    <button type="button" class="mui-btn mui-btn-danger">即将开始</button>
+    {elseif $data.row.end_time<$smarty.const.RUN_TIME || $data.row.stock<=0}
+    <button type="button" class="mui-btn mui-btn-danger">活动结束</button>
+    {else}
+    <button type="button" class="mui-btn mui-btn-danger buy_team"><span>￥{$data.row.team_price}</span><br>{$data.row.team_num}人成团</button>
+    <div class="buy-ts">
+        支付后并邀请<span>{$data.row.team_num-1}</span>人参加，人数不足自动退款
+    </div>
+    {/if}
+    {else}
+    <button type="button" class="mui-btn mui-btn-danger buy_team"><span>￥{formatPrice($data.row.team_price)}</span><br>{$data.row.team_num}人成团</button>
+    <div class="buy-ts">
+        支付后并邀请<span>{$data.row.team_num-1}</span>人参加，人数不足自动退款
+    </div>
+    {/if}
+</nav>
+{/if}
+<div class="pop-dbox" style="display: none;">
+    <div class="buy-option" >
+        <div class="buy-option-open"></div>
+        <div class="buy-cp clearfix">
+            <img src="{$data.row.img_src}" class="cp-img" />
+            <div class="buy-cpt">
+                <div class="mui-card-link">
+                    <span class="rmb">¥</span>
+                    <span class="price-int">{$data.row.team_price}</span>
+                </div>
+                {*<p class="txt"><b>已选：</b>颜色 <span>"浅粉"</span>、尺码 <span>"66"</span></p>*}
+            </div>
+        </div>
+        <div class="buy-auto">
+            {if $data.row.typeid==$smarty.const.CART_OPTION && $data.common_id==0}
+            <dl class="buy-fl team_option">
+                <dt>自选参团人数</dt>
+                <dd>
+                    {foreach from=$data.row.step.team_price item=m key=k}
+                    <span {if $k==1}class="active"{/if} data-price="{$data.row.step.team_num[$k]}-{$m}" data-teamprice="{$m}">{$data.row.step.team_num[$k]}人团/{$m}元</span>
+                    {/foreach}
+                </dd>
+            </dl>
+            {/if}
+            {if $data.row.sp_val}
+            {foreach from=$data.sp_vals item=m key=k}
+            <dl class="buy-fl">
+                <dt>{$k}</dt>
+                <dd>
+                    {foreach from=$m item=n name=foo key=key}
+                    <span {if in_array($key,$data.spec) || (count($data.spec)==0 && $smarty.foreach.foo.index==0)}class="active"{/if} data-val="{$key}">{$n}</span>
+                    {/foreach}
+                </dd>
+            </dl>
+            {/foreach}
+            {/if}
+        </div>
+        <div class="buy-sl">
+            <span>数量</span>
+            <div class="mui-numbox" data-numbox-min='1' data-numbox-max='{if $data.row.limit_buy_bumber>0}{$data.row.limit_buy_bumber}{else}{$data.row.stock}{/if}'>
+                <button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+                <input class="mui-input-numbox" type="number" value="1"/>
+                <button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+            </div>
+        </div>
+        <div class="buy-btn">
+            <button type="button" class="mui-btn mui-btn-danger ajax_cart">确定</button>
+            <input type="hidden" class="spec" name="spec" value="">
+            <input type="hidden" class="buy_type" name="buy_type" value="{$data.row.typeid}">
+        </div>
+    </div>
+</div>
+
+<div class="toTop" id="roll_top">
+    <a href="javascript:void(0)" class="tot">顶部</a>
+    <a href="javascript:history.back()">关闭</a>
+</div>
+<script>
+    $(document).ready(function() {
+        {if $data.row.sp_val || ( $data.row.typeid==$smarty.const.CART_OPTION && $data.common_id==0 )}
+        {if $data.row.sp_val}
+        getSelecteds();
+        //单独购买
+        $(".buy_now").click(function(){
+            $(".mui-bar-buy").hide();
+            $(".pop-dbox").show();
+            $(".buy_type").val('0');
+            $(".price-int").html({$data.row.price});
+        });
+        {else}
+        $(".buy_now").click(function(){
+            ajax_cart({$data.row.id},0,1,'');
+        });
+        {/if}
+        //立即参团
+        $(".buy_team").click(function(){
+            $(".mui-bar-buy").hide();
+            $(".pop-dbox").show();
+            $(".buy_type").val('{$data.row.typeid}');
+            $(".price-int").html({$data.row.team_price});
+        });
+
+        //关闭规格选择
+        $(".buy-option-open").click(function(){
+            $(".pop-dbox").hide();
+            $(".mui-bar-buy").show();
+        });
+
+        //提交
+        $(".ajax_cart").click(function(){
+            var num = $('.mui-input-numbox').val();
+            var spec = $('.spec').val();
+            var buy_type = $('.buy_type').val();
+            var commmon_id = {$data.common_id};
+            if($(".team_option").length>0){
+                var option = $('.team_option').find(".active").attr('data-price');
+            }else{
+                var option = '';
+            }
+            ajax_cart({$data.row.id},buy_type,num,spec,commmon_id,option);
+        });
+        {else}
+        $(".buy_now").click(function(){
+            ajax_cart({$data.row.id},0,1,'');
+        });
+        $(".buy_team").click(function(){
+            var commmon_id = {$data.common_id};
+            ajax_cart({$data.row.id},{$data.row.typeid|default:1},1,'',commmon_id);
+        });
+        {/if}
+    });
+
+    //选择规格返回不同的图片和规格
+    var goods_id = '{$data.row.id}';
+    var img_src = '{$data.row.img_src}';
+    $('.buy-fl dd span').click(function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        if(typeof($(this).attr('data-val'))!='undefined'){
+            getSelecteds();
+        }else{
+            $(".price-int").html($(this).attr('data-teamprice'));
+        }
+    });
+
+    {literal}
+
+    function getSelecteds() {
+        var result = "";
+        $(".buy-fl dd span[class='active']").each(function () {
+            result += $(this).attr("data-val")+"-";
+        });
+        $.post("/goods/ajax_goodspec",{spec:result,goods_id:goods_id},function(data){
+            if(data.code=='success'){
+                $(".spec").val(data.spec);
+                //$(".price-int").html(data.price);
+                if(data.path){
+                    $(".cp-img").attr('src',data.path);
+                }else{
+                    $(".cp-img").attr('src',img_src);
+                }
+            }
+        },"json");
+    }
+</script>
+<script type="text/javascript">
+    mui.init({
+        pullRefresh: {
+            container: '.refreshContainer',
+            up: {
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }
+        }
+    });
+    var count = 0;
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh() {
+        setTimeout(function() {
+            mui('.refreshContainer').pullRefresh().endPullupToRefresh((++count > 5)); //参数为true代表没有更多数据了。
+            $('.mui-content').append('');
+        }, 1500);
+    }
+    mui.init({
+        swipeBack:true, //启用右滑关闭功能
+    });
+    var gallery = mui('#slider');
+    gallery.slider({
+        interval:5000 //自动轮播周期，若为0则不自动播放，默认为0；
+    });
+</script>
+{/literal}
+{include file="public_footer.html"}

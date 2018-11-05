@@ -1,0 +1,126 @@
+<div class="selection-content">
+    <form class="cond-form clear" action="/manage/coupon/selection">
+        <input type="hidden" name="target" value="{get('target')}">
+        <div class="f-unit">
+            <span class="input-group l">
+                    <label class="input-group-addon-left">优惠券ID</label>
+                    <input class="form-i" type="text" name="filters[id]" value="{$filters['id']}" placeholder="ID需是整数">
+                </span>
+            <span class="input-group l">
+                    <label class="input-group-addon-left">名称</label>
+                    <input class="form-i" type="text" name="filters[title]" value="{$filters['title']}" placeholder="输入要查找的名称">
+                    <label class="input-group-addon-right">
+                        <input type="hidden" name="filters[title_blur]" value="0">
+                        <input type="checkbox" name="filters[title_blur]" value="1" {if $filters['title_blur']}checked="checked" {/if}> 模糊
+                    </label>
+                </span>
+            <span class="input-group l">
+                    <input class="form-i w120 sitem" name="filters[amount_egt]" value="{$filters['amount_egt']}" type="text" autocomplete="false" placeholder="抵扣金额起" />
+                    <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[amount_elt]" value="{$filters['amount_elt']}" type="text" autocomplete="false" placeholder="抵扣金额止" />
+                </span>
+            <span class="input-group l">
+                    <input class="form-i w120 sitem" name="filters[need_amount_egt]" value="{$filters['need_amount_egt']}" type="text" autocomplete="false" placeholder="满减金额起" />
+                    <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[need_amount_elt]" value="{$filters['need_amount_elt']}" type="text" autocomplete="false" placeholder="满减金额止" />
+                </span>
+            <span class="input-group l">
+                    <input class="form-i w120 sitem" name="filters[start_time_egt]" value="{$filters['start_time_egt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="有效期开始起" />
+                    <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[start_time_elt]" value="{$filters['start_time_elt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="有效期开始止" />
+                </span>
+            <span class="input-group l">
+                    <input class="form-i w120 sitem" name="filters[end_time_egt]" value="{$filters['end_time_egt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 00:00:00' })" autocomplete="false" placeholder="有效期结束起" />
+                    <input style="margin-left:-1px" class="form-i w120 sitem" name="filters[end_time_elt]" value="{$filters['end_time_elt']}" type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd 23:59:59' })" autocomplete="false" placeholder="有效期结束止" />
+                </span>
+            <span class="input-group l">
+                    <select name="filters[status]">
+                        <option value="" {if !is_numeric($filters['status'])}selected="selected" {/if}>状态不限</option>
+                        {foreach from=$status item=item key=key}
+                        <option value="{$key}" {if is_numeric($filters[ 'status']) and $filters[ 'status'] eq $key}selected="selected" {/if}>{$item}</option>
+                        {/foreach}
+                    </select>
+                </span>
+            <span class="input-group l">
+                    <label class="form-i">
+                        <input type="checkbox" {if $filters['share']}checked="checked"{/if} name="filters[share]" value="1">
+                        分享券
+                    </label>
+                    <label class="form-i">
+                        <input type="checkbox" {if $filters['uniqued']}checked="checked"{/if} name="filters[uniqued]" value="1">
+                        限一次
+                    </label>
+                    <label class="form-i">
+                        <input type="checkbox" {if $filters['exchange']}checked="checked"{/if} name="filters[exchange]" value="1">
+                        积分换
+                    </label>
+                    <label class="form-i">
+                        <input type="checkbox" {if $filters['target_exist']}checked="checked"{/if} name="filters[target_exist]" value="1">
+                        限品类
+                    </label>
+                    <label class="form-i">
+                        <input type="checkbox" {if $filters['paid']}checked="checked"{/if} name="filters[paid]" value="1">
+                        购物送
+                    </label>
+                </span>
+        </div>
+        <div class="f-unit">
+            <label class="l">排序:</label>
+            <span class="l">
+            {section name=loop loop=3} {assign var="i" value=$smarty.section.loop.index}
+                <span class="input-group">
+                    <select name="orders[{$i}][key]">
+                        {foreach from=$orderTypes item=item key=key}
+                            <option value="{$key}" {if !empty($orders[{$i}]['key']) and $orders[{$i}]['key'] eq $key}selected="selected"{/if}>{$item}</option>
+                        {/foreach}
+                    </select>
+                    <select name="orders[{$i}][status]">
+                        <option value="asc" {if !empty($orders[{$i}]['status']) and $orders[{$i}]['status'] eq 'asc'}selected="selected"{/if}>顺序</option>
+                        <option value="desc" {if !empty($orders[{$i}]['status']) and $orders[{$i}]['status'] eq 'desc'}selected="selected"{/if}>逆序</option>
+                    </select>
+                </span> {/section}
+            </span>
+            <button type="button" style="margin-left:10px; margin-top:1px" class="uiBtn BtnBlue selection-search">搜索</button>
+            <button type="button" class="uiBtn selection-reset">重置</button>
+        </div>
+        <table class="list">
+            <thead>
+                <tr>
+                    <th class="w30">选择</th>
+                    <th align="left">ID</th>
+                    <th align="left">名称</th>
+                    <th align="left">面额</th>
+                    <th align="left">有效期</th>
+                    <th align="left">剩余</th>
+                    <th align="left">已领</th>
+                    <th align="left">已用</th>
+                    <th align="left">标签</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$list item=m}
+                <tr>
+                    <td align='center'>
+                        <input type='radio' class='form-i w30' name="post[coupon_id_selected]" value='{$m.id}' data-target="{get('target')}" {if isset($smarty.get.post.coupon_id_selected) and $smarty.get.post.coupon_id_selected eq $m.id}checked="checked" {/if}/>
+                    </td>
+                    <td>{$m.id}</td>
+                    <td class="coupon-title">{$m.title}</td>
+                    <td class="coupon-amount">{if !empty($m.need_amount)}满{$m.need_amount}减{/if}{$m.amount}元</td>
+                    <td class="coupon-time">{if !empty($m.start_time)}起:{date('Y-m-d H:i', $m.start_time)}{/if} {if !empty($m.end_time)}止:{date('Y-m-d H:i', $m.end_time)}{else}不限{/if}</td>
+                    <td class="coupon-stock">{$m.stock}</td>
+                    <td>{$m.sended}</td>
+                    <td>{$m.used}</td>
+                    <td>
+                        {if !empty($m.target)} <span class="mark" title="仅能购买分类id为{$m.target|truncate:40:'...'}的商品">限品类</span> {/if} {if !empty($m.uniqued)} <span class="mark" title="每个会员仅能领取一次">限一次</span> {/if} {if !empty($m.exchange)} <span class="mark" title="可以使用积分兑换">积分换</span> {/if} {if !empty($m.share)} <span class="mark" title="分享给别人.被分享人使用后,本券才可用">分享券</span> {/if} {if !empty($m.paid)} <span class="mark" title="交易完成时,购买指定品类商品送优惠券">购物送</span> {/if}
+                    </td>
+                </tr>
+                {foreachelse}
+                <tr>
+                    <td colspan="10" align="center">本条件暂无记录</td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+        <div class="foot-btn">
+            <div class="pager r">{$page}</div>
+            <button type="button" class="uiBtn BtnGreen e2-com-xhide">确定</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,11 @@
+{foreach from=$data.list item=item key=key name=name}
+<li class="clearfix msg-line">
+    <div class="{if $item.service}right{else}left{/if}">
+        <img class="avatar" src="{$item.avatar}">
+        <div class="msg-popover">
+            <div class="arrow"></div>
+            <div class="msg-popover-content">{$item.msg}</div>
+        </div>
+    </div>
+</li>
+{/foreach}

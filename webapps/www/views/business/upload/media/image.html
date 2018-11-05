@@ -1,0 +1,37 @@
+<h3 class="info-tag media-cate">
+    <a href="#!upload/media/1/image" class="{if $type=='image'}on {/if}">图片管理
+        <b class="z1">◆</b><b class="z0">◆</b>
+    </a>
+    <a href="#!upload/media/1/file" class="{if $type=='file'}on {/if}">文件管理
+        <b class="z1">◆</b><b class="z0">◆</b>
+    </a>
+    {*<a href="javascript:;" class="uiBtn e3-upload-cloudImg">生成云图片</a>*}
+    <span></span>
+</h3>
+
+{literal}
+<style type="text/css">
+</style>
+{/literal}
+
+<div class="html-box">
+    <div class="media-box clear tab-mod" id="media-box">
+        {if $type=='file'}
+        {include file='business/upload/media/file_list.html'}
+        {else}
+        {include file='business/upload/media/image_list.html'}
+        {/if}
+    </div>
+
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    $.loadJs('/admin/js/upload.js',function(){
+        upload.params = { id:100};
+    });
+</script>
+
+
+
+
+

@@ -1,0 +1,104 @@
+<div class="html-box">
+    <table class="tb-goods" style="width:100%;margin-bottom:5px">
+        <tr class="order-head">
+            <td colspan="8">
+                订单编号:<span class="order-no">{$order.order_sn}</span>
+                下单时间：<span class="order-date">{date('Y-m-d H:i:s',$order.c_time)}</span>
+                {if $order.extension}
+                <br>{$order.order_code}：<span class="c-red">{$order.extension.act_name}</span>
+                {/if}
+            </td>
+        </tr>
+        {foreach from=$items item=g key=k}
+        <tr>
+            <td class="bdl w5"></td>
+            <td class="w60"><img src="{$g.img_src}" style="width:60px" /></td>
+            <td class="bdr" style="line-height: 1.4">
+                <div class="oi-name">{$g.goods_name}</div>
+                <div class="c-gray">
+                    单价：{$g.sell_price}<br>
+                    数量：{$g.buy_num}
+                </div>
+            </td>
+        </tr>
+        {/foreach}
+
+        <tr>
+            <td colspan="8" class="bdl bdr">
+                <span class="c-gray">会员名：</span><span>{$order.m_username}</span>
+                <span class="c-gray">收货人：</span><span>{$order.name}[{$order.mobile}]</span><br>
+                <span><i class="iconfont">&#xe655;</i> {$order.area} {$order.address}</span>
+                {if $order.order_tip}
+                <br>
+                <span class="c-gray">买家备注：</span>
+                <span class="c-orange">{$order.order_tip|nl2br}</span>
+                {/if}
+            </td>
+        </tr>
+    </table>
+
+    <form target="iframeNewsTarget" method="post" action="/business/order/doSendPre" style="padding-top:20px; padding-bottom:10px">
+        <input type="hidden" name="order_id" value="{$order.id}" />
+        <input type="hidden" name="qishu" value="{$qishu}" />
+        <div class="f-unit">
+            <label class="ui-label w80">备货备忘：</label>
+            <textarea class="form-area" name="state_info" style="height: 40px"></textarea>
+        </div>
+
+        <div class="f-unit">
+            <label class="ui-label w80">&nbsp;</label>
+            <button type="submit" name="Submit" class="uiBtn BtnBlue">备 货</button>
+        </div>
+    </form>
+
+    <form target="iframeNewsTarget" method="post" action="/business/order/doSend" style="padding-bottom:10px">
+        <input type="hidden" name="order_id" id="order_id" value="{$order.id}" />
+        <input type="hidden" name="qishu" value="{$qishu}" />
+        <div class="f-unit">
+            <label class="ui-label w80">快递公司：</label>
+            <select name="express" id="express" onchange="send.chang_field(this.value);">
+                {foreach from=$express item=m}
+                <option value="{$m.id}" {if $order.express_id eq $m.id}selected{/if}>{$m.name}</option>
+                {/foreach}
+                <option value="0">-快速添加-</option>
+            </select>
+            <input class="form-i w150 hideTr" type="text" name="express_name" value="" style="display: none;" />
+        </div>
+        <div class="f-unit hideTr" style="display: none;">
+            <label class="ui-label w80">快递标识：</label>
+            <input class="form-i w150" type="text" name="pinyin" value="" />
+            <div class="form-tip" style="clear: both">
+                标识获取地址：<a href="http://www.kuaidi100.com/all/index.shtml" target="_blank">http://www.kuaidi100.com/all/index.shtml</a><br>如顺风快递：http://www.kuaidi100.com/all/sf.shtml，标识为sf
+            </div>
+        </div>
+
+        <div class="f-unit">
+            <label class="ui-label w80">快递单号：</label>
+            <input class="form-i w200" type="text" name="express_no" value="{$order.express_num}" id="express_no"/>
+        </div>
+
+        <div class="f-unit">
+            <label class="ui-label w80">发货备忘：</label>
+            <textarea class="form-area" name="state_info" style="height: 40px"></textarea>
+        </div>
+
+        <div class="f-unit">
+            <label class="ui-label w80">&nbsp;</label>
+            <button type="submit" name="Submit" class="uiBtn BtnGreen">发 货</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var send=function(){ };
+    send.prototype={
+        chang_field:function(value){
+            if(value=='0'){
+                $('.hideTr').css('display','');
+            }else{
+                $('.hideTr').hide();
+            }
+        }
+
+    };send = new send;
+</script>

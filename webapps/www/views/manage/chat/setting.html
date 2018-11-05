@@ -1,0 +1,69 @@
+{include file='../public_btn.html'}
+<div class="html-box">
+    <form target="iframeNewsTarget" method="post" action="/manage/chat/setting" enctype="multipart/form-data">
+        <table class="table-list">
+            <tbody>
+                <tr>
+                    <td class="td-label">
+                        <label>游客头像：</label>
+                    </td>
+                    <td class="td-input">
+                        <input type="file" name="guest_avatar" /> {if $info.guest_avatar}<a onmousemove="main.seepic(this)" title="查看图片" class="iconfont c-green seePic" target="_blank" href="{$info.guest_avatar}"></a>{/if}
+                        <div class="form-tip">选择并上传未登录用户的默认头像图片 100x100像素</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>客服头像：</label>
+                    </td>
+                    <td class="td-input">
+                        <input type="file" name="service_avatar" /> {if $info.service_avatar}<a onmousemove="main.seepic(this)" title="查看图片" class="iconfont c-green seePic" target="_blank" href="{$info.service_avatar}"></a>{/if}
+                        <div class="form-tip">选择并上传客服的头像图片 100x100像素</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>客服名称：</label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[service_name]" value="{$info.service_name}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>欢迎语句：</label>
+                    </td>
+                    <td class="td-input">
+                        {$info.welcome_editor}
+                    </td>
+                </tr>
+                <tr class="h s0">
+                    <td class="td-label">
+                        <label>服务时间：</label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[service_time]" value="{$info.service_time}">
+                        <div class="form-tip">请填写客服电话的接待时间</div>
+                    </td>
+                </tr>
+                <tr class="h s0">
+                    <td class="td-label">
+                        <label>热线电话：</label>
+                    </td>
+                    <td class="td-input">
+                        <input type="text" class="form-i w220" name="post[service_tel]" value="{$info.service_tel}" autocomplete="off">
+                        <div class="form-tip">请填写客服电话 注意建议用纯数字 否则移动端无法点击拨打</div>
+                    </td>
+                </tr>
+                <tr class="tr-btn">
+                    <td class="td-label"></td>
+                    <td class="td-input">
+                        <input type="hidden" name="Submit" value="1">
+                        <button type="submit" name="Submit" class="uiBtn BtnGreen">提&nbsp;&nbsp;交</button>
+                        <button type="reset" class="uiBtn">重&nbsp;&nbsp;置</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
