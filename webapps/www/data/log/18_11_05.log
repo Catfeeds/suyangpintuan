@@ -109,3 +109,6 @@ E_ERR: Call to undefined function loadClass() in E:\wamp64\www\suyangpintuan\sys
 [ 2018-11-05T14:38:46+08:00 ] localhost/suyangpintuan/web/index.php
 E_ERR: Call to undefined function loadClass() in E:\wamp64\www\suyangpintuan\system\core\lowxp.php on line 69
 
+[ 2018-11-05T14:55:35+08:00 ] localhost/suyangpintuan/web/index.php
+E_ERR: Call to undefined function loadClass() in E:\wamp64\www\suyangpintuan\system\core\lowxp.php on line 69
+
