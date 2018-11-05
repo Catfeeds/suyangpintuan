@@ -106,3 +106,6 @@ E_COMPILE_ERROR: require_once(): Failed opening required 'E:/wamp64/www/suyangpi
 [ 2018-11-05T14:15:31+08:00 ] localhost/suyangpintuan/web/index.php
 E_ERR: Call to undefined function loadClass() in E:\wamp64\www\suyangpintuan\system\core\lowxp.php on line 73
 
+[ 2018-11-05T14:38:46+08:00 ] localhost/suyangpintuan/web/index.php
+E_ERR: Call to undefined function loadClass() in E:\wamp64\www\suyangpintuan\system\core\lowxp.php on line 69
+
