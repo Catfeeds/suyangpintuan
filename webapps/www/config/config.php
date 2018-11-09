@@ -73,4 +73,4 @@ $CACHE_CONFIG = array(
 );
 // fan 2016-03-23 end
 
-define('AuthKey', 'Egxq5reDFI1h3pEbEaTO'); #授权码
+define('AuthKey', 'sbN0aFLkxYIl2s6W1NPV'); #授权码

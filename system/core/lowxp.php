@@ -22,7 +22,9 @@ define('IS_CLI', 'cli' === PHP_SAPI ? true : false);
 
 define('REQUEST_SCHEME', is_ssl() ? 'https://' : 'http://'); // 设置整站协议为http  如果需要https  或者做判断 请修改这里的值
 
+/***********该网站通过域名与AuthKey绑定**************/
 $_HOST = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+// $_HOST = 'food.wintom.com.cn';
 
 $tmpHost = parse_url(REQUEST_SCHEME . $_HOST);
 
@@ -30,7 +32,7 @@ empty($tmpHost['host']) && die('url parse failed');
 
 define('Domain', $tmpHost['host']);
 
-//$_HOST = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : ''; #域名不带端口号
+$_HOST = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : ''; #域名不带端口号
 
 define('IS_LOCAL', strpos(Domain, '.local') !== false);
 
@@ -63,6 +65,8 @@ $LOG_CONFIG = isset($LOG_CONFIG) ? $LOG_CONFIG : array();
 Log::init($LOG_CONFIG);
 
 include AppDir . 'config/version.php'; #版本号
+
+/*************下面引入中有混淆加密代码**************/
 include RootDir . 'system/core/common.php';
 
 //路由
